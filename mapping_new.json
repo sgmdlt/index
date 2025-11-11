@@ -1,0 +1,161 @@
+{
+  "settings": {
+    "analysis": {
+      "normalizer": {
+        "lowercase": {
+          "type": "custom",
+          "char_filter": [],
+          "filter": ["trim", "lowercase"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "group_id": { "type": "keyword" },
+      "version": { "type": "integer" },
+      "version_ts": { "type": "date" },
+      "is_latest": { "type": "boolean" },
+      "meta": { "type": "object", "enabled": true },
+      "files": { "type": "nested" },
+      "doc_text_full": { "type": "text" },
+      "articles": {
+        "type": "keyword",
+        "normalizer": "lowercase"
+      },
+      "case_category": {
+        "type": "keyword",
+        "normalizer": "lowercase"
+      },
+      "case_hidden": {
+        "type": "boolean"
+      },
+      "case_number": {
+        "type": "keyword"
+      },
+      "case_subcategory": {
+        "type": "keyword",
+        "normalizer": "lowercase"
+      },
+      "case_type": {
+        "type": "keyword"
+      },
+      "censorship": {
+        "type": "text",
+        "analyzer": "russian",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "normalizer": "lowercase"
+          }
+        }
+      },
+      "court_code": {
+        "type": "keyword"
+      },
+      "court_name": {
+        "type": "keyword"
+      },
+      "date_reg": {
+        "type": "date",
+        "ignore_malformed": true
+      },
+      "date_result": {
+        "type": "date",
+        "ignore_malformed": true
+      },
+      "date_onhold_defendant_wanted": {
+        "type": "date",
+        "ignore_malformed": true
+      },
+      "date_onhold_defendant_located": {
+        "type": "date",
+        "ignore_malformed": true
+      },
+      "defendants": {
+        "type": "text",
+        "analyzer": "russian",
+        "fields": {
+          "keyword": {
+            "type": "wildcard"
+          }
+        }
+      },
+      "first_case_number": {
+        "type": "keyword"
+      },
+      "first_court_name": {
+        "type": "keyword"
+      },
+      "first_judge": {
+        "type": "keyword"
+      },
+      "full_document_texts": {
+        "type": "text",
+        "analyzer": "russian"
+      },
+      "id_final": {
+        "type": "keyword"
+      },
+      "id_uid": {
+        "type": "keyword"
+      },
+      "instance": {
+        "type": "keyword"
+      },
+      "judge": {
+        "type": "keyword"
+      },
+      "link": {
+        "type": "keyword",
+        "index": false
+      },
+      "main_document_text": {
+        "type": "text",
+        "analyzer": "russian"
+      },
+      "main_document_text_length": {
+        "type": "integer",
+        "index": false
+      },
+      "participants": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "wildcard"
+          }
+        }
+      },
+      "region": {
+        "type": "keyword"
+      },
+      "result": {
+        "type": "keyword",
+        "normalizer": "lowercase"
+      },
+      "summary": {
+        "type": "text",
+        "index": false
+      },
+      "tag": {
+        "type": "keyword"
+      },
+      "uuid": {
+        "type": "keyword"
+      },
+      "participants_and_defendants": {
+        "type": "text",
+        "analyzer": "russian",
+        "fields": {
+          "keyword": {
+            "type": "wildcard"
+          }
+        }
+      },
+      "raw": {
+        "type": "text",
+        "index": false
+      }
+    }
+  }
+}
