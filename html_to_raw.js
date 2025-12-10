@@ -107,31 +107,13 @@ async function parseTable($, tab) {
 }
 
 function extractVerdicts($) {
-  const cont5 = $("#cont5");
-  if (!cont5.length) return null;
-
+  const node = $("#cont_doc1");
+  if (!node.length) return null;
   const out = {};
 
-  // Внутри: ul.tabs > li (названия), рядом .contentt с div[id^=cont_doc]
-  const liTabs = cont5.find("ul.tabs > li").toArray();
-  const contentBlocks = cont5.find(".contentt > div[id^=cont_doc]").toArray();
-
-  if (liTabs.length && contentBlocks.length) {
-    // Если количество совпадает — сводим по парам
-    for (let i = 0; i < Math.min(liTabs.length, contentBlocks.length); i++) {
-      const name = _text($, liTabs[i]); // например: "Судебный акт #1 (Приговор)"
-      const txt = _text($, contentBlocks[i]); // чистый текст акта
-      out[name] = txt;
-    }
-  } else {
-    // fallback: если один документ без явной вкладки
-    const single = cont5.find(".contentt > div[id^=cont_doc]").first();
-    if (single.length) {
-      out["Судебный акт"] = _text($, single);
-    }
-  }
-
-  return out;
+  const txt = node.text().replace(/\s+/g, " ").trim();
+  out["СУДЕБНЫЙ АКТ"] = txt || null
+  return out
 }
 
 export default async function fillRawTables(html) {
@@ -166,6 +148,5 @@ export default async function fillRawTables(html) {
     ...formatted_case["raw_tables"],
     ...verdict,
   };
-
   return formatted_case;
 }

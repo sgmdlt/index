@@ -11,6 +11,7 @@
   "dependencies": {
     "@elastic/elasticsearch": "^8.19.1",
     "@google/genai": "^1.8.0",
+    "async": "^3.2.6",
     "cheerio": "^1.1.2",
     "cli-progress": "^3.12.0",
     "date-fns": "^4.1.0",

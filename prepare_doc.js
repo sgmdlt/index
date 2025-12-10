@@ -4,6 +4,22 @@ import { format as formatDate } from 'date-fns';
 import rules from './elastic_index_dict.json' with { type: "json" };
 import typeInstanceRules from './elastic_type_instance_dict.json' with { type: "json" };
 
+const jsonPathCache = new Map();
+
+function getCompiledJSONPath(path) {
+  let query = jsonPathCache.get(path);
+  if (!query) {
+    query = new JSONPathJS(path);
+    jsonPathCache.set(path, query);
+  }
+  return query;
+};
+
+function getValueByPath(json, path) {
+  const query = getCompiledJSONPath(path);
+  return query.find(json);
+};
+
 function getStringValue(values) {
   // find first non-null value
   const value = values.find(v => v !== null && v !== undefined);
@@ -99,8 +115,7 @@ function getValue(json, locations, type) {
       path = location.key;
     }
 
-    const query = new JSONPathJS(path);
-    const value = query.find(json);
+    const value = getValueByPath(json, path);
     if (!isEmptyValue(value)) {
       locationsWithValues.push([location, value]);
       const result = typeMapping[type](value, format)
@@ -119,11 +134,6 @@ function getTypeInstance(typeInstance) {
     return typeInstanceRules[typeInstance];
   }
   return null;
-}
-
-function getUuidFromLink(link) {
-  const match = link.match(/_uid=([0-9a-f-]+)/);
-  return match ? match[1] : null;
 }
 
 const PARTICIPANTS_AND_DEFENDANTS = 'participants_and_defendants';
@@ -162,26 +172,10 @@ export default async function prepareDoc(raw) {
     }
   }
 
-  // add uuid
-  if (doc.link) {
-    doc.uuid = getUuidFromLink(doc.link);
-  }
-
   // add text length
   if (doc.main_document_text) {
     doc.main_document_text_length = doc.main_document_text.length;
-    // truncate if too long
-    if (doc.main_document_text_length > 1_000_000) {
-      // get first 500_000 characters and last 500_000 characters
-      doc.main_document_text = doc.main_document_text.slice(0, 500_000) +
-        '\n\n... (truncated) ...\n\n' +
-        doc.main_document_text.slice(-500_000);
-      doc.main_document_text_length = doc.main_document_text.length;
-    }
   }
-
-  // add raw
-  doc.raw = JSON.stringify(raw);
 
   return doc;
 }

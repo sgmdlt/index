@@ -30,10 +30,43 @@ async function readJsonSafe(file) {
 
 async function listHtmlInDir(dir) {
   const names = await readDirSafe(dir);
-  return names
+
+  function parseNameToTimestamp(name) {
+    const fileName = name.toLowerCase().endsWith(".html")
+      ? name.slice(0, -5)
+      : name;
+
+    const [datePart, timePart] = fileName.split(".");
+    if (!datePart || !timePart) return NaN;
+
+    const [dayStr, monthStr, yearStr] = datePart.split("-");
+    const [hourStr, minuteStr, secondStr] = timePart.split(":");
+
+    const day = Number(dayStr);
+    const month = Number(monthStr);
+    const year = Number(yearStr);
+    const hour = Number(hourStr);
+    const minute = Number(minuteStr);
+    const second = Number(secondStr);
+
+    if (
+      Number.isNaN(day) || Number.isNaN(month) || Number.isNaN(year) ||
+      Number.isNaN(hour) || Number.isNaN(minute) || Number.isNaN(second)
+    ) {
+      return NaN;
+    }
+
+    return Date.UTC(year, month - 1, day, hour, minute, second);
+  }
+
+  const html = names
     .filter((e) => e.isFile() && e.name.toLowerCase().endsWith(".html"))
-    .map((e) => e.name)
-    .sort((a, b) => a.localeCompare(b, "ru"));
+    .map((e) => e.name);
+
+  const withTs = html.map((n) => ({ n, ts: parseNameToTimestamp(n) }));
+  withTs.sort((a, b) => a.ts - b.ts);
+
+  return withTs.map((x) => x.n);
 }
 
 /**

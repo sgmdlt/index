@@ -39,7 +39,6 @@ export async function parseFiles(unit, options = {}) {
       const html = await fsp.readFile(fullPath, "utf8");
       const raw = (await fillRawTables(html)) || {};
       const parsed = await prepareDoc(raw);
-
       return parsed;
     } catch (e) {
       return {
