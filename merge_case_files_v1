@@ -1,0 +1,95 @@
+// Keeps accumulated arrays ordered from older -> newer docs.
+// If an older version arrives after a newer one, its new unique values are inserted at the beginning.
+
+void collectValues(def item, List newVals, def seen) {
+  if (item == null) return;
+  if (item instanceof String && item.length() == 0) return;
+
+  if (item instanceof List) {
+    for (def el : (List) item) {
+      collectValues(el, newVals, seen);
+    }
+    return;
+  }
+
+  if (!seen.contains(item)) {
+    newVals.add(item);
+    seen.add(item);
+  }
+}
+
+void mergeUniqueOrdered(List fieldArr, def paramsVal, boolean insertAtFront) {
+  if (paramsVal == null) return;
+
+  def seen = new HashSet();
+  for (def x : fieldArr) {
+    if (x != null) seen.add(x);
+  }
+
+  def newVals = new ArrayList();
+  collectValues(paramsVal, newVals, seen);
+
+  if (newVals.size() == 0) return;
+
+  // To preserve original order when inserting at front, insert in reverse.
+  if (insertAtFront) {
+    for (int i = newVals.size() - 1; i >= 0; i--) {
+      fieldArr.add(0, newVals.get(i));
+    }
+  } else {
+    for (def v : newVals) {
+      fieldArr.add(v);
+    }
+  }
+}
+
+if (ctx._source.articles == null) ctx._source.articles = new ArrayList();
+if (ctx._source.defendants == null) ctx._source.defendants = new ArrayList();
+if (ctx._source.participants == null) ctx._source.participants = new ArrayList();
+if (ctx._source.participants_and_defendants == null) ctx._source.participants_and_defendants = new ArrayList();
+if (ctx._source.full_document_texts == null) ctx._source.full_document_texts = new ArrayList();
+if (ctx._source.files == null) ctx._source.files = new ArrayList();
+
+def incomingTs = params.version_ts != null ? ZonedDateTime.parse(params.version_ts) : null;
+
+def currentTs = null;
+if (ctx._source.version_ts != null) {
+  if (ctx._source.version_ts instanceof String) {
+    currentTs = ZonedDateTime.parse(ctx._source.version_ts);
+  } else {
+    currentTs = ctx._source.version_ts;
+  }
+}
+
+// if an older doc arrives, insert its NEW values at the beginning
+boolean insertAtFront = (incomingTs != null && currentTs != null && incomingTs.isBefore(currentTs));
+
+mergeUniqueOrdered(ctx._source.articles, params.articles_add, insertAtFront);
+mergeUniqueOrdered(ctx._source.defendants, params.defendants_add, insertAtFront);
+mergeUniqueOrdered(ctx._source.participants, params.participants_add, insertAtFront);
+mergeUniqueOrdered(ctx._source.participants_and_defendants, params.participants_and_defendants_add, insertAtFront);
+mergeUniqueOrdered(ctx._source.full_document_texts, params.full_document_texts_add, insertAtFront);
+
+if (params.file_append != null) {
+  if (insertAtFront) {
+    ctx._source.files.add(0, params.file_append);
+  } else {
+    ctx._source.files.add(params.file_append);
+  }
+}
+
+boolean shouldUpdateLatest = false;
+if (incomingTs != null && currentTs == null) {
+  shouldUpdateLatest = true;
+} else if (incomingTs != null && currentTs != null) {
+  if (incomingTs.isAfter(currentTs)) shouldUpdateLatest = true;
+}
+
+if (shouldUpdateLatest) {
+  ctx._source.version = params.version;
+  ctx._source.version_ts = incomingTs;
+  ctx._source.is_latest = true;
+
+  if (params.judge_latest != null) ctx._source.judge = params.judge_latest;
+  if (params.doc_text_full_latest != null) ctx._source.doc_text_full = params.doc_text_full_latest;
+}

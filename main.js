@@ -1,5 +1,8 @@
+process.env.UV_THREADPOOL_SIZE = '16';
+
 import { traverseCases } from "./traverse.js";
-import { parseFiles } from "./parser.js";
+// import { parseFiles } from "./parser.js";
+import { parseFiles } from "./threaded_parser.js";
 import path from "path";
 import minimist from "minimist";
 import { toDocument } from "./toDocument.js";
@@ -41,13 +44,16 @@ if (ES_URL.startsWith("https://") && args.insecure) {
 }
 const es = new Client(esOpts);
 
+
+const scriptId = process.env.ES_SCRIPT_ID || 'merge_case_files_v1';
+
 function idFn(d) {
   return d.id_final || `${d.group_id}__${d.version}`;
 }
 
 function bucketKey(unit) {
   const parts = unit.relFromRoot.split("/");
-  return parts.slice(0, 2).join("/"); // YYYY/MM/DD
+  return parts.slice(0, 1).join("/"); // YYYY/MM/DD
 }
 
 export async function bulkIndex(esClient, index, docs, makeId, { refresh = false } = {}) {
@@ -128,6 +134,7 @@ function createBucketIndexer({
       metrics.inc("bulkCalls", 1);
       metrics.inc("docsIndexed", res.total);
       metrics.inc("bulkDocsTotal", res.total);
+      console.log("flush bkey=", bkey, "batch=", batch.length);
       if (res.failed) metrics.inc("bulkFailedDocs", res.failed);
     } finally {
       metrics.addTime("bulkMs", metrics.now() - t0);
@@ -294,10 +301,10 @@ async function main() {
   const metrics = createMetrics({ logEveryMs: 5000 });
   await ensureIndex();
 
-  const caseConcurrency = Math.max(1, 8);
+  const caseConcurrency = Math.max(1, 4);
   const fileConcurrency = Math.max(1, 2);
   const bulkDocs = Math.max(1, 3000);
-  const bulkFlushMs = Math.max(10, 5000);
+  const bulkFlushMs = Math.max(10, 30000);
 
   const indexer = createBucketIndexer({
   es,
@@ -337,7 +344,10 @@ async function main() {
       const bkey = bucketKey(unit);
 
       const tParse = metrics.now();
-      const parsedFiles = await parseFiles(unit, { concurrency: fileConcurrency });
+      const parsedFiles = await parseFiles(unit, {
+        concurrency: fileConcurrency,
+        metrics,
+        });
       metrics.addTime("parseMs", metrics.now() - tParse);
 
       const tDoc = metrics.now();
@@ -359,7 +369,7 @@ async function main() {
       console.error("Parse queue error:", err);
     });
 
-    const SOFT_LIMIT = caseConcurrency * 10;
+    const SOFT_LIMIT = caseConcurrency * 30;
 
     for await (const unit of traverseCases(ROOT)) {
       while (parseQueue.length() > SOFT_LIMIT) {

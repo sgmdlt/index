@@ -120,9 +120,11 @@ export default async function fillRawTables(html) {
   html = html.replace(/<\/th>\s+<tr>\s+<tr>/gi, "</th></tr><tr>");
 
   const $ = load(html, {
-    decodeEntities: true,
-    xmlMode: false,
-    lowerCaseTags: false,
+    xml: {
+      decodeEntities: true,
+      xmlMode: false,
+      lowerCaseTags: false,
+    },
   });
 
   const formatted_case = {};

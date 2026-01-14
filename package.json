@@ -18,6 +18,8 @@
     "dotenv": "^17.0.1",
     "jsonpath-js": "^0.1.2",
     "minimist": "^1.2.8",
+    "pg": "^8.16.3",
+    "piscina": "^5.1.4",
     "stream-chain": "^2.2.5",
     "stream-json": "1.8.0"
   },
