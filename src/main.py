@@ -40,6 +40,7 @@ from src.load_from_db import (
     poll_batch,
     queue_redownload,
     rows_to_units,
+    units_from_warc,
 )
 from src.metrics import Metrics
 from src.parse_html import fill_raw_tables
@@ -708,6 +709,11 @@ def parse_args():
     p.add_argument("--filter", dest="filter_str", default=None)
     p.add_argument("--jsonl", default=None)
     p.add_argument("--folders", default=None)
+    p.add_argument(
+        "--warc",
+        default=None,
+        help="Shard .warc.gz file or directory of shards: stream start-to-end for a full reindex (no DB)",
+    )
     p.add_argument("--db", action="store_true")
     p.add_argument("--insecure", action="store_true")
     p.add_argument("--workers", type=int, default=os.cpu_count() or 6)
@@ -763,7 +769,7 @@ def main():
 
     orig_settings = _fast_ingest_on(es, args.index)
 
-    pg_conn = _open_pg() if args.redownload and not args.db else None
+    pg_conn = _open_pg() if args.redownload and not args.db and not args.warc else None
     on_redownload = None
     if pg_conn is not None:
         def on_redownload(reason: str, manifest_path: str, filename: str | None = None):
@@ -775,6 +781,12 @@ def main():
         try:
             if args.jsonl:
                 _run_jsonl(args.jsonl, indexer, metrics, failed_log=args.failed_log)
+            elif args.warc:
+                _run_pipelined(
+                    units_from_warc(args.warc),
+                    pool, indexer, metrics, args.workers,
+                    failed_log=args.failed_log,
+                )
             elif args.db:
                 _run_db(pool, indexer, metrics, args.workers)
             elif args.folders:

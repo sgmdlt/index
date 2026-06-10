@@ -229,6 +229,53 @@ def _warc_date_to_name(warc_date: str | None) -> str | None:
     return dt.strftime("%d-%m-%Y.%H:%M:%S.html")
 
 
+def _group_to_unit(locator: str, meta, html, warc_date) -> dict:
+    fname = _warc_date_to_name(warc_date) or locator
+    return {
+        "manifest_path": locator,
+        "rel_from_root": locator,
+        "meta": meta,
+        "html_files": [fname],
+        "html_bytes_by_name": {fname: html},
+    }
+
+
+def units_from_warc(path: str) -> Generator[dict, None, None]:
+    """Stream .warc.gz shards start-to-end for a full reindex, no DB.
+
+    `path` is one shard or a directory of shards. Records are paired into
+    (metadata, resource) groups; each group becomes one pipeline unit with a
+    seek-compatible locator, identical to what db mode produces.
+    """
+    if os.path.isdir(path):
+        shards = sorted(
+            os.path.join(path, f)
+            for f in os.listdir(path)
+            if f.endswith(".warc.gz")
+        )
+    else:
+        shards = [path]
+
+    for shard in shards:
+        with open(shard, "rb") as fh:
+            it = ArchiveIterator(fh)
+            group_off = group_len = meta = None
+            for rec in it:
+                # content must be read before offset/length are valid
+                if rec.rec_type == "metadata":
+                    meta = json.load(rec.content_stream())
+                    group_off = it.get_record_offset()
+                    group_len = it.get_record_length()
+                elif rec.rec_type == "resource" and meta is not None:
+                    html = rec.content_stream().read()
+                    warc_date = rec.rec_headers.get_header("WARC-Date")
+                    group_len += it.get_record_length()
+                    yield _group_to_unit(
+                        f"{shard}:{group_off}:{group_len}", meta, html, warc_date
+                    )
+                    meta = None
+
+
 def _warc_row_to_unit(fh, row: dict) -> tuple[dict | None, dict, str | None]:
     """Read one 2-record group (metadata + resource) at the row's locator."""
     locator = row["warc_locator"]
