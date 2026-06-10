@@ -21,7 +21,15 @@ DOCKER_ROOT = "/app/court_data/"
 DOCKER_WARC_ROOT = "/app/court_warc/"
 MAX_ATTEMPTS = 5
 
-VALID_REASONS = {"path_missing", "docs_missing", "bad_manifest_json", "build_failed"}
+VALID_REASONS = {
+    "path_missing",
+    "docs_missing",
+    "bad_manifest_json",
+    "build_failed",
+    "bad_jsonl_record",
+    "sql_error",   # court DB error page stored instead of case HTML
+    "empty_html",  # placeholder/banner page with no extractable fields
+}
 
 
 FS_ROOT = os.environ.get("COURTS_FS_ROOT", "/home/ltdmgs/courts_raw_data/")

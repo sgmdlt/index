@@ -494,6 +494,11 @@ def _run_pipelined(
                 metrics.inc("parseErrors")
                 state["results"][fname] = None  # drop file, don't emit empty doc
                 state["had_error"] = True
+                # _parse_html_bytes raises ValueError("<kind>: <origin>");
+                # surface the kind so DB mode queues a precise redownload reason
+                kind = str(exc).split(":", 1)[0]
+                if kind in ("sql_error", "empty_html"):
+                    state["unit"]["_fail_reason"] = kind
             state["completed"] += 1
 
             # Not all futures for this unit resolved yet — keep waiting
@@ -674,7 +679,7 @@ def _run_db(
         else:
             queue_redownload(
                 conn,
-                "build_failed",
+                unit.get("_fail_reason") or "build_failed",
                 manifest_path=row["manifest"],
                 filename=row["filename"],
                 outbox_row=row,
