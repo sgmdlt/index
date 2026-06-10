@@ -51,8 +51,10 @@ def test_warc_rows_yield_units_without_fs_tree(tmp_path):
     assert out_row["id"] == 1
     assert unit["meta"] == meta
     assert unit["manifest_path"] == locator
-    assert unit["html_files"] == [locator]
-    assert unit["html_bytes_by_name"] == {locator: html}
+    # filename synthesized from WARC-Date (download time) so version_ts works
+    [fname] = unit["html_files"]
+    assert fname.endswith(".html")
+    assert unit["html_bytes_by_name"] == {fname: html}
 
 
 def test_warc_batch_two_shards_shuffled_order(tmp_path):

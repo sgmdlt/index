@@ -6,6 +6,7 @@ Ports loadFromDb.js. Implements lease-based polling with retry limits.
 import json
 import logging
 import os
+from datetime import datetime
 from io import BytesIO
 from itertools import groupby
 from typing import Generator
@@ -212,32 +213,50 @@ def rows_to_units(
         )
 
 
+def _warc_date_to_name(warc_date: str | None) -> str | None:
+    """WARC-Date (record write time = download time) -> legacy html filename.
+
+    The old-format name DD-MM-YYYY.HH:MM:SS.html is what html_name_to_iso /
+    get_files_version derive version_ts from; without it WARC units would
+    fall back to date_reg and re-downloads of a case would tie on version.
+    """
+    if not warc_date:
+        return None
+    try:
+        dt = datetime.fromisoformat(warc_date.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return dt.strftime("%d-%m-%Y.%H:%M:%S.html")
+
+
 def _warc_row_to_unit(fh, row: dict) -> tuple[dict | None, dict, str | None]:
     """Read one 2-record group (metadata + resource) at the row's locator."""
     locator = row["warc_locator"]
     _, off, length = _loc_parts(locator)
     fh.seek(off)
     buf = BytesIO(fh.read(length))
-    meta, html = None, None
+    meta, html, warc_date = None, None, None
     try:
         for rec in ArchiveIterator(buf):
             if rec.rec_type == "metadata":
                 meta = json.load(rec.content_stream())
             elif rec.rec_type == "resource":
                 html = rec.content_stream().read()
+                warc_date = rec.rec_headers.get_header("WARC-Date")
     except Exception as exc:
         logger.warning("[ID %d] Bad WARC group at %s: %s", row["id"], locator, exc)
         return None, row, "docs_missing"
     if meta is None or html is None:
         logger.warning("[ID %d] Incomplete WARC group at %s", row["id"], locator)
         return None, row, "docs_missing"
+    fname = _warc_date_to_name(warc_date) or locator
     return (
         {
             "manifest_path": locator,
             "rel_from_root": locator,
             "meta": meta,
-            "html_files": [locator],
-            "html_bytes_by_name": {locator: html},
+            "html_files": [fname],
+            "html_bytes_by_name": {fname: html},
         },
         row,
         None,
