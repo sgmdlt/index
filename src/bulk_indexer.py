@@ -8,6 +8,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 
+from .text_filters import broken_text_message, fix_date_reg
 from .utils.dates import html_name_to_iso
 from .utils.paths import norm_path, dir_of_rel
 
@@ -212,15 +213,20 @@ def _build_documents_array(
     if not doc_texts:
         return []
     if isinstance(doc_texts, list) and doc_texts and isinstance(doc_texts[0], dict):
-        return [
-            {
+        entries = []
+        for dt in doc_texts:
+            entry = {
                 "filename": filename or "",
                 "date": date,
                 "name": dt["name"],
                 "text": dt["text"],
             }
-            for dt in doc_texts
-        ]
+            broken_msg = broken_text_message(dt["text"])
+            if broken_msg:
+                entry["text"] = broken_msg
+                entry["is_broken"] = True
+            entries.append(entry)
+        return entries
     # Legacy fallback: flat list of strings
     text = " ".join(t for t in doc_texts if isinstance(t, str) and t)
     if text and filename:
@@ -262,6 +268,9 @@ def build_update_item(
     assembled.pop("full_document_texts", None)
     assembled["documents"] = _build_documents_array(
         doc_texts, filename, from_name or version_ts
+    )
+    assembled["date_reg"] = fix_date_reg(
+        assembled.get("date_reg"), assembled.get("progress") or []
     )
 
     item: dict = {
