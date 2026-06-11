@@ -1,0 +1,303 @@
+{
+  "settings": {
+    "analysis": {
+      "normalizer": {
+        "lowercase": {
+          "type": "custom",
+          "char_filter": [],
+          "filter": ["trim", "lowercase"]
+        }
+      },
+      "analyzer": {
+        "mz_russian": {
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "russian_stop",
+            "russian_keywords",
+            "russian_stemmer"
+          ]
+        }
+      },
+      "filter": {
+        "russian_stop": {
+          "type": "stop",
+          "stopwords": [
+            "и",
+            "в",
+            "во",
+            "не",
+            "что",
+            "он",
+            "на",
+            "я",
+            "с",
+            "со",
+            "как",
+            "а",
+            "то",
+            "она",
+            "так",
+            "его",
+            "но",
+            "да",
+            "ты",
+            "к",
+            "у",
+            "же",
+            "вы",
+            "за",
+            "бы",
+            "по",
+            "ее",
+            "мне",
+            "было",
+            "вот",
+            "от",
+            "меня",
+            "еще",
+            "о",
+            "из",
+            "ему",
+            "когда",
+            "даже",
+            "ну",
+            "ли",
+            "если",
+            "уже",
+            "или",
+            "ни",
+            "быть",
+            "был",
+            "него",
+            "до",
+            "вас",
+            "нибудь",
+            "уж",
+            "вам",
+            "ведь",
+            "там",
+            "себя",
+            "ей",
+            "они",
+            "тут",
+            "где",
+            "есть",
+            "ней",
+            "для",
+            "мы",
+            "тебя",
+            "их",
+            "чем",
+            "была",
+            "сам",
+            "чтоб",
+            "будто",
+            "чего",
+            "тоже",
+            "себе",
+            "под",
+            "будет",
+            "ж",
+            "кто",
+            "этот",
+            "того",
+            "потому",
+            "этого",
+            "какой",
+            "совсем",
+            "ним",
+            "здесь",
+            "этом",
+            "почти",
+            "мой",
+            "тем",
+            "чтобы",
+            "нее",
+            "были",
+            "куда",
+            "зачем",
+            "можно",
+            "при",
+            "об",
+            "хоть",
+            "тот",
+            "эти",
+            "нас",
+            "про",
+            "них",
+            "какая",
+            "разве",
+            "эту",
+            "моя",
+            "впрочем",
+            "свою",
+            "этой",
+            "чуть",
+            "том",
+            "такой",
+            "им"
+          ]
+        },
+        "russian_keywords": {
+          "type": "keyword_marker",
+          "keywords": ["пример"]
+        },
+        "russian_stemmer": {
+          "type": "stemmer",
+          "language": "russian"
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "version": {
+        "type": "integer",
+        "index": false
+      },
+      "version_ts": {
+        "type": "date"
+      },
+      "doc_count": {
+        "type": "integer"
+      },
+      "progress": {
+        "type": "object"
+      },
+      "articles": {
+        "type": "wildcard"
+      },
+      "case_category": {
+        "type": "keyword",
+        "normalizer": "lowercase"
+      },
+      "case_hidden": {
+        "type": "boolean"
+      },
+      "case_number": {
+        "type": "keyword"
+      },
+      "case_subcategory": {
+        "type": "keyword",
+        "normalizer": "lowercase"
+      },
+      "case_type": {
+        "type": "keyword"
+      },
+      "censorship": {
+        "type": "text",
+        "analyzer": "russian",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "normalizer": "lowercase"
+          }
+        }
+      },
+      "court_code": {
+        "type": "keyword"
+      },
+      "tag": {
+        "type": "keyword"
+      },
+      "court_name": {
+        "type": "keyword"
+      },
+      "date_reg": {
+        "type": "date",
+        "ignore_malformed": true
+      },
+      "date_result": {
+        "type": "date",
+        "ignore_malformed": true
+      },
+      "date_onhold_defendant_wanted": {
+        "type": "date",
+        "ignore_malformed": true
+      },
+      "date_onhold_defendant_located": {
+        "type": "date",
+        "ignore_malformed": true
+      },
+      "date_onhold_defendant_military": {
+        "type": "date",
+        "ignore_malformed": true
+      },
+      "defendants": {
+        "type": "text",
+        "analyzer": "russian",
+        "fields": {
+          "keyword": {
+            "type": "wildcard"
+          }
+        }
+      },
+      "first_case_number": {
+        "type": "keyword"
+      },
+      "first_court_name": {
+        "type": "keyword"
+      },
+      "first_judge": {
+        "type": "keyword"
+      },
+      "id_final": {
+        "type": "keyword"
+      },
+      "id_uid": {
+        "type": "keyword"
+      },
+      "instance": {
+        "type": "keyword"
+      },
+      "judge": {
+        "type": "keyword"
+      },
+      "link": {
+        "type": "keyword",
+        "index": false
+      },
+      "participants": {
+        "type": "text",
+        "analyzer": "russian",
+        "fields": {
+          "keyword": {
+            "type": "wildcard"
+          }
+        }
+      },
+      "region": {
+        "type": "keyword"
+      },
+      "result": {
+        "type": "keyword",
+        "normalizer": "lowercase"
+      },
+      "uuid": {
+        "type": "keyword"
+      },
+      "html_files": { "type": "keyword", "index": false },
+      "path_manifest": { "type": "keyword", "index": false },
+      "documents": {
+        "type": "nested",
+        "properties": {
+          "filename": {
+            "type": "keyword"
+          },
+          "date": {
+            "type": "date",
+            "ignore_malformed": true
+          },
+          "name": {
+            "type": "keyword"
+          },
+          "text": {
+            "type": "text",
+            "analyzer": "mz_russian"
+          }
+        }
+      }
+    }
+  }
+}
