@@ -91,7 +91,7 @@ def build_query(
 def run(es: Elasticsearch, index: str, apply: bool, query: dict) -> None:
     fixed = scanned = 0
     resp = es.search(
-        index=index, query=query, size=500, scroll="5m", _source=["documents", "uuid"]
+        index=index, query=query, size=500, scroll="5m", _source=["documents", "id_uid"]
     )
     scroll_id = resp["_scroll_id"]
     while hits := resp["hits"]["hits"]:
@@ -103,8 +103,8 @@ def run(es: Elasticsearch, index: str, apply: bool, query: dict) -> None:
             if new_docs != docs:
                 fixed += 1
                 n_broken = sum(1 for d in new_docs if d.get("is_broken"))
-                uuid = hit["_source"].get("uuid") or "-"
-                print(f"{hit['_id']} uuid={uuid}: {len(docs)} -> {len(new_docs)} broken={n_broken}")
+                id_uid = hit["_source"].get("id_uid") or "-"
+                print(f"{hit['_id']} id_uid={id_uid}: {len(docs)} -> {len(new_docs)} broken={n_broken}")
                 if apply:
                     ops.append({"update": {"_index": index, "_id": hit["_id"]}})
                     ops.append({"doc": {"documents": new_docs, "doc_count": len(new_docs)}})
