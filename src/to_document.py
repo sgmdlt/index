@@ -7,10 +7,21 @@ import json
 import re
 from pathlib import Path
 
+from .utils.case_id import build_case_id
 from .utils.dates import date_value_to_iso, get_files_version
 from .utils.paths import dir_of_rel, norm_path
 
 _UUID_RE = re.compile(r"_uid=([0-9a-f-]+)")
+_NUMBER_YEAR_RE = re.compile(r"/\s*((?:19|20)\d{2})")
+
+
+def fix_none_id(id_final: str | None, case_number) -> str | None:
+    """Heal legacy `<court>_NONE_<number>` ids: replace NONE with the year
+    from the case number (same fallback the downloader uses now)."""
+    if not id_final or "_NONE_" not in id_final:
+        return id_final
+    m = _NUMBER_YEAR_RE.search(str(case_number or ""))
+    return id_final.replace("_NONE_", f"_{m.group(1)}_") if m else id_final
 
 _HERE = Path(__file__).parent.parent  # project root (index/)
 
@@ -27,7 +38,19 @@ def to_document(
 ) -> dict:
     """Build the ES document container from a parsed unit."""
     rel_dir = dir_of_rel(rel_from_root)
-    id_final = meta.get("ID") or meta.get("id_final")
+    # Recompute the id from the manifest's component fields with the current
+    # (corrected) formula instead of trusting a possibly-stale meta["ID"]. This
+    # re-keys legacy wrong-parse ids and folds old/new collision scrapes onto one
+    # _id. Fall back to the stored id only when recomputation can't run.
+    try:
+        recomputed = build_case_id(
+            meta.get("case_number"), meta.get("date_reg"), meta.get("court_id")
+        )
+    except Exception:
+        recomputed = None
+    id_final = recomputed or fix_none_id(
+        meta.get("ID") or meta.get("id_final"), meta.get("case_number")
+    )
     version_info = get_files_version(html_files, rel_dir, meta)
 
     instance_key = str(meta.get("instance", ""))
