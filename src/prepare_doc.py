@@ -16,8 +16,15 @@ with open(_HERE / "elastic_index_dict.json", encoding="utf-8") as _f:
 with open(_HERE / "elastic_type_instance_dict.json", encoding="utf-8") as _f:
     TYPE_INSTANCE_RULES: dict = json.load(_f)
 
-_PROGRESS_DATE_KEYS = ("Дата", "Дата события")
-_PROGRESS_EVENT_KEYS = ("Наименование события", "Тип события", "Вид события", "Событие")
+_PROGRESS_DATE_KEYS = ("Дата", "Дата события", "Дата и время")
+_PROGRESS_EVENT_KEYS = (
+    "Наименование события", "Тип события", "Вид события", "Событие",
+    "Состояние", "Стадия",
+)
+# Moscow (mos-gorsud/mos-sud) cards nest movement as {section: [rows]} inside
+# `Движение дела`/`Судебные заседания`. Expand only these sections into progress
+# rows; other wrappers (e.g. «История местонахождения») are skipped.
+_PROGRESS_SECTIONS = ("История состояний", "Судебные заседания и беседы")
 
 _ONHOLD_PATTERNS = {
     "date_onhold_defendant_wanted": re.compile(r"скрылся", re.IGNORECASE),
@@ -251,15 +258,25 @@ def _get_progress_rows(values: list) -> list[dict]:
     for row in values:
         if not isinstance(row, dict):
             continue
-        if long_key in row:
-            row["Дата размещения"] = row.pop(long_key)
-        date = str(row.get("Дата") or row.get("Дата события") or "").strip()
-        name = str(row.get("Наименование события") or "").strip()
-        entry = {"date": date, "event": name}
-        for k, v in row.items():
-            if v and k not in ("Дата", "Дата события", "Наименование события"):
-                entry[k] = v
-        result[(date, name)] = entry
+        # Moscow nested wrapper {section: [inner rows]}: expand wanted sections,
+        # skip the rest. Flat regional rows fall through unchanged.
+        if len(row) == 1 and isinstance(next(iter(row.values())), list):
+            section, inner = next(iter(row.items()))
+            if section not in _PROGRESS_SECTIONS:
+                continue
+            inner_rows = [r for r in inner if isinstance(r, dict)]
+        else:
+            inner_rows = [row]
+        for r in inner_rows:
+            if long_key in r:
+                r["Дата размещения"] = r.pop(long_key)
+            date = next((str(r[k]).strip() for k in _PROGRESS_DATE_KEYS if r.get(k)), "")
+            name = next((str(r[k]).strip() for k in _PROGRESS_EVENT_KEYS if r.get(k)), "")
+            entry = {"date": date, "event": name}
+            for k, v in r.items():
+                if v and k not in _PROGRESS_DATE_KEYS and k not in _PROGRESS_EVENT_KEYS:
+                    entry[k] = v
+            result[(date, name)] = entry
     return list(result.values())
 
 
@@ -276,6 +293,11 @@ _TYPE_HANDLERS = {
 # ---------------------------------------------------------------------------
 # Main entry point
 # ---------------------------------------------------------------------------
+
+# Document-type names carrying no information: "" and the JSONPath container key
+# "raw_json" that the legacy court_decisions location surfaces. These must never
+# overwrite a real "Судебный акт #N (…)" name during _document_text dedup.
+_PLACEHOLDER_DOC_NAMES = frozenset({"", "raw_json"})
 
 
 def prepare_doc(raw: dict) -> dict:
@@ -303,7 +325,11 @@ def prepare_doc(raw: dict) -> dict:
                         continue
                     if text not in name_by_text:
                         text_order.append(text)
-                    name_by_text[text] = tab_name
+                        name_by_text[text] = tab_name
+                    elif tab_name not in _PLACEHOLDER_DOC_NAMES:
+                        # later real name wins; a placeholder (raw_json/"") from
+                        # the legacy court_decisions location can't clobber it
+                        name_by_text[text] = tab_name
             doc["_document_text"] = [
                 {"name": name_by_text[t], "text": t} for t in text_order
             ]

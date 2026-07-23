@@ -97,6 +97,39 @@ def _normalize_strings(node):
     return node
 
 
+def _court_decisions_to_raw_tables(data: dict) -> None:
+    """In-place: derive raw_tables['СУДЕБНЫЕ АКТЫ'] from the legacy
+    raw_json.court_decisions format (old mgs / sud_delo MS scrapers).
+
+    The document-type name comes from each decision's filename stem
+    ('Постановление.doc' → 'Постановление'), producing the same
+    'Судебный акт #N (<type>)' keys the sudrf format uses. court_decisions is
+    kept intact so date_result's created_date rule still resolves. No-op when a
+    'СУДЕБНЫЕ АКТЫ' section already exists (idempotent re-index)."""
+    raw_json = data.get("raw_json")
+    if not isinstance(raw_json, dict):
+        return
+    decisions = raw_json.get("court_decisions")
+    if not decisions:
+        return
+    tables = data.get("raw_tables")
+    if isinstance(tables, dict) and "СУДЕБНЫЕ АКТЫ" in tables:
+        return
+    acts: list[dict] = []
+    for d in decisions:
+        if not isinstance(d, dict):
+            continue
+        text = d.get("text") or ""
+        if not text:
+            continue
+        name = (d.get("filename") or "").rsplit(".", 1)[0].strip()
+        label = f"Судебный акт #{len(acts) + 1}"
+        if name:
+            label += f" ({name})"
+        acts.append({label: text})
+    data.setdefault("raw_tables", {})["СУДЕБНЫЕ АКТЫ"] = acts
+
+
 _ID_FINAL_RE = re.compile(rb'"id_final"\s*:\s*"([^"]+)"')
 _LINK_RE = re.compile(rb'"link"\s*:\s*"([^"]+)"')
 
@@ -197,6 +230,7 @@ def _units_from_jsonl(jsonl_path: str):
                     buf_parts = []
                 continue
             buf_parts = []
+            _court_decisions_to_raw_tables(data)
             if "raw_tables" in data:
                 data["raw_tables"] = _normalize_strings(data["raw_tables"])
             yield {
