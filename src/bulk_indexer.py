@@ -60,20 +60,30 @@ def _doc_canon(text: str) -> str:
     return " ".join(text.split()) if text else ""
 
 
+# Names that carry no information about the document type: "" and the JSONPath
+# container key "raw_json" that the old mgs court_decisions format surfaced as.
+_PLACEHOLDER_NAMES = frozenset({"", "raw_json"})
+
+
 def _merge_documents(existing_arr: list, incoming_arr: list) -> list:
-    seen_canon: set[str] = {
-        _doc_canon(entry["text"])
-        for entry in existing_arr
-        if isinstance(entry, dict) and entry.get("text")
-    }
     result = list(existing_arr)
+    canon_idx: dict[str, int] = {}
+    for i, entry in enumerate(result):
+        if isinstance(entry, dict) and entry.get("text"):
+            canon_idx.setdefault(_doc_canon(entry["text"]), i)
     for entry in incoming_arr:
         if not isinstance(entry, dict):
             continue
         canon = _doc_canon(entry.get("text", ""))
-        if canon and canon not in seen_canon:
-            seen_canon.add(canon)
+        if not canon:
+            continue
+        i = canon_idx.get(canon)
+        if i is None:
+            canon_idx[canon] = len(result)
             result.append(entry)
+        elif ((result[i].get("name") or "") in _PLACEHOLDER_NAMES
+              and (entry.get("name") or "") not in _PLACEHOLDER_NAMES):
+            result[i] = entry    # same text, properly named copy wins
     return result
 
 
@@ -170,6 +180,11 @@ def merge_progress(existing: list, incoming: list) -> list[dict]:
         if d is None:
             continue
         head = _progress_head(d)
+        # Drop degenerate rows with no date and no event (e.g. the stale
+        # «История местонахождения»-only row left by the old parser). Purges
+        # them on re-index instead of preserving them forever.
+        if head == ("", ""):
+            continue
         rest = _progress_rest(d)
         result = [
             r for r in result
@@ -270,7 +285,10 @@ def build_update_item(
         doc_texts, filename, from_name or version_ts
     )
     assembled["date_reg"] = fix_date_reg(
-        assembled.get("date_reg"), assembled.get("progress") or []
+        assembled.get("date_reg"),
+        assembled.get("progress") or [],
+        assembled.get("date_result"),
+        assembled.get("case_number"),
     )
 
     item: dict = {
