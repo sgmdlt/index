@@ -8,6 +8,8 @@ import logging
 import re
 from bs4 import BeautifulSoup, Tag
 
+from src.parse_html_mgs import fill_raw_tables_mgs, is_mgs
+
 logger = logging.getLogger(__name__)
 
 
@@ -184,6 +186,11 @@ def _should_include_table(table: Tag) -> bool:
 def fill_raw_tables(html: bytes | str) -> dict:
     if isinstance(html, bytes):
         html = html.decode("utf-8", errors="replace")
+
+    # mos-gorsud shares no markup with sudrf — none of the selectors below
+    # match, and the page would silently parse to an empty raw_tables.
+    if is_mgs(html):
+        return fill_raw_tables_mgs(html)
 
     # Fix malformed HTML pattern seen in the wild
     html = re.sub(r"</th>\s+<tr>\s+<tr>", "</th></tr><tr>", html, flags=re.IGNORECASE)

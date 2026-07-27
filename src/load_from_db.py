@@ -13,6 +13,8 @@ from typing import Generator
 
 from warcio.archiveiterator import ArchiveIterator
 
+from src.parse_html_mgs import is_mgs, mgs_identity
+
 logger = logging.getLogger(__name__)
 
 TABLE = os.environ.get("PG_TABLE", "outbox")
@@ -237,12 +239,31 @@ def _warc_date_to_name(warc_date: str | None) -> str | None:
     return dt.strftime("%d-%m-%Y.%H:%M:%S.html")
 
 
+def enrich_mgs_meta(meta: dict, html) -> dict:
+    """Fill identity for an archived mos-gorsud card.
+
+    The MGS crawler stores pages without parsing them, so its manifest carries
+    only the url, the court derived from that url, and a dump-seeded id when
+    there is one. Everything else has to come from the card itself. A seeded id
+    always wins: it is what is already in Elasticsearch, and a case renumbered
+    since the dump would otherwise land as a second document.
+    """
+    if not is_mgs(html):
+        return meta
+    enriched = dict(meta)
+    identity = mgs_identity(html, enriched.get("url", ""))
+    if enriched.get("id_final") or enriched.get("ID"):
+        identity.pop("id_final", None)
+    enriched.update({k: v for k, v in identity.items() if v})
+    return enriched
+
+
 def _group_to_unit(locator: str, meta, html, warc_date) -> dict:
     fname = _warc_date_to_name(warc_date) or locator
     return {
         "manifest_path": locator,
         "rel_from_root": locator,
-        "meta": meta,
+        "meta": enrich_mgs_meta(meta, html),
         "html_files": [fname],
         "html_bytes_by_name": {fname: html},
     }
@@ -309,7 +330,7 @@ def _warc_row_to_unit(fh, row: dict) -> tuple[dict | None, dict, str | None]:
         {
             "manifest_path": locator,
             "rel_from_root": locator,
-            "meta": meta,
+            "meta": enrich_mgs_meta(meta, html),
             "html_files": [fname],
             "html_bytes_by_name": {fname: html},
         },
