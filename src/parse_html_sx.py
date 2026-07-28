@@ -318,7 +318,7 @@ def tab_to_dict(tab: LexborNode):
 
 # ---------- public entry point ----------
 
-def fill_raw_tables(html: bytes | str) -> dict:
+def fill_raw_tables(html: bytes | str, documents: dict | None = None) -> dict:
     if isinstance(html, bytes):
         html = html.decode("utf-8", errors="replace")
 
@@ -326,7 +326,7 @@ def fill_raw_tables(html: bytes | str) -> dict:
     # miss and the page would parse to an empty raw_tables. Delegating keeps
     # this a true drop-in for src.parse_html, parity test included.
     if is_mgs(html):
-        return fill_raw_tables_mgs(html)
+        return fill_raw_tables_mgs(html, documents)
 
     # Fix malformed pattern seen in the wild
     html = re.sub(r"</th>\s+<tr>\s+<tr>", "</th></tr><tr>", html, flags=re.IGNORECASE)

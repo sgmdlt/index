@@ -13,6 +13,8 @@ from dataclasses import dataclass
 
 from bs4 import BeautifulSoup
 
+from src.extract_document import to_text
+
 BASE = "https://mos-gorsud.ru"
 
 # UI chrome that sits inside the very nodes we read: clipboard hints on card
@@ -114,12 +116,64 @@ def fill_texts(tables: dict, texts: dict) -> dict:
 
 
 
-def fill_raw_tables_mgs(html) -> dict:
-    """The `fill_raw_tables` contract: {"raw_tables": {...}}."""
+def _documents(card) -> list:
+    """Every downloadable document, labelled by its own опись row.
+
+    card.links alone loses the label, and СУДЕБНЫЕ АКТЫ is keyed by it.
+    """
+    docs, seen = [], set()
+    for groups in card.tables.values():
+        for group in groups:
+            for rows in group.values():
+                for row in rows:
+                    link = next((v for v in row.values()
+                                 if isinstance(v, str) and v in card.links), None)
+                    if link is None or link in seen:
+                        continue
+                    seen.add(link)
+                    docs.append({"link": link,
+                                 "name": row.get("Вид документа", ""),
+                                 "date": row.get("Дата документа", "")})
+    return docs
+
+
+def _acts(card, texts: dict) -> list:
+    """raw_tables["СУДЕБНЫЕ АКТЫ"], the section the _document_text rule reads."""
+    acts = []
+    for doc in _documents(card):
+        text = texts.get(doc["link"])
+        if not text:
+            continue
+        label = f"Судебный акт #{len(acts) + 1}"
+        if doc["name"]:
+            label += f" ({doc['name']})"
+        acts.append({label: text})
+    return acts
+
+
+def fill_raw_tables_mgs(html, documents: dict | None = None) -> dict:
+    """The `fill_raw_tables` contract: {"raw_tables": {...}}.
+
+    `documents` maps a document URL to `(bytes, ext)` as archived by the
+    crawler — plain bytes are accepted too, and then the format is sniffed.
+    Extraction happens here, so improving it never costs another crawl. A
+    document that will not extract keeps its link in the cell, which makes the
+    loss visible instead of silently blank.
+    """
     if isinstance(html, bytes):
         html = html.decode("utf-8", errors="replace")
     card = parse_card(html)
-    return {"raw_tables": {"Дело": card.head, **card.tables}}
+    texts = {}
+    for url, value in (documents or {}).items():
+        body, ext = value if isinstance(value, tuple) else (value, None)
+        extracted = to_text(body, ext)
+        if extracted.text:
+            texts[url] = extracted.text
+    tables = fill_texts(card.tables, texts) if texts else card.tables
+    raw = {"Дело": card.head, **tables}
+    if texts:
+        raw["СУДЕБНЫЕ АКТЫ"] = _acts(card, texts)
+    return {"raw_tables": raw}
 
 
 def is_mgs(html) -> bool:

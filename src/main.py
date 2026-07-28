@@ -58,9 +58,14 @@ logging.getLogger("elastic_transport.transport").setLevel(logging.ERROR)
 
 _HERE = Path(__file__).parent  # project root (index/)
 
-def _parse_html_bytes(html_bytes: bytes, origin: str) -> dict:
-    """Parse raw case HTML into a prepared doc; origin is for error messages."""
-    raw = fill_raw_tables(html_bytes)
+def _parse_html_bytes(html_bytes: bytes, origin: str,
+                      documents: dict | None = None) -> dict:
+    """Parse raw case HTML into a prepared doc; origin is for error messages.
+
+    `documents` are the raw files an MGS crawler archived beside the card;
+    their text is extracted here rather than at crawl time.
+    """
+    raw = fill_raw_tables(html_bytes, documents)
     prepared = prepare_doc(raw)
     # No-progress docs are fine; skip only docs with no extracted field at all
     # (Postgres outage dumps and truncated pages).

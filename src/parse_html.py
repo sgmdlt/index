@@ -183,14 +183,15 @@ def _should_include_table(table: Tag) -> bool:
     return True
 
 
-def fill_raw_tables(html: bytes | str) -> dict:
+def fill_raw_tables(html: bytes | str, documents: dict | None = None) -> dict:
     if isinstance(html, bytes):
         html = html.decode("utf-8", errors="replace")
 
     # mos-gorsud shares no markup with sudrf — none of the selectors below
     # match, and the page would silently parse to an empty raw_tables.
+    # `documents` are the raw files the MGS crawler archived beside the card.
     if is_mgs(html):
-        return fill_raw_tables_mgs(html)
+        return fill_raw_tables_mgs(html, documents)
 
     # Fix malformed HTML pattern seen in the wild
     html = re.sub(r"</th>\s+<tr>\s+<tr>", "</th></tr><tr>", html, flags=re.IGNORECASE)

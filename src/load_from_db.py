@@ -311,13 +311,22 @@ def _warc_row_to_unit(fh, row: dict) -> tuple[dict | None, dict, str | None]:
     _, off, length = _loc_parts(locator)
     fh.seek(off)
     buf = BytesIO(fh.read(length))
-    meta, html, warc_date = None, None, None
+    meta, html, warc_date, documents = None, None, None, {}
     try:
         for rec in ArchiveIterator(buf):
             if rec.rec_type == "metadata":
                 meta = json.load(rec.content_stream())
             elif rec.rec_type == "resource":
-                html = rec.content_stream().read()
+                ctype = rec.rec_headers.get_header("Content-Type") or ""
+                body = rec.content_stream().read()
+                # an MGS group carries the card plus its documents; courts
+                # groups carry the page alone, so the html branch still wins
+                if documents is not None and html is not None and \
+                        not ctype.startswith("text/html"):
+                    documents[rec.rec_headers.get_header("WARC-Target-URI")] = (
+                        body, rec.rec_headers.get_header("X-Document-Ext"))
+                    continue
+                html = body
                 warc_date = rec.rec_headers.get_header("WARC-Date")
     except Exception as exc:
         logger.warning("[ID %d] Bad WARC group at %s: %s", row["id"], locator, exc)
@@ -333,6 +342,7 @@ def _warc_row_to_unit(fh, row: dict) -> tuple[dict | None, dict, str | None]:
             "meta": enrich_mgs_meta(meta, html),
             "html_files": [fname],
             "html_bytes_by_name": {fname: html},
+            "documents": documents,
         },
         row,
         None,
