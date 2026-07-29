@@ -38,14 +38,14 @@ const PG = {
   port: Number(process.env.PGPORT || 8432),
   database: process.env.PGDATABASE || 'postgres',
   user: process.env.PGUSER || 'postgres',
-  password: process.env.PGPASSWORD || 'celgthtytcen',
+  password: process.env.PGPASSWORD || '3vsjbY6sFydwtegFwA6p',
   max: Number(process.env.PGPOOL_MAX || 5),
 };
 
 const TABLE = 'outbox';
-const BATCH_LIMIT = Number(process.env.BATCH_LIMIT || 500);
+const BATCH_LIMIT = Number(process.env.BATCH_LIMIT || 20000);
 const LEASE_MINUTES = Number(process.env.LEASE_MINUTES || 5);
-const MAX_ATTEMPTS = Number(process.env.MAX_ATTEMPTS || 5);
+const MAX_ATTEMPTS = Number(process.env.MAX_ATTEMPTS || 8);
 
 const pool = new Pool(PG);
 
@@ -128,15 +128,17 @@ async function readJsonSafe(file) {
   try {
     return JSON.parse(await fsp.readFile(file, "utf8"));
   } catch (e) {
+    if (file.includes("УК")) {
     console.warn(`Пропуск (невалидный JSON): ${file}: ${e.message}`);
     return null;
   }
 }
+}
 
 async function* makeDatasource(rows) {
   for (const r of rows) {
-      r.manifest = r.manifest.replace("/app/", "/home/ltdmgs/courts/");
-      const relFromRoot = r.filename.replace("/app/", "/home/ltdmgs/courts/");
+      r.manifest = r.manifest.replace("/app/court_data/", "/home/ltdmgs/courts_raw_data/");
+      const relFromRoot = r.filename.replace("/app/court_data/", "/home/ltdmgs/courts_raw_data/");
       r.filename = r.filename.split('/').at(-1);
       const meta = await readJsonSafe(r.manifest);
 

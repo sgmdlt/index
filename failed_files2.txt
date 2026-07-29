@@ -1,0 +1,3 @@
+/home/ikuzminkin/sud_delo/cases_by_court/raw/RS/03RS0003.jsonl.gz
+/home/ikuzminkin/sud_delo/cases_by_court/raw/RS/21RS0025.jsonl.gz
+/home/ikuzminkin/sud_delo/cases_by_court/raw/RS/35RS0023.jsonl.gz

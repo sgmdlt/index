@@ -1,0 +1,114 @@
+WARNING __main__: No permission to create index 'sudata'; assuming it exists.
+rss_MB=219.3 | time=5.0s | units=4341 | html=0 | docs_prepared=4341 | docs_indexed=2000 | avg_bulk_size=1000.0 | bulk_calls=2 | bulk_failed_docs=0 | rate_docs/s=400.0 | rate_units/s=868.20 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=1926 | toDoc_ms=153 | bulk_ms=5546 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=374.9 | time=10.0s | units=8385 | html=0 | docs_prepared=8385 | docs_indexed=4000 | avg_bulk_size=1000.0 | bulk_calls=4 | bulk_failed_docs=0 | rate_docs/s=400.0 | rate_units/s=838.45 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=3672 | toDoc_ms=286 | bulk_ms=11406 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=15.0s | units=11859 | html=0 | docs_prepared=11859 | docs_indexed=11000 | avg_bulk_size=1000.0 | bulk_calls=11 | bulk_failed_docs=0 | rate_docs/s=733.3 | rate_units/s=790.55 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=5285 | toDoc_ms=412 | bulk_ms=26155 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=20.0s | units=16999 | html=0 | docs_prepared=16999 | docs_indexed=14877 | avg_bulk_size=991.8 | bulk_calls=15 | bulk_failed_docs=0 | rate_docs/s=743.8 | rate_units/s=849.88 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=7449 | toDoc_ms=577 | bulk_ms=29918 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=25.0s | units=21458 | html=0 | docs_prepared=21458 | docs_indexed=19877 | avg_bulk_size=993.9 | bulk_calls=20 | bulk_failed_docs=0 | rate_docs/s=795.0 | rate_units/s=858.25 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=9458 | toDoc_ms=730 | bulk_ms=36162 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=30.0s | units=25452 | html=0 | docs_prepared=25452 | docs_indexed=23877 | avg_bulk_size=994.9 | bulk_calls=24 | bulk_failed_docs=0 | rate_docs/s=795.4 | rate_units/s=847.88 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=11342 | toDoc_ms=873 | bulk_ms=41217 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=35.0s | units=30052 | html=0 | docs_prepared=30052 | docs_indexed=27461 | avg_bulk_size=980.8 | bulk_calls=28 | bulk_failed_docs=0 | rate_docs/s=784.2 | rate_units/s=858.14 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=13417 | toDoc_ms=1034 | bulk_ms=46010 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=40.0s | units=34299 | html=0 | docs_prepared=34299 | docs_indexed=31461 | avg_bulk_size=983.2 | bulk_calls=32 | bulk_failed_docs=0 | rate_docs/s=786.1 | rate_units/s=857.02 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=15394 | toDoc_ms=1183 | bulk_ms=55021 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=45.0s | units=38633 | html=0 | docs_prepared=38633 | docs_indexed=37461 | avg_bulk_size=985.8 | bulk_calls=38 | bulk_failed_docs=0 | rate_docs/s=832.1 | rate_units/s=858.11 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=17383 | toDoc_ms=1332 | bulk_ms=64564 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=50.0s | units=43192 | html=0 | docs_prepared=43192 | docs_indexed=41641 | avg_bulk_size=968.4 | bulk_calls=43 | bulk_failed_docs=0 | rate_docs/s=832.5 | rate_units/s=863.46 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=19334 | toDoc_ms=1482 | bulk_ms=70225 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=55.0s | units=47887 | html=0 | docs_prepared=47887 | docs_indexed=44641 | avg_bulk_size=970.5 | bulk_calls=46 | bulk_failed_docs=0 | rate_docs/s=811.3 | rate_units/s=870.32 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=21459 | toDoc_ms=1644 | bulk_ms=76150 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=60.0s | units=51890 | html=0 | docs_prepared=51890 | docs_indexed=49641 | avg_bulk_size=973.4 | bulk_calls=51 | bulk_failed_docs=0 | rate_docs/s=827.0 | rate_units/s=864.50 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=23372 | toDoc_ms=1790 | bulk_ms=85257 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=65.0s | units=56192 | html=0 | docs_prepared=56192 | docs_indexed=54900 | avg_bulk_size=963.2 | bulk_calls=57 | bulk_failed_docs=0 | rate_docs/s=844.3 | rate_units/s=864.18 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=25349 | toDoc_ms=1942 | bulk_ms=93488 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=70.0s | units=60485 | html=0 | docs_prepared=60485 | docs_indexed=58900 | avg_bulk_size=965.6 | bulk_calls=61 | bulk_failed_docs=0 | rate_docs/s=841.1 | rate_units/s=863.77 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=27368 | toDoc_ms=2096 | bulk_ms=98600 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=75.1s | units=65004 | html=0 | docs_prepared=65004 | docs_indexed=62900 | avg_bulk_size=967.7 | bulk_calls=65 | bulk_failed_docs=0 | rate_docs/s=838.1 | rate_units/s=866.14 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=29389 | toDoc_ms=2256 | bulk_ms=106223 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=80.1s | units=69511 | html=0 | docs_prepared=69511 | docs_indexed=68003 | avg_bulk_size=957.8 | bulk_calls=71 | bulk_failed_docs=0 | rate_docs/s=849.5 | rate_units/s=868.34 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=31506 | toDoc_ms=2416 | bulk_ms=112518 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=85.1s | units=74099 | html=0 | docs_prepared=74099 | docs_indexed=72003 | avg_bulk_size=960.0 | bulk_calls=75 | bulk_failed_docs=0 | rate_docs/s=846.5 | rate_units/s=871.19 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=33534 | toDoc_ms=2571 | bulk_ms=117812 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=90.1s | units=78237 | html=0 | docs_prepared=78237 | docs_indexed=77003 | avg_bulk_size=962.5 | bulk_calls=80 | bulk_failed_docs=0 | rate_docs/s=855.1 | rate_units/s=868.77 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=35447 | toDoc_ms=2716 | bulk_ms=123925 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=95.1s | units=82642 | html=0 | docs_prepared=82642 | docs_indexed=81236 | avg_bulk_size=955.7 | bulk_calls=85 | bulk_failed_docs=0 | rate_docs/s=854.6 | rate_units/s=869.41 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=37447 | toDoc_ms=2870 | bulk_ms=129974 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=100.1s | units=87415 | html=0 | docs_prepared=87415 | docs_indexed=86236 | avg_bulk_size=958.2 | bulk_calls=90 | bulk_failed_docs=0 | rate_docs/s=861.9 | rate_units/s=873.66 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=39524 | toDoc_ms=3029 | bulk_ms=137275 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=105.1s | units=92317 | html=0 | docs_prepared=92317 | docs_indexed=90236 | avg_bulk_size=960.0 | bulk_calls=94 | bulk_failed_docs=0 | rate_docs/s=858.9 | rate_units/s=878.73 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=41676 | toDoc_ms=3196 | bulk_ms=142375 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=110.1s | units=96981 | html=0 | docs_prepared=96981 | docs_indexed=95316 | avg_bulk_size=953.2 | bulk_calls=100 | bulk_failed_docs=0 | rate_docs/s=866.1 | rate_units/s=881.18 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=43711 | toDoc_ms=3352 | bulk_ms=149514 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=115.1s | units=101548 | html=0 | docs_prepared=101548 | docs_indexed=98316 | avg_bulk_size=954.5 | bulk_calls=103 | bulk_failed_docs=0 | rate_docs/s=854.5 | rate_units/s=882.58 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=45640 | toDoc_ms=3503 | bulk_ms=153740 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/ltdmgs/index/src/main.py", line 791, in <module>
+    main()
+    ~~~~^^
+  File "/home/ltdmgs/index/src/main.py", line 771, in main
+    indexer.drain()
+    ~~~~~~~~~~~~~^^
+  File "/home/ltdmgs/index/src/bulk_indexer.py", line 389, in drain
+    self._flush_bucket(key)
+    ~~~~~~~~~~~~~~~~~~^^^^^
+  File "/home/ltdmgs/index/src/bulk_indexer.py", line 409, in _flush_bucket
+    self._do_bulk(batch, bucket_key)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/home/ltdmgs/index/src/bulk_indexer.py", line 428, in _do_bulk
+    res = self._es.bulk(operations=ops, refresh=False)
+  File "/home/ltdmgs/index/.venv/lib/python3.13/site-packages/elasticsearch/_sync/client/utils.py", line 421, in wrapped
+    return api(*args, **kwargs)
+  File "/home/ltdmgs/index/.venv/lib/python3.13/site-packages/elasticsearch/_sync/client/__init__.py", line 751, in bulk
+    return self.perform_request(  # type: ignore[return-value]
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        "PUT",
+        ^^^^^^
+    ...<5 lines>...
+        path_parts=__path_parts,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ltdmgs/index/.venv/lib/python3.13/site-packages/elasticsearch/_sync/client/_base.py", line 271, in perform_request
+    response = self._perform_request(
+        method,
+    ...<4 lines>...
+        otel_span=otel_span,
+    )
+  File "/home/ltdmgs/index/.venv/lib/python3.13/site-packages/elasticsearch/_sync/client/_base.py", line 315, in _perform_request
+    meta, resp_body = self.transport.perform_request(
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        method,
+        ^^^^^^^
+    ...<8 lines>...
+        otel_span=otel_span,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ltdmgs/index/.venv/lib/python3.13/site-packages/elastic_transport/_transport.py", line 344, in perform_request
+    resp = node.perform_request(
+        method,
+    ...<3 lines>...
+        request_timeout=request_timeout,
+    )
+  File "/home/ltdmgs/index/.venv/lib/python3.13/site-packages/elastic_transport/_node/_http_urllib3.py", line 167, in perform_request
+    response = self.pool.urlopen(
+        method,
+    ...<4 lines>...
+        **kw,  # type: ignore[arg-type]
+    )
+  File "/home/ltdmgs/index/.venv/lib/python3.13/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "/home/ltdmgs/index/.venv/lib/python3.13/site-packages/urllib3/connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+  File "/home/ltdmgs/index/.venv/lib/python3.13/site-packages/urllib3/connection.py", line 571, in getresponse
+    httplib_response = super().getresponse()
+  File "/home/ltdmgs/.local/share/uv/python/cpython-3.13.1-linux-x86_64-gnu/lib/python3.13/http/client.py", line 1428, in getresponse
+    response.begin()
+    ~~~~~~~~~~~~~~^^
+  File "/home/ltdmgs/.local/share/uv/python/cpython-3.13.1-linux-x86_64-gnu/lib/python3.13/http/client.py", line 331, in begin
+    version, status, reason = self._read_status()
+                              ~~~~~~~~~~~~~~~~~^^
+  File "/home/ltdmgs/.local/share/uv/python/cpython-3.13.1-linux-x86_64-gnu/lib/python3.13/http/client.py", line 292, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+               ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/home/ltdmgs/.local/share/uv/python/cpython-3.13.1-linux-x86_64-gnu/lib/python3.13/socket.py", line 719, in readinto
+    return self._sock.recv_into(b)
+           ~~~~~~~~~~~~~~~~~~~~^^^
+KeyboardInterrupt
+
+rss_MB=439.6 | time=120.1s | units=106448 | html=0 | docs_prepared=106448 | docs_indexed=104316 | avg_bulk_size=957.0 | bulk_calls=109 | bulk_failed_docs=0 | rate_docs/s=868.9 | rate_units/s=886.64 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=47708 | toDoc_ms=3664 | bulk_ms=163219 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=125.1s | units=111337 | html=0 | docs_prepared=111337 | docs_indexed=108459 | avg_bulk_size=951.4 | bulk_calls=114 | bulk_failed_docs=0 | rate_docs/s=867.3 | rate_units/s=890.28 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=49765 | toDoc_ms=3825 | bulk_ms=169456 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=130.1s | units=115842 | html=0 | docs_prepared=115842 | docs_indexed=114459 | avg_bulk_size=953.8 | bulk_calls=120 | bulk_failed_docs=0 | rate_docs/s=880.1 | rate_units/s=890.69 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=51709 | toDoc_ms=3976 | bulk_ms=178724 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=135.1s | units=120734 | html=0 | docs_prepared=120734 | docs_indexed=118459 | avg_bulk_size=955.3 | bulk_calls=124 | bulk_failed_docs=0 | rate_docs/s=877.1 | rate_units/s=893.93 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=53790 | toDoc_ms=4139 | bulk_ms=184205 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=140.1s | units=125568 | html=0 | docs_prepared=125568 | docs_indexed=122791 | avg_bulk_size=951.9 | bulk_calls=129 | bulk_failed_docs=0 | rate_docs/s=876.7 | rate_units/s=896.53 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=55934 | toDoc_ms=4305 | bulk_ms=194614 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=439.6 | time=145.1s | units=130010 | html=0 | docs_prepared=130010 | docs_indexed=127791 | avg_bulk_size=953.7 | bulk_calls=134 | bulk_failed_docs=0 | rate_docs/s=880.9 | rate_units/s=896.24 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=57873 | toDoc_ms=4458 | bulk_ms=202504 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=447.1 | time=150.3s | units=133920 | html=0 | docs_prepared=133920 | docs_indexed=130791 | avg_bulk_size=954.7 | bulk_calls=137 | bulk_failed_docs=0 | rate_docs/s=870.2 | rate_units/s=891.05 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=59666 | toDoc_ms=4589 | bulk_ms=208807 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=507.0 | time=155.3s | units=137226 | html=0 | docs_prepared=137226 | docs_indexed=134919 | avg_bulk_size=950.1 | bulk_calls=142 | bulk_failed_docs=0 | rate_docs/s=868.8 | rate_units/s=883.61 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=61195 | toDoc_ms=4706 | bulk_ms=221255 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=507.0 | time=160.3s | units=141040 | html=0 | docs_prepared=141040 | docs_indexed=136919 | avg_bulk_size=950.8 | bulk_calls=144 | bulk_failed_docs=0 | rate_docs/s=854.1 | rate_units/s=879.84 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=62842 | toDoc_ms=4836 | bulk_ms=225581 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=508.0 | time=165.3s | units=145777 | html=0 | docs_prepared=145777 | docs_indexed=140919 | avg_bulk_size=952.2 | bulk_calls=148 | bulk_failed_docs=0 | rate_docs/s=852.4 | rate_units/s=881.74 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=64812 | toDoc_ms=4992 | bulk_ms=239334 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00

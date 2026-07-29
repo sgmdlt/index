@@ -1,0 +1,26 @@
+WARNING __main__: No permission to create index 'sudata'; assuming it exists.
+rss_MB=245.3 | time=5.0s | units=4562 | html=0 | docs_prepared=4562 | docs_indexed=2000 | avg_bulk_size=1000.0 | bulk_calls=2 | bulk_failed_docs=0 | rate_docs/s=400.0 | rate_units/s=912.39 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=2068 | toDoc_ms=171 | bulk_ms=3456 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=245.3 | time=8.7s | units=5845 | html=0 | docs_prepared=5844 | docs_indexed=5844 | avg_bulk_size=974.0 | bulk_calls=6 | bulk_failed_docs=0 | rate_docs/s=672.5 | rate_units/s=672.63 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=2621 | toDoc_ms=219 | bulk_ms=11496 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+=== Indexation COMPLETED: index=sudata units=5845 docsPrepared=5844 docsIndexed=5844 parseErrors=0 elapsed=8.7s ===
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/ltdmgs/index/src/main.py", line 791, in <module>
+    main()
+    ~~~~^^
+  File "/home/ltdmgs/index/src/main.py", line 745, in main
+    _run_jsonl(args.jsonl, indexer, metrics, failed_log=args.failed_log)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ltdmgs/index/src/main.py", line 556, in _run_jsonl
+    prepared = prepare_doc(data)
+  File "/home/ltdmgs/index/src/prepare_doc.py", line 320, in prepare_doc
+    values = get_value_by_path(raw, path)
+  File "/home/ltdmgs/index/src/prepare_doc.py", line 143, in get_value_by_path
+    return _resolve(data, segments)
+  File "/home/ltdmgs/index/src/prepare_doc.py", line 95, in _resolve
+    results.extend(_resolve(data[key], rest))
+                   ~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/ltdmgs/index/src/prepare_doc.py", line 94, in _resolve
+    if key in data:
+       ^^^^^^^^^^^
+KeyboardInterrupt

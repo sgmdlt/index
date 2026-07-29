@@ -1,0 +1,1198 @@
+[2026-05-18T14:50:21+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/AJ/23AJ0003.jsonl.gz -> logs_retry/23AJ0003.log
+[2026-05-18T14:50:50+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/AJ/23AJ0003.jsonl.gz exit=0
+[2026-05-18T14:50:50+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/AJ/52AJ0004.jsonl.gz -> logs_retry/52AJ0004.log
+[2026-05-18T14:51:35+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/AJ/52AJ0004.jsonl.gz exit=0
+[2026-05-18T14:51:35+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/AJ/54AJ0005.jsonl.gz -> logs_retry/54AJ0005.log
+[2026-05-18T14:52:01+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/AJ/54AJ0005.jsonl.gz exit=0
+[2026-05-18T14:52:01+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/AJ/77AJ0001.jsonl.gz -> logs_retry/77AJ0001.log
+[2026-05-18T14:53:05+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/AJ/77AJ0001.jsonl.gz exit=0
+[2026-05-18T14:53:05+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/AJ/78AJ0002.jsonl.gz -> logs_retry/78AJ0002.log
+[2026-05-18T14:53:26+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/AJ/78AJ0002.jsonl.gz exit=0
+[2026-05-18T14:53:26+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/AV/50AV0000.jsonl.gz -> logs_retry/50AV0000.log
+[2026-05-18T14:53:30+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/AV/50AV0000.jsonl.gz exit=0
+[2026-05-18T14:53:30+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/23GV0004.jsonl.gz -> logs_retry/23GV0004.log
+[2026-05-18T14:53:52+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/23GV0004.jsonl.gz exit=0
+[2026-05-18T14:53:52+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/23GV0009.jsonl.gz -> logs_retry/23GV0009.log
+[2026-05-18T14:54:10+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/23GV0009.jsonl.gz exit=0
+[2026-05-18T14:54:10+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/23GV0013.jsonl.gz -> logs_retry/23GV0013.log
+[2026-05-18T14:54:22+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/23GV0013.jsonl.gz exit=0
+[2026-05-18T14:54:22+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/25GV0001.jsonl.gz -> logs_retry/25GV0001.log
+[2026-05-18T14:54:39+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/25GV0001.jsonl.gz exit=0
+[2026-05-18T14:54:39+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/25GV0002.jsonl.gz -> logs_retry/25GV0002.log
+[2026-05-18T14:54:46+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/25GV0002.jsonl.gz exit=0
+[2026-05-18T14:54:46+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/25GV0003.jsonl.gz -> logs_retry/25GV0003.log
+[2026-05-18T14:54:50+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/25GV0003.jsonl.gz exit=0
+[2026-05-18T14:54:50+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/25GV0004.jsonl.gz -> logs_retry/25GV0004.log
+[2026-05-18T14:55:12+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/25GV0004.jsonl.gz exit=0
+[2026-05-18T14:55:12+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/25GV0005.jsonl.gz -> logs_retry/25GV0005.log
+[2026-05-18T14:55:17+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/25GV0005.jsonl.gz exit=0
+[2026-05-18T14:55:17+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0001.jsonl.gz -> logs_retry/27GV0001.log
+[2026-05-18T14:55:38+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0001.jsonl.gz exit=0
+[2026-05-18T14:55:38+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0002.jsonl.gz -> logs_retry/27GV0002.log
+[2026-05-18T14:55:49+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0002.jsonl.gz exit=0
+[2026-05-18T14:55:49+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0003.jsonl.gz -> logs_retry/27GV0003.log
+[2026-05-18T14:55:59+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0003.jsonl.gz exit=0
+[2026-05-18T14:55:59+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0004.jsonl.gz -> logs_retry/27GV0004.log
+[2026-05-18T14:56:10+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0004.jsonl.gz exit=0
+[2026-05-18T14:56:10+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0005.jsonl.gz -> logs_retry/27GV0005.log
+[2026-05-18T14:56:24+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0005.jsonl.gz exit=0
+[2026-05-18T14:56:24+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0006.jsonl.gz -> logs_retry/27GV0006.log
+[2026-05-18T14:56:32+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0006.jsonl.gz exit=0
+[2026-05-18T14:56:32+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0008.jsonl.gz -> logs_retry/27GV0008.log
+[2026-05-18T14:56:47+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0008.jsonl.gz exit=0
+[2026-05-18T14:56:47+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0009.jsonl.gz -> logs_retry/27GV0009.log
+[2026-05-18T14:56:57+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0009.jsonl.gz exit=0
+[2026-05-18T14:56:57+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0010.jsonl.gz -> logs_retry/27GV0010.log
+[2026-05-18T14:57:10+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0010.jsonl.gz exit=0
+[2026-05-18T14:57:10+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0012.jsonl.gz -> logs_retry/27GV0012.log
+[2026-05-18T14:57:19+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0012.jsonl.gz exit=0
+[2026-05-18T14:57:19+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0013.jsonl.gz -> logs_retry/27GV0013.log
+[2026-05-18T14:57:30+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0013.jsonl.gz exit=0
+[2026-05-18T14:57:30+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0014.jsonl.gz -> logs_retry/27GV0014.log
+[2026-05-18T14:57:35+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/27GV0014.jsonl.gz exit=0
+[2026-05-18T14:57:35+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/31GV0007.jsonl.gz -> logs_retry/31GV0007.log
+[2026-05-18T14:57:48+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/31GV0007.jsonl.gz exit=0
+[2026-05-18T14:57:48+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/31GV0008.jsonl.gz -> logs_retry/31GV0008.log
+[2026-05-18T14:57:57+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/31GV0008.jsonl.gz exit=0
+[2026-05-18T14:57:57+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/31GV0014.jsonl.gz -> logs_retry/31GV0014.log
+[2026-05-18T15:01:07+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/31GV0014.jsonl.gz exit=0
+[2026-05-18T15:01:07+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/31GV0015.jsonl.gz -> logs_retry/31GV0015.log
+[2026-05-18T15:01:12+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/31GV0015.jsonl.gz exit=0
+[2026-05-18T15:01:12+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/39GV0001.jsonl.gz -> logs_retry/39GV0001.log
+[2026-05-18T15:01:38+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/39GV0001.jsonl.gz exit=0
+[2026-05-18T15:01:38+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/39GV0004.jsonl.gz -> logs_retry/39GV0004.log
+[2026-05-18T15:01:53+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/39GV0004.jsonl.gz exit=0
+[2026-05-18T15:01:53+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/39GV0005.jsonl.gz -> logs_retry/39GV0005.log
+[2026-05-18T15:02:11+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/39GV0005.jsonl.gz exit=0
+[2026-05-18T15:02:11+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/51GV0001.jsonl.gz -> logs_retry/51GV0001.log
+[2026-05-18T15:02:32+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/51GV0001.jsonl.gz exit=0
+[2026-05-18T15:02:32+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/51GV0002.jsonl.gz -> logs_retry/51GV0002.log
+[2026-05-18T15:02:46+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/51GV0002.jsonl.gz exit=0
+[2026-05-18T15:02:46+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/51GV0003.jsonl.gz -> logs_retry/51GV0003.log
+[2026-05-18T15:02:58+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/51GV0003.jsonl.gz exit=0
+[2026-05-18T15:02:58+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/51GV0004.jsonl.gz -> logs_retry/51GV0004.log
+[2026-05-18T15:03:08+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/51GV0004.jsonl.gz exit=0
+[2026-05-18T15:03:08+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/51GV0006.jsonl.gz -> logs_retry/51GV0006.log
+[2026-05-18T15:03:19+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/51GV0006.jsonl.gz exit=0
+[2026-05-18T15:03:19+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/51GV0007.jsonl.gz -> logs_retry/51GV0007.log
+[2026-05-18T15:03:32+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/51GV0007.jsonl.gz exit=0
+[2026-05-18T15:03:32+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/54GV0001.jsonl.gz -> logs_retry/54GV0001.log
+[2026-05-18T15:03:55+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/54GV0001.jsonl.gz exit=0
+[2026-05-18T15:03:55+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/54GV0002.jsonl.gz -> logs_retry/54GV0002.log
+[2026-05-18T15:04:08+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/54GV0002.jsonl.gz exit=0
+[2026-05-18T15:04:08+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/54GV0003.jsonl.gz -> logs_retry/54GV0003.log
+[2026-05-18T15:04:31+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/54GV0003.jsonl.gz exit=0
+[2026-05-18T15:04:31+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/54GV0007.jsonl.gz -> logs_retry/54GV0007.log
+[2026-05-18T15:04:47+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/54GV0007.jsonl.gz exit=0
+[2026-05-18T15:04:47+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/54GV0008.jsonl.gz -> logs_retry/54GV0008.log
+[2026-05-18T15:05:02+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/54GV0008.jsonl.gz exit=0
+[2026-05-18T15:05:02+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/54GV0009.jsonl.gz -> logs_retry/54GV0009.log
+[2026-05-18T15:05:20+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/54GV0009.jsonl.gz exit=0
+[2026-05-18T15:05:20+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0001.jsonl.gz -> logs_retry/61GV0001.log
+[2026-05-18T15:05:42+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0001.jsonl.gz exit=0
+[2026-05-18T15:05:42+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0002.jsonl.gz -> logs_retry/61GV0002.log
+[2026-05-18T15:06:05+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0002.jsonl.gz exit=0
+[2026-05-18T15:06:05+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0003.jsonl.gz -> logs_retry/61GV0003.log
+[2026-05-18T15:06:16+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0003.jsonl.gz exit=0
+[2026-05-18T15:06:16+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0005.jsonl.gz -> logs_retry/61GV0005.log
+[2026-05-18T15:06:32+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0005.jsonl.gz exit=0
+[2026-05-18T15:06:32+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0006.jsonl.gz -> logs_retry/61GV0006.log
+[2026-05-18T15:06:56+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0006.jsonl.gz exit=0
+[2026-05-18T15:06:56+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0007.jsonl.gz -> logs_retry/61GV0007.log
+[2026-05-18T15:07:13+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0007.jsonl.gz exit=0
+[2026-05-18T15:07:13+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0008.jsonl.gz -> logs_retry/61GV0008.log
+[2026-05-18T15:07:23+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0008.jsonl.gz exit=0
+[2026-05-18T15:07:23+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0010.jsonl.gz -> logs_retry/61GV0010.log
+[2026-05-18T15:07:37+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0010.jsonl.gz exit=0
+[2026-05-18T15:07:37+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0011.jsonl.gz -> logs_retry/61GV0011.log
+[2026-05-18T15:08:05+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0011.jsonl.gz exit=0
+[2026-05-18T15:08:05+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0012.jsonl.gz -> logs_retry/61GV0012.log
+[2026-05-18T15:08:25+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0012.jsonl.gz exit=0
+[2026-05-18T15:08:25+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0014.jsonl.gz -> logs_retry/61GV0014.log
+[2026-05-18T15:08:42+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0014.jsonl.gz exit=0
+[2026-05-18T15:08:42+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0015.jsonl.gz -> logs_retry/61GV0015.log
+[2026-05-18T15:08:47+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0015.jsonl.gz exit=0
+[2026-05-18T15:08:47+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0016.jsonl.gz -> logs_retry/61GV0016.log
+[2026-05-18T15:09:03+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0016.jsonl.gz exit=0
+[2026-05-18T15:09:03+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0018.jsonl.gz -> logs_retry/61GV0018.log
+[2026-05-18T15:09:20+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0018.jsonl.gz exit=0
+[2026-05-18T15:09:20+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0019.jsonl.gz -> logs_retry/61GV0019.log
+[2026-05-18T15:09:40+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/61GV0019.jsonl.gz exit=0
+[2026-05-18T15:09:40+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/63GV0001.jsonl.gz -> logs_retry/63GV0001.log
+[2026-05-18T15:09:46+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/63GV0001.jsonl.gz exit=0
+[2026-05-18T15:09:46+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/63GV0002.jsonl.gz -> logs_retry/63GV0002.log
+[2026-05-18T15:10:00+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/63GV0002.jsonl.gz exit=0
+[2026-05-18T15:10:00+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/63GV0003.jsonl.gz -> logs_retry/63GV0003.log
+[2026-05-18T15:10:14+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/63GV0003.jsonl.gz exit=0
+[2026-05-18T15:10:14+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/63GV0004.jsonl.gz -> logs_retry/63GV0004.log
+[2026-05-18T15:10:25+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/63GV0004.jsonl.gz exit=0
+[2026-05-18T15:10:25+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/63GV0006.jsonl.gz -> logs_retry/63GV0006.log
+[2026-05-18T15:10:34+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/63GV0006.jsonl.gz exit=0
+[2026-05-18T15:10:34+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/63GV0007.jsonl.gz -> logs_retry/63GV0007.log
+[2026-05-18T15:10:44+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/63GV0007.jsonl.gz exit=0
+[2026-05-18T15:10:44+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/63GV0008.jsonl.gz -> logs_retry/63GV0008.log
+[2026-05-18T15:10:57+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/63GV0008.jsonl.gz exit=0
+[2026-05-18T15:10:57+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/63GV0009.jsonl.gz -> logs_retry/63GV0009.log
+[2026-05-18T15:11:06+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/63GV0009.jsonl.gz exit=0
+[2026-05-18T15:11:06+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/66GV0001.jsonl.gz -> logs_retry/66GV0001.log
+[2026-05-18T15:11:29+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/66GV0001.jsonl.gz exit=0
+[2026-05-18T15:11:29+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/66GV0002.jsonl.gz -> logs_retry/66GV0002.log
+[2026-05-18T15:11:35+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/66GV0002.jsonl.gz exit=0
+[2026-05-18T15:11:35+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/66GV0003.jsonl.gz -> logs_retry/66GV0003.log
+[2026-05-18T15:11:46+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/66GV0003.jsonl.gz exit=0
+[2026-05-18T15:11:46+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/66GV0006.jsonl.gz -> logs_retry/66GV0006.log
+[2026-05-18T15:12:00+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/66GV0006.jsonl.gz exit=0
+[2026-05-18T15:12:00+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/66GV0008.jsonl.gz -> logs_retry/66GV0008.log
+[2026-05-18T15:12:06+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/66GV0008.jsonl.gz exit=0
+[2026-05-18T15:12:06+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/75GV0001.jsonl.gz -> logs_retry/75GV0001.log
+[2026-05-18T15:12:29+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/75GV0001.jsonl.gz exit=0
+[2026-05-18T15:12:29+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/75GV0002.jsonl.gz -> logs_retry/75GV0002.log
+[2026-05-18T15:12:44+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/75GV0002.jsonl.gz exit=0
+[2026-05-18T15:12:44+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/75GV0004.jsonl.gz -> logs_retry/75GV0004.log
+[2026-05-18T15:13:05+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/75GV0004.jsonl.gz exit=0
+[2026-05-18T15:13:05+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/75GV0005.jsonl.gz -> logs_retry/75GV0005.log
+[2026-05-18T15:13:13+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/75GV0005.jsonl.gz exit=0
+[2026-05-18T15:13:13+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/75GV0007.jsonl.gz -> logs_retry/75GV0007.log
+[2026-05-18T15:13:27+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/75GV0007.jsonl.gz exit=0
+[2026-05-18T15:13:27+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0001.jsonl.gz -> logs_retry/77GV0001.log
+[2026-05-18T15:14:11+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0001.jsonl.gz exit=0
+[2026-05-18T15:14:11+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0002.jsonl.gz -> logs_retry/77GV0002.log
+[2026-05-18T15:14:20+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0002.jsonl.gz exit=0
+[2026-05-18T15:14:20+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0003.jsonl.gz -> logs_retry/77GV0003.log
+[2026-05-18T15:14:32+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0003.jsonl.gz exit=0
+[2026-05-18T15:14:32+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0004.jsonl.gz -> logs_retry/77GV0004.log
+[2026-05-18T15:14:41+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0004.jsonl.gz exit=0
+[2026-05-18T15:14:41+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0005.jsonl.gz -> logs_retry/77GV0005.log
+[2026-05-18T15:15:00+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0005.jsonl.gz exit=0
+[2026-05-18T15:15:00+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0006.jsonl.gz -> logs_retry/77GV0006.log
+[2026-05-18T15:15:14+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0006.jsonl.gz exit=0
+[2026-05-18T15:15:14+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0008.jsonl.gz -> logs_retry/77GV0008.log
+[2026-05-18T15:15:25+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0008.jsonl.gz exit=0
+[2026-05-18T15:15:25+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0009.jsonl.gz -> logs_retry/77GV0009.log
+[2026-05-18T15:15:52+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0009.jsonl.gz exit=0
+[2026-05-18T15:15:52+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0010.jsonl.gz -> logs_retry/77GV0010.log
+[2026-05-18T15:16:08+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0010.jsonl.gz exit=0
+[2026-05-18T15:16:08+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0011.jsonl.gz -> logs_retry/77GV0011.log
+[2026-05-18T15:16:23+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0011.jsonl.gz exit=0
+[2026-05-18T15:16:23+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0012.jsonl.gz -> logs_retry/77GV0012.log
+[2026-05-18T15:16:38+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0012.jsonl.gz exit=0
+[2026-05-18T15:16:38+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0013.jsonl.gz -> logs_retry/77GV0013.log
+[2026-05-18T15:16:49+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0013.jsonl.gz exit=0
+[2026-05-18T15:16:49+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0014.jsonl.gz -> logs_retry/77GV0014.log
+[2026-05-18T15:17:06+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0014.jsonl.gz exit=0
+[2026-05-18T15:17:06+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0015.jsonl.gz -> logs_retry/77GV0015.log
+[2026-05-18T15:17:18+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0015.jsonl.gz exit=0
+[2026-05-18T15:17:18+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0016.jsonl.gz -> logs_retry/77GV0016.log
+[2026-05-18T15:17:36+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0016.jsonl.gz exit=0
+[2026-05-18T15:17:36+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0017.jsonl.gz -> logs_retry/77GV0017.log
+[2026-05-18T15:17:51+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0017.jsonl.gz exit=0
+[2026-05-18T15:17:51+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0018.jsonl.gz -> logs_retry/77GV0018.log
+[2026-05-18T15:18:02+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0018.jsonl.gz exit=0
+[2026-05-18T15:18:02+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0020.jsonl.gz -> logs_retry/77GV0020.log
+[2026-05-18T15:18:17+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0020.jsonl.gz exit=0
+[2026-05-18T15:18:17+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0021.jsonl.gz -> logs_retry/77GV0021.log
+[2026-05-18T15:18:28+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/77GV0021.jsonl.gz exit=0
+[2026-05-18T15:18:28+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/78GV0001.jsonl.gz -> logs_retry/78GV0001.log
+[2026-05-18T15:18:52+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/78GV0001.jsonl.gz exit=0
+[2026-05-18T15:18:52+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/78GV0002.jsonl.gz -> logs_retry/78GV0002.log
+[2026-05-18T15:19:00+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/78GV0002.jsonl.gz exit=0
+[2026-05-18T15:19:00+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/78GV0003.jsonl.gz -> logs_retry/78GV0003.log
+[2026-05-18T15:19:14+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/78GV0003.jsonl.gz exit=0
+[2026-05-18T15:19:14+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/78GV0004.jsonl.gz -> logs_retry/78GV0004.log
+[2026-05-18T15:19:29+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/78GV0004.jsonl.gz exit=0
+[2026-05-18T15:19:29+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/78GV0006.jsonl.gz -> logs_retry/78GV0006.log
+[2026-05-18T15:19:36+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/78GV0006.jsonl.gz exit=0
+[2026-05-18T15:19:36+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/78GV0007.jsonl.gz -> logs_retry/78GV0007.log
+[2026-05-18T15:19:44+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/78GV0007.jsonl.gz exit=0
+[2026-05-18T15:19:44+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/78GV0008.jsonl.gz -> logs_retry/78GV0008.log
+[2026-05-18T15:19:49+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/78GV0008.jsonl.gz exit=0
+[2026-05-18T15:19:49+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/78GV0009.jsonl.gz -> logs_retry/78GV0009.log
+[2026-05-18T15:20:00+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/GV/78GV0009.jsonl.gz exit=0
+[2026-05-18T15:20:00+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/KJ/23KJ0004.jsonl.gz -> logs_retry/23KJ0004.log
+[2026-05-18T15:27:40+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/KJ/23KJ0004.jsonl.gz exit=0
+[2026-05-18T15:27:40+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/KJ/25KJ0009.jsonl.gz -> logs_retry/25KJ0009.log
+[2026-05-18T15:30:39+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/KJ/25KJ0009.jsonl.gz exit=0
+[2026-05-18T15:30:39+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/KJ/26KJ0005.jsonl.gz -> logs_retry/26KJ0005.log
+[2026-05-18T15:32:58+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/KJ/26KJ0005.jsonl.gz exit=0
+[2026-05-18T15:32:58+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/KJ/42KJ0008.jsonl.gz -> logs_retry/42KJ0008.log
+[2026-05-18T15:39:09+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/KJ/42KJ0008.jsonl.gz exit=0
+[2026-05-18T15:39:09+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/KJ/63KJ0006.jsonl.gz -> logs_retry/63KJ0006.log
+[2026-05-18T15:46:05+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/KJ/63KJ0006.jsonl.gz exit=0
+[2026-05-18T15:46:05+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/KJ/64KJ0001.jsonl.gz -> logs_retry/64KJ0001.log
+[2026-05-18T15:52:57+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/KJ/64KJ0001.jsonl.gz exit=0
+[2026-05-18T15:52:57+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/KJ/74KJ0007.jsonl.gz -> logs_retry/74KJ0007.log
+[2026-05-18T15:55:49+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/KJ/74KJ0007.jsonl.gz exit=0
+[2026-05-18T15:55:49+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/KJ/77KJ0002.jsonl.gz -> logs_retry/77KJ0002.log
+[2026-05-18T16:01:54+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/KJ/77KJ0002.jsonl.gz exit=0
+[2026-05-18T16:01:54+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/KJ/78KJ0003.jsonl.gz -> logs_retry/78KJ0003.log
+[2026-05-18T16:06:47+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/KJ/78KJ0003.jsonl.gz exit=0
+[2026-05-18T16:06:47+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/KV/54KV0000.jsonl.gz -> logs_retry/54KV0000.log
+[2026-05-18T16:07:10+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/KV/54KV0000.jsonl.gz exit=0
+[2026-05-18T16:07:10+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/MS/77MS0107.jsonl -> logs_retry/77MS0107.log
+[2026-05-18T16:07:31+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/MS/77MS0107.jsonl exit=0
+[2026-05-18T16:07:31+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/MS/77MS0300.jsonl -> logs_retry/77MS0300.log
+[2026-05-18T16:08:02+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/MS/77MS0300.jsonl exit=0
+[2026-05-18T16:08:02+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/MS/77MS0325.jsonl -> logs_retry/77MS0325.log
+[2026-05-18T16:08:29+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/MS/77MS0325.jsonl exit=0
+[2026-05-18T16:08:29+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/MS/77MS0354.jsonl -> logs_retry/77MS0354.log
+[2026-05-18T16:08:54+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/MS/77MS0354.jsonl exit=0
+[2026-05-18T16:08:54+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/MS/77MS0403.jsonl -> logs_retry/77MS0403.log
+[2026-05-18T16:09:20+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/MS/77MS0403.jsonl exit=0
+[2026-05-18T16:09:20+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/OS/77OS0000.jsonl.gz -> logs_retry/77OS0000.log
+[2026-05-18T16:44:49+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/OS/77OS0000.jsonl.gz exit=0
+[2026-05-18T16:44:49+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/OV/25OV0000.jsonl.gz -> logs_retry/25OV0000.log
+[2026-05-18T16:45:07+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/OV/25OV0000.jsonl.gz exit=0
+[2026-05-18T16:45:07+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/OV/27OV0000.jsonl.gz -> logs_retry/27OV0000.log
+[2026-05-18T16:45:25+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/OV/27OV0000.jsonl.gz exit=0
+[2026-05-18T16:45:25+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/OV/39OV0000.jsonl.gz -> logs_retry/39OV0000.log
+[2026-05-18T16:45:33+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/OV/39OV0000.jsonl.gz exit=0
+[2026-05-18T16:45:33+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/OV/51OV0000.jsonl.gz -> logs_retry/51OV0000.log
+[2026-05-18T16:45:46+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/OV/51OV0000.jsonl.gz exit=0
+[2026-05-18T16:45:46+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/OV/61OV0000.jsonl.gz -> logs_retry/61OV0000.log
+[2026-05-18T16:46:05+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/OV/61OV0000.jsonl.gz exit=0
+[2026-05-18T16:46:05+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/OV/66OV0001.jsonl.gz -> logs_retry/66OV0001.log
+[2026-05-18T16:46:22+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/OV/66OV0001.jsonl.gz exit=0
+[2026-05-18T16:46:22+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/OV/75OV0000.jsonl.gz -> logs_retry/75OV0000.log
+[2026-05-18T16:46:38+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/OV/75OV0000.jsonl.gz exit=0
+[2026-05-18T16:46:38+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/OV/77OV0000.jsonl.gz -> logs_retry/77OV0000.log
+[2026-05-18T16:47:22+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/OV/77OV0000.jsonl.gz exit=0
+[2026-05-18T16:47:22+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/OV/78OV0000.jsonl.gz -> logs_retry/78OV0000.log
+[2026-05-18T16:47:40+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/OV/78OV0000.jsonl.gz exit=0
+[2026-05-18T16:47:40+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/01RS0003.jsonl.gz -> logs_retry/01RS0003.log
+[2026-05-18T16:48:06+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/01RS0003.jsonl.gz exit=0
+[2026-05-18T16:48:06+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/01RS0008.jsonl.gz -> logs_retry/01RS0008.log
+[2026-05-18T16:48:26+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/01RS0008.jsonl.gz exit=0
+[2026-05-18T16:48:26+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/02RS0001.jsonl.gz -> logs_retry/02RS0001.log
+[2026-05-18T16:50:35+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/02RS0001.jsonl.gz exit=0
+[2026-05-18T16:50:35+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/02RS0002.jsonl.gz -> logs_retry/02RS0002.log
+[2026-05-18T16:51:12+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/02RS0002.jsonl.gz exit=0
+[2026-05-18T16:51:12+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/02RS0003.jsonl.gz -> logs_retry/02RS0003.log
+[2026-05-18T16:52:11+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/02RS0003.jsonl.gz exit=0
+[2026-05-18T16:52:11+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/02RS0011.jsonl.gz -> logs_retry/02RS0011.log
+[2026-05-18T16:52:38+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/02RS0011.jsonl.gz exit=0
+[2026-05-18T16:52:38+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/03RS0001.jsonl.gz -> logs_retry/03RS0001.log
+[2026-05-18T16:54:02+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/03RS0001.jsonl.gz exit=0
+[2026-05-18T16:54:02+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/03RS0003.jsonl.gz -> logs_retry/03RS0003.log
+[2026-05-18T16:56:52+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/03RS0003.jsonl.gz exit=1
+[2026-05-18T16:56:52+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/03RS0028.jsonl.gz -> logs_retry/03RS0028.log
+[2026-05-18T16:57:49+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/03RS0028.jsonl.gz exit=0
+[2026-05-18T16:57:49+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/03RS0033.jsonl.gz -> logs_retry/03RS0033.log
+[2026-05-18T16:58:40+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/03RS0033.jsonl.gz exit=0
+[2026-05-18T16:58:40+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/03RS0060.jsonl.gz -> logs_retry/03RS0060.log
+[2026-05-18T16:59:32+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/03RS0060.jsonl.gz exit=0
+[2026-05-18T16:59:32+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/03RS0068.jsonl.gz -> logs_retry/03RS0068.log
+[2026-05-18T17:00:32+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/03RS0068.jsonl.gz exit=0
+[2026-05-18T17:00:32+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/04RS0001.jsonl.gz -> logs_retry/04RS0001.log
+[2026-05-18T17:01:38+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/04RS0001.jsonl.gz exit=0
+[2026-05-18T17:01:38+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/04RS0003.jsonl.gz -> logs_retry/04RS0003.log
+[2026-05-18T17:02:06+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/04RS0003.jsonl.gz exit=0
+[2026-05-18T17:02:06+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/04RS0006.jsonl.gz -> logs_retry/04RS0006.log
+[2026-05-18T17:02:28+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/04RS0006.jsonl.gz exit=0
+[2026-05-18T17:02:28+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/04RS0007.jsonl.gz -> logs_retry/04RS0007.log
+[2026-05-18T17:06:03+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/04RS0007.jsonl.gz exit=0
+[2026-05-18T17:06:03+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/04RS0009.jsonl.gz -> logs_retry/04RS0009.log
+[2026-05-18T17:06:26+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/04RS0009.jsonl.gz exit=0
+[2026-05-18T17:06:26+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/05RS0005.jsonl.gz -> logs_retry/05RS0005.log
+[2026-05-18T17:07:22+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/05RS0005.jsonl.gz exit=0
+[2026-05-18T17:07:22+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/05RS0007.jsonl.gz -> logs_retry/05RS0007.log
+[2026-05-18T17:07:53+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/05RS0007.jsonl.gz exit=0
+[2026-05-18T17:07:53+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/05RS0011.jsonl.gz -> logs_retry/05RS0011.log
+[2026-05-18T17:08:07+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/05RS0011.jsonl.gz exit=0
+[2026-05-18T17:08:07+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/05RS0024.jsonl.gz -> logs_retry/05RS0024.log
+[2026-05-18T17:08:47+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/05RS0024.jsonl.gz exit=0
+[2026-05-18T17:08:47+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/05RS0032.jsonl.gz -> logs_retry/05RS0032.log
+[2026-05-18T17:09:18+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/05RS0032.jsonl.gz exit=0
+[2026-05-18T17:09:18+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/05RS0038.jsonl.gz -> logs_retry/05RS0038.log
+[2026-05-18T17:13:58+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/05RS0038.jsonl.gz exit=0
+[2026-05-18T17:13:58+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/05RS0042.jsonl.gz -> logs_retry/05RS0042.log
+[2026-05-18T17:14:19+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/05RS0042.jsonl.gz exit=0
+[2026-05-18T17:14:19+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/05RS0045.jsonl.gz -> logs_retry/05RS0045.log
+[2026-05-18T17:14:37+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/05RS0045.jsonl.gz exit=0
+[2026-05-18T17:14:37+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/05RS0047.jsonl.gz -> logs_retry/05RS0047.log
+[2026-05-18T17:15:28+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/05RS0047.jsonl.gz exit=0
+[2026-05-18T17:15:28+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/05RS0048.jsonl.gz -> logs_retry/05RS0048.log
+[2026-05-18T17:15:52+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/05RS0048.jsonl.gz exit=0
+[2026-05-18T17:15:52+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/06RS0001.jsonl.gz -> logs_retry/06RS0001.log
+[2026-05-18T17:16:02+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/06RS0001.jsonl.gz exit=0
+[2026-05-18T17:16:02+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/06RS0002.jsonl.gz -> logs_retry/06RS0002.log
+[2026-05-18T17:16:31+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/06RS0002.jsonl.gz exit=0
+[2026-05-18T17:16:31+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/06RS0003.jsonl.gz -> logs_retry/06RS0003.log
+[2026-05-18T17:16:51+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/06RS0003.jsonl.gz exit=0
+[2026-05-18T17:16:51+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/07RS0004.jsonl.gz -> logs_retry/07RS0004.log
+[2026-05-18T17:17:52+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/07RS0004.jsonl.gz exit=0
+[2026-05-18T17:17:52+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/07RS0008.jsonl.gz -> logs_retry/07RS0008.log
+[2026-05-18T17:18:25+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/07RS0008.jsonl.gz exit=0
+[2026-05-18T17:18:25+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/08RS0001.jsonl.gz -> logs_retry/08RS0001.log
+[2026-05-18T17:21:31+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/08RS0001.jsonl.gz exit=0
+[2026-05-18T17:21:31+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/08RS0008.jsonl.gz -> logs_retry/08RS0008.log
+[2026-05-18T17:21:56+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/08RS0008.jsonl.gz exit=0
+[2026-05-18T17:21:56+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/08RS0009.jsonl.gz -> logs_retry/08RS0009.log
+[2026-05-18T17:22:26+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/08RS0009.jsonl.gz exit=0
+[2026-05-18T17:22:26+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/09RS0008.jsonl.gz -> logs_retry/09RS0008.log
+[2026-05-18T17:22:55+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/09RS0008.jsonl.gz exit=0
+[2026-05-18T17:22:55+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/10RS0001.jsonl.gz -> logs_retry/10RS0001.log
+[2026-05-18T17:23:38+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/10RS0001.jsonl.gz exit=0
+[2026-05-18T17:23:38+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/10RS0007.jsonl.gz -> logs_retry/10RS0007.log
+[2026-05-18T17:23:51+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/10RS0007.jsonl.gz exit=0
+[2026-05-18T17:23:51+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/10RS0011.jsonl.gz -> logs_retry/10RS0011.log
+[2026-05-18T17:29:59+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/10RS0011.jsonl.gz exit=0
+[2026-05-18T17:29:59+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/10RS0013.jsonl.gz -> logs_retry/10RS0013.log
+[2026-05-18T17:30:42+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/10RS0013.jsonl.gz exit=0
+[2026-05-18T17:30:42+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/11RS0005.jsonl.gz -> logs_retry/11RS0005.log
+[2026-05-18T17:33:42+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/11RS0005.jsonl.gz exit=0
+[2026-05-18T17:33:42+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/11RS0009.jsonl.gz -> logs_retry/11RS0009.log
+[2026-05-18T17:34:45+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/11RS0009.jsonl.gz exit=0
+[2026-05-18T17:34:45+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/11RS0012.jsonl.gz -> logs_retry/11RS0012.log
+[2026-05-18T17:35:25+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/11RS0012.jsonl.gz exit=0
+[2026-05-18T17:35:25+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/11RS0017.jsonl.gz -> logs_retry/11RS0017.log
+[2026-05-18T17:36:12+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/11RS0017.jsonl.gz exit=0
+[2026-05-18T17:36:12+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/11RS0020.jsonl.gz -> logs_retry/11RS0020.log
+[2026-05-18T17:37:23+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/11RS0020.jsonl.gz exit=0
+[2026-05-18T17:37:23+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/12RS0013.jsonl.gz -> logs_retry/12RS0013.log
+[2026-05-18T17:38:03+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/12RS0013.jsonl.gz exit=0
+[2026-05-18T17:38:03+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/13RS0015.jsonl.gz -> logs_retry/13RS0015.log
+[2026-05-18T17:38:49+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/13RS0015.jsonl.gz exit=0
+[2026-05-18T17:38:49+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/14RS0013.jsonl.gz -> logs_retry/14RS0013.log
+[2026-05-18T17:38:52+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/14RS0013.jsonl.gz exit=0
+[2026-05-18T17:38:52+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/14RS0019.jsonl.gz -> logs_retry/14RS0019.log
+[2026-05-18T17:40:26+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/14RS0019.jsonl.gz exit=0
+[2026-05-18T17:40:26+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/14RS0026.jsonl.gz -> logs_retry/14RS0026.log
+[2026-05-18T17:40:43+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/14RS0026.jsonl.gz exit=0
+[2026-05-18T17:40:43+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/14RS0031.jsonl.gz -> logs_retry/14RS0031.log
+[2026-05-18T17:41:08+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/14RS0031.jsonl.gz exit=0
+[2026-05-18T17:41:08+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/15RS0012.jsonl.gz -> logs_retry/15RS0012.log
+[2026-05-18T17:41:32+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/15RS0012.jsonl.gz exit=0
+[2026-05-18T17:41:32+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/16RS0003.jsonl.gz -> logs_retry/16RS0003.log
+[2026-05-18T17:41:53+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/16RS0003.jsonl.gz exit=0
+[2026-05-18T17:41:53+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/16RS0005.jsonl.gz -> logs_retry/16RS0005.log
+[2026-05-18T17:42:08+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/16RS0005.jsonl.gz exit=0
+[2026-05-18T17:42:08+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/16RS0007.jsonl.gz -> logs_retry/16RS0007.log
+[2026-05-18T17:42:50+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/16RS0007.jsonl.gz exit=0
+[2026-05-18T17:42:50+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/16RS0019.jsonl.gz -> logs_retry/16RS0019.log
+[2026-05-18T17:43:32+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/16RS0019.jsonl.gz exit=0
+[2026-05-18T17:43:32+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/16RS0036.jsonl.gz -> logs_retry/16RS0036.log
+[2026-05-18T17:46:36+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/16RS0036.jsonl.gz exit=0
+[2026-05-18T17:46:36+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/16RS0038.jsonl.gz -> logs_retry/16RS0038.log
+[2026-05-18T17:48:04+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/16RS0038.jsonl.gz exit=0
+[2026-05-18T17:48:04+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/16RS0041.jsonl.gz -> logs_retry/16RS0041.log
+[2026-05-18T17:49:21+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/16RS0041.jsonl.gz exit=0
+[2026-05-18T17:49:21+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/16RS0048.jsonl.gz -> logs_retry/16RS0048.log
+[2026-05-18T17:51:50+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/16RS0048.jsonl.gz exit=0
+[2026-05-18T17:51:50+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/16RS0050.jsonl.gz -> logs_retry/16RS0050.log
+[2026-05-18T17:56:17+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/16RS0050.jsonl.gz exit=0
+[2026-05-18T17:56:17+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/17RS0001.jsonl.gz -> logs_retry/17RS0001.log
+[2026-05-18T17:56:30+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/17RS0001.jsonl.gz exit=0
+[2026-05-18T17:56:30+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/17RS0010.jsonl.gz -> logs_retry/17RS0010.log
+[2026-05-18T17:56:48+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/17RS0010.jsonl.gz exit=0
+[2026-05-18T17:56:48+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/17RS0016.jsonl.gz -> logs_retry/17RS0016.log
+[2026-05-18T17:57:04+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/17RS0016.jsonl.gz exit=0
+[2026-05-18T17:57:04+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/17RS0017.jsonl.gz -> logs_retry/17RS0017.log
+[2026-05-18T17:58:56+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/17RS0017.jsonl.gz exit=0
+[2026-05-18T17:58:56+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/18RS0013.jsonl.gz -> logs_retry/18RS0013.log
+[2026-05-18T18:00:34+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/18RS0013.jsonl.gz exit=0
+[2026-05-18T18:00:34+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/18RS0015.jsonl.gz -> logs_retry/18RS0015.log
+[2026-05-18T18:01:02+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/18RS0015.jsonl.gz exit=0
+[2026-05-18T18:01:02+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/18RS0027.jsonl.gz -> logs_retry/18RS0027.log
+[2026-05-18T18:01:36+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/18RS0027.jsonl.gz exit=0
+[2026-05-18T18:01:36+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/19RS0003.jsonl.gz -> logs_retry/19RS0003.log
+[2026-05-18T18:02:47+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/19RS0003.jsonl.gz exit=0
+[2026-05-18T18:02:47+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/19RS0004.jsonl.gz -> logs_retry/19RS0004.log
+[2026-05-18T18:03:43+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/19RS0004.jsonl.gz exit=0
+[2026-05-18T18:03:43+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/19RS0006.jsonl.gz -> logs_retry/19RS0006.log
+[2026-05-18T18:04:17+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/19RS0006.jsonl.gz exit=0
+[2026-05-18T18:04:17+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/19RS0007.jsonl.gz -> logs_retry/19RS0007.log
+[2026-05-18T18:04:43+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/19RS0007.jsonl.gz exit=0
+[2026-05-18T18:04:43+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/19RS0013.jsonl.gz -> logs_retry/19RS0013.log
+[2026-05-18T18:05:02+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/19RS0013.jsonl.gz exit=0
+[2026-05-18T18:05:02+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/21RS0006.jsonl.gz -> logs_retry/21RS0006.log
+[2026-05-18T18:06:13+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/21RS0006.jsonl.gz exit=0
+[2026-05-18T18:06:13+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/21RS0011.jsonl.gz -> logs_retry/21RS0011.log
+[2026-05-18T18:06:40+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/21RS0011.jsonl.gz exit=0
+[2026-05-18T18:06:40+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/21RS0023.jsonl.gz -> logs_retry/21RS0023.log
+[2026-05-18T18:09:58+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/21RS0023.jsonl.gz exit=0
+[2026-05-18T18:09:58+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/21RS0025.jsonl.gz -> logs_retry/21RS0025.log
+[2026-05-18T18:12:50+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/21RS0025.jsonl.gz exit=1
+[2026-05-18T18:12:50+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0002.jsonl.gz -> logs_retry/22RS0002.log
+[2026-05-18T18:13:02+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0002.jsonl.gz exit=0
+[2026-05-18T18:13:02+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0013.jsonl.gz -> logs_retry/22RS0013.log
+[2026-05-18T18:16:30+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0013.jsonl.gz exit=0
+[2026-05-18T18:16:30+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0020.jsonl.gz -> logs_retry/22RS0020.log
+[2026-05-18T18:16:43+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0020.jsonl.gz exit=0
+[2026-05-18T18:16:43+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0021.jsonl.gz -> logs_retry/22RS0021.log
+[2026-05-18T18:16:59+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0021.jsonl.gz exit=0
+[2026-05-18T18:16:59+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0023.jsonl.gz -> logs_retry/22RS0023.log
+[2026-05-18T18:17:21+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0023.jsonl.gz exit=0
+[2026-05-18T18:17:21+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0028.jsonl.gz -> logs_retry/22RS0028.log
+[2026-05-18T18:17:33+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0028.jsonl.gz exit=0
+[2026-05-18T18:17:33+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0029.jsonl.gz -> logs_retry/22RS0029.log
+[2026-05-18T18:18:02+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0029.jsonl.gz exit=0
+[2026-05-18T18:18:02+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0035.jsonl.gz -> logs_retry/22RS0035.log
+[2026-05-18T18:18:55+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0035.jsonl.gz exit=0
+[2026-05-18T18:18:55+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0047.jsonl.gz -> logs_retry/22RS0047.log
+[2026-05-18T18:20:28+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0047.jsonl.gz exit=0
+[2026-05-18T18:20:28+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0054.jsonl.gz -> logs_retry/22RS0054.log
+[2026-05-18T18:21:23+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0054.jsonl.gz exit=0
+[2026-05-18T18:21:23+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0057.jsonl.gz -> logs_retry/22RS0057.log
+[2026-05-18T18:21:48+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0057.jsonl.gz exit=0
+[2026-05-18T18:21:48+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0060.jsonl.gz -> logs_retry/22RS0060.log
+[2026-05-18T18:22:09+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0060.jsonl.gz exit=0
+[2026-05-18T18:22:09+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0068.jsonl.gz -> logs_retry/22RS0068.log
+[2026-05-18T18:27:12+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0068.jsonl.gz exit=0
+[2026-05-18T18:27:12+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0071.jsonl.gz -> logs_retry/22RS0071.log
+[2026-05-18T18:27:32+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/22RS0071.jsonl.gz exit=0
+[2026-05-18T18:27:32+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/23RS0006.jsonl.gz -> logs_retry/23RS0006.log
+[2026-05-18T18:31:08+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/23RS0006.jsonl.gz exit=0
+[2026-05-18T18:31:08+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/23RS0011.jsonl.gz -> logs_retry/23RS0011.log
+[2026-05-18T18:33:50+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/23RS0011.jsonl.gz exit=0
+[2026-05-18T18:33:50+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/23RS0013.jsonl.gz -> logs_retry/23RS0013.log
+[2026-05-18T18:35:35+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/23RS0013.jsonl.gz exit=0
+[2026-05-18T18:35:35+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/23RS0027.jsonl.gz -> logs_retry/23RS0027.log
+[2026-05-18T18:36:50+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/23RS0027.jsonl.gz exit=0
+[2026-05-18T18:36:50+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/23RS0030.jsonl.gz -> logs_retry/23RS0030.log
+[2026-05-18T18:39:02+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/23RS0030.jsonl.gz exit=0
+[2026-05-18T18:39:02+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/23RS0032.jsonl.gz -> logs_retry/23RS0032.log
+[2026-05-18T18:40:08+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/23RS0032.jsonl.gz exit=0
+[2026-05-18T18:40:08+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/23RS0048.jsonl.gz -> logs_retry/23RS0048.log
+[2026-05-18T18:40:53+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/23RS0048.jsonl.gz exit=0
+[2026-05-18T18:40:53+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/23RS0060.jsonl.gz -> logs_retry/23RS0060.log
+[2026-05-18T18:41:46+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/23RS0060.jsonl.gz exit=0
+[2026-05-18T18:41:46+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0001.jsonl.gz -> logs_retry/24RS0001.log
+[2026-05-18T18:42:19+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0001.jsonl.gz exit=0
+[2026-05-18T18:42:19+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0002.jsonl.gz -> logs_retry/24RS0002.log
+[2026-05-18T18:46:10+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0002.jsonl.gz exit=0
+[2026-05-18T18:46:10+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0004.jsonl.gz -> logs_retry/24RS0004.log
+[2026-05-18T18:47:31+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0004.jsonl.gz exit=0
+[2026-05-18T18:47:31+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0006.jsonl.gz -> logs_retry/24RS0006.log
+[2026-05-18T18:48:21+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0006.jsonl.gz exit=0
+[2026-05-18T18:48:21+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0008.jsonl.gz -> logs_retry/24RS0008.log
+[2026-05-18T18:48:51+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0008.jsonl.gz exit=0
+[2026-05-18T18:48:51+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0011.jsonl.gz -> logs_retry/24RS0011.log
+[2026-05-18T18:49:16+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0011.jsonl.gz exit=0
+[2026-05-18T18:49:16+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0013.jsonl.gz -> logs_retry/24RS0013.log
+[2026-05-18T18:51:58+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0013.jsonl.gz exit=0
+[2026-05-18T18:51:58+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0014.jsonl.gz -> logs_retry/24RS0014.log
+[2026-05-18T18:53:08+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0014.jsonl.gz exit=0
+[2026-05-18T18:53:08+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0021.jsonl.gz -> logs_retry/24RS0021.log
+[2026-05-18T18:53:37+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0021.jsonl.gz exit=0
+[2026-05-18T18:53:37+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0023.jsonl.gz -> logs_retry/24RS0023.log
+[2026-05-18T18:53:56+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0023.jsonl.gz exit=0
+[2026-05-18T18:53:56+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0037.jsonl.gz -> logs_retry/24RS0037.log
+[2026-05-18T18:55:24+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0037.jsonl.gz exit=0
+[2026-05-18T18:55:24+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0041.jsonl.gz -> logs_retry/24RS0041.log
+[2026-05-18T18:59:41+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0041.jsonl.gz exit=0
+[2026-05-18T18:59:41+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0049.jsonl.gz -> logs_retry/24RS0049.log
+[2026-05-18T19:00:39+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0049.jsonl.gz exit=0
+[2026-05-18T19:00:39+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0059.jsonl.gz -> logs_retry/24RS0059.log
+[2026-05-18T19:01:54+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/24RS0059.jsonl.gz exit=0
+[2026-05-18T19:01:54+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/25RS0004.jsonl.gz -> logs_retry/25RS0004.log
+[2026-05-18T19:05:20+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/25RS0004.jsonl.gz exit=0
+[2026-05-18T19:05:20+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/25RS0010.jsonl.gz -> logs_retry/25RS0010.log
+[2026-05-18T19:08:31+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/25RS0010.jsonl.gz exit=0
+[2026-05-18T19:08:31+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/25RS0011.jsonl.gz -> logs_retry/25RS0011.log
+[2026-05-18T19:10:13+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/25RS0011.jsonl.gz exit=0
+[2026-05-18T19:10:13+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/25RS0013.jsonl.gz -> logs_retry/25RS0013.log
+[2026-05-18T19:11:25+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/25RS0013.jsonl.gz exit=0
+[2026-05-18T19:11:25+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/25RS0021.jsonl.gz -> logs_retry/25RS0021.log
+[2026-05-18T19:12:20+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/25RS0021.jsonl.gz exit=0
+[2026-05-18T19:12:20+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/25RS0023.jsonl.gz -> logs_retry/25RS0023.log
+[2026-05-18T19:12:50+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/25RS0023.jsonl.gz exit=0
+[2026-05-18T19:12:50+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/25RS0024.jsonl.gz -> logs_retry/25RS0024.log
+[2026-05-18T19:13:52+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/25RS0024.jsonl.gz exit=0
+[2026-05-18T19:13:52+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/25RS0026.jsonl.gz -> logs_retry/25RS0026.log
+[2026-05-18T19:14:29+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/25RS0026.jsonl.gz exit=0
+[2026-05-18T19:14:29+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/25RS0028.jsonl.gz -> logs_retry/25RS0028.log
+[2026-05-18T19:14:45+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/25RS0028.jsonl.gz exit=0
+[2026-05-18T19:14:45+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/25RS0029.jsonl.gz -> logs_retry/25RS0029.log
+[2026-05-18T19:16:36+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/25RS0029.jsonl.gz exit=0
+[2026-05-18T19:16:36+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/26RS0002.jsonl.gz -> logs_retry/26RS0002.log
+[2026-05-18T19:20:59+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/26RS0002.jsonl.gz exit=0
+[2026-05-18T19:20:59+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/26RS0006.jsonl.gz -> logs_retry/26RS0006.log
+[2026-05-18T19:21:23+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/26RS0006.jsonl.gz exit=0
+[2026-05-18T19:21:23+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/26RS0009.jsonl.gz -> logs_retry/26RS0009.log
+[2026-05-18T19:22:22+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/26RS0009.jsonl.gz exit=0
+[2026-05-18T19:22:22+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/26RS0014.jsonl.gz -> logs_retry/26RS0014.log
+[2026-05-18T19:24:11+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/26RS0014.jsonl.gz exit=0
+[2026-05-18T19:24:11+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/26RS0023.jsonl.gz -> logs_retry/26RS0023.log
+[2026-05-18T19:27:35+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/26RS0023.jsonl.gz exit=0
+[2026-05-18T19:27:35+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/26RS0024.jsonl.gz -> logs_retry/26RS0024.log
+[2026-05-18T19:29:37+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/26RS0024.jsonl.gz exit=0
+[2026-05-18T19:29:37+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/26RS0029.jsonl.gz -> logs_retry/26RS0029.log
+[2026-05-18T19:33:51+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/26RS0029.jsonl.gz exit=0
+[2026-05-18T19:33:51+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/26RS0030.jsonl.gz -> logs_retry/26RS0030.log
+[2026-05-18T19:35:46+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/26RS0030.jsonl.gz exit=0
+[2026-05-18T19:35:46+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/26RS0032.jsonl.gz -> logs_retry/26RS0032.log
+[2026-05-18T19:36:07+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/26RS0032.jsonl.gz exit=0
+[2026-05-18T19:36:07+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/27RS0006.jsonl.gz -> logs_retry/27RS0006.log
+[2026-05-18T19:38:27+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/27RS0006.jsonl.gz exit=0
+[2026-05-18T19:38:27+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/27RS0009.jsonl.gz -> logs_retry/27RS0009.log
+[2026-05-18T19:38:57+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/27RS0009.jsonl.gz exit=0
+[2026-05-18T19:38:57+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/27RS0011.jsonl.gz -> logs_retry/27RS0011.log
+[2026-05-18T19:39:23+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/27RS0011.jsonl.gz exit=0
+[2026-05-18T19:39:23+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/27RS0015.jsonl.gz -> logs_retry/27RS0015.log
+[2026-05-18T19:40:00+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/27RS0015.jsonl.gz exit=0
+[2026-05-18T19:40:00+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/28RS0007.jsonl.gz -> logs_retry/28RS0007.log
+[2026-05-18T19:40:23+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/28RS0007.jsonl.gz exit=0
+[2026-05-18T19:40:23+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/28RS0012.jsonl.gz -> logs_retry/28RS0012.log
+[2026-05-18T19:40:54+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/28RS0012.jsonl.gz exit=0
+[2026-05-18T19:40:54+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/28RS0020.jsonl.gz -> logs_retry/28RS0020.log
+[2026-05-18T19:41:16+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/28RS0020.jsonl.gz exit=0
+[2026-05-18T19:41:16+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/28RS0021.jsonl.gz -> logs_retry/28RS0021.log
+[2026-05-18T19:41:47+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/28RS0021.jsonl.gz exit=0
+[2026-05-18T19:41:47+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/28RS0022.jsonl.gz -> logs_retry/28RS0022.log
+[2026-05-18T19:42:20+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/28RS0022.jsonl.gz exit=0
+[2026-05-18T19:42:20+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/29RS0020.jsonl.gz -> logs_retry/29RS0020.log
+[2026-05-18T19:43:00+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/29RS0020.jsonl.gz exit=0
+[2026-05-18T19:43:00+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/29RS0026.jsonl.gz -> logs_retry/29RS0026.log
+[2026-05-18T19:43:34+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/29RS0026.jsonl.gz exit=0
+[2026-05-18T19:43:34+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/30RS0002.jsonl.gz -> logs_retry/30RS0002.log
+[2026-05-18T19:47:02+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/30RS0002.jsonl.gz exit=0
+[2026-05-18T19:47:02+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/30RS0007.jsonl.gz -> logs_retry/30RS0007.log
+[2026-05-18T19:47:48+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/30RS0007.jsonl.gz exit=0
+[2026-05-18T19:47:48+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/31RS0002.jsonl.gz -> logs_retry/31RS0002.log
+[2026-05-18T19:49:41+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/31RS0002.jsonl.gz exit=0
+[2026-05-18T19:49:41+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/31RS0006.jsonl.gz -> logs_retry/31RS0006.log
+[2026-05-18T19:50:04+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/31RS0006.jsonl.gz exit=0
+[2026-05-18T19:50:04+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/31RS0007.jsonl.gz -> logs_retry/31RS0007.log
+[2026-05-18T19:51:12+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/31RS0007.jsonl.gz exit=0
+[2026-05-18T19:51:12+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/31RS0011.jsonl.gz -> logs_retry/31RS0011.log
+[2026-05-18T19:51:46+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/31RS0011.jsonl.gz exit=0
+[2026-05-18T19:51:46+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/31RS0016.jsonl.gz -> logs_retry/31RS0016.log
+[2026-05-18T19:55:25+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/31RS0016.jsonl.gz exit=0
+[2026-05-18T19:55:25+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/31RS0021.jsonl.gz -> logs_retry/31RS0021.log
+[2026-05-18T19:55:52+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/31RS0021.jsonl.gz exit=0
+[2026-05-18T19:55:52+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/31RS0022.jsonl.gz -> logs_retry/31RS0022.log
+[2026-05-18T19:58:42+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/31RS0022.jsonl.gz exit=0
+[2026-05-18T19:58:42+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/32RS0011.jsonl.gz -> logs_retry/32RS0011.log
+[2026-05-18T19:59:01+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/32RS0011.jsonl.gz exit=0
+[2026-05-18T19:59:01+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/32RS0012.jsonl.gz -> logs_retry/32RS0012.log
+[2026-05-18T19:59:35+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/32RS0012.jsonl.gz exit=0
+[2026-05-18T19:59:35+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/32RS0014.jsonl.gz -> logs_retry/32RS0014.log
+[2026-05-18T20:00:07+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/32RS0014.jsonl.gz exit=0
+[2026-05-18T20:00:07+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/32RS0016.jsonl.gz -> logs_retry/32RS0016.log
+[2026-05-18T20:00:30+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/32RS0016.jsonl.gz exit=0
+[2026-05-18T20:00:30+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/32RS0018.jsonl.gz -> logs_retry/32RS0018.log
+[2026-05-18T20:01:38+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/32RS0018.jsonl.gz exit=0
+[2026-05-18T20:01:38+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/32RS0026.jsonl.gz -> logs_retry/32RS0026.log
+[2026-05-18T20:02:20+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/32RS0026.jsonl.gz exit=0
+[2026-05-18T20:02:20+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/32RS0031.jsonl.gz -> logs_retry/32RS0031.log
+[2026-05-18T20:03:02+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/32RS0031.jsonl.gz exit=0
+[2026-05-18T20:03:02+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/33RS0008.jsonl.gz -> logs_retry/33RS0008.log
+[2026-05-18T20:03:50+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/33RS0008.jsonl.gz exit=0
+[2026-05-18T20:03:50+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/33RS0011.jsonl.gz -> logs_retry/33RS0011.log
+[2026-05-18T20:07:00+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/33RS0011.jsonl.gz exit=0
+[2026-05-18T20:07:00+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/34RS0003.jsonl.gz -> logs_retry/34RS0003.log
+[2026-05-18T20:09:31+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/34RS0003.jsonl.gz exit=0
+[2026-05-18T20:09:31+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/34RS0010.jsonl.gz -> logs_retry/34RS0010.log
+[2026-05-18T20:10:11+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/34RS0010.jsonl.gz exit=0
+[2026-05-18T20:10:11+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/34RS0019.jsonl.gz -> logs_retry/34RS0019.log
+[2026-05-18T20:12:49+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/34RS0019.jsonl.gz exit=0
+[2026-05-18T20:12:49+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/34RS0020.jsonl.gz -> logs_retry/34RS0020.log
+[2026-05-18T20:13:07+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/34RS0020.jsonl.gz exit=0
+[2026-05-18T20:13:07+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/34RS0022.jsonl.gz -> logs_retry/34RS0022.log
+[2026-05-18T20:13:49+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/34RS0022.jsonl.gz exit=0
+[2026-05-18T20:13:49+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/35RS0009.jsonl.gz -> logs_retry/35RS0009.log
+[2026-05-18T20:15:06+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/35RS0009.jsonl.gz exit=0
+[2026-05-18T20:15:06+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/35RS0013.jsonl.gz -> logs_retry/35RS0013.log
+[2026-05-18T20:15:37+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/35RS0013.jsonl.gz exit=0
+[2026-05-18T20:15:37+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/35RS0017.jsonl.gz -> logs_retry/35RS0017.log
+[2026-05-18T20:16:02+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/35RS0017.jsonl.gz exit=0
+[2026-05-18T20:16:02+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/35RS0021.jsonl.gz -> logs_retry/35RS0021.log
+[2026-05-18T20:16:19+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/35RS0021.jsonl.gz exit=0
+[2026-05-18T20:16:19+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/35RS0023.jsonl.gz -> logs_retry/35RS0023.log
+[2026-05-18T20:16:28+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/35RS0023.jsonl.gz exit=1
+[2026-05-18T20:16:28+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/35RS0028.jsonl.gz -> logs_retry/35RS0028.log
+[2026-05-18T20:17:34+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/35RS0028.jsonl.gz exit=0
+[2026-05-18T20:17:34+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/36RS0002.jsonl.gz -> logs_retry/36RS0002.log
+[2026-05-18T20:21:49+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/36RS0002.jsonl.gz exit=0
+[2026-05-18T20:21:49+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/36RS0007.jsonl.gz -> logs_retry/36RS0007.log
+[2026-05-18T20:22:35+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/36RS0007.jsonl.gz exit=0
+[2026-05-18T20:22:35+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/36RS0008.jsonl.gz -> logs_retry/36RS0008.log
+[2026-05-18T20:23:21+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/36RS0008.jsonl.gz exit=0
+[2026-05-18T20:23:21+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/36RS0010.jsonl.gz -> logs_retry/36RS0010.log
+[2026-05-18T20:24:39+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/36RS0010.jsonl.gz exit=0
+[2026-05-18T20:24:39+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/36RS0018.jsonl.gz -> logs_retry/36RS0018.log
+[2026-05-18T20:25:08+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/36RS0018.jsonl.gz exit=0
+[2026-05-18T20:25:08+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/36RS0019.jsonl.gz -> logs_retry/36RS0019.log
+[2026-05-18T20:25:38+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/36RS0019.jsonl.gz exit=0
+[2026-05-18T20:25:38+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/36RS0028.jsonl.gz -> logs_retry/36RS0028.log
+[2026-05-18T20:26:25+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/36RS0028.jsonl.gz exit=0
+[2026-05-18T20:26:25+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/36RS0035.jsonl.gz -> logs_retry/36RS0035.log
+[2026-05-18T20:27:34+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/36RS0035.jsonl.gz exit=0
+[2026-05-18T20:27:34+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/36RS0036.jsonl.gz -> logs_retry/36RS0036.log
+[2026-05-18T20:28:04+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/36RS0036.jsonl.gz exit=0
+[2026-05-18T20:28:04+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/37RS0010.jsonl.gz -> logs_retry/37RS0010.log
+[2026-05-18T20:30:08+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/37RS0010.jsonl.gz exit=0
+[2026-05-18T20:30:08+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/37RS0012.jsonl.gz -> logs_retry/37RS0012.log
+[2026-05-18T20:32:19+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/37RS0012.jsonl.gz exit=0
+[2026-05-18T20:32:19+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/37RS0017.jsonl.gz -> logs_retry/37RS0017.log
+[2026-05-18T20:32:50+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/37RS0017.jsonl.gz exit=0
+[2026-05-18T20:32:50+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/37RS0020.jsonl.gz -> logs_retry/37RS0020.log
+[2026-05-18T20:34:05+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/37RS0020.jsonl.gz exit=0
+[2026-05-18T20:34:05+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/37RS0021.jsonl.gz -> logs_retry/37RS0021.log
+[2026-05-18T20:34:46+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/37RS0021.jsonl.gz exit=0
+[2026-05-18T20:34:46+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/38RS0001.jsonl.gz -> logs_retry/38RS0001.log
+[2026-05-18T20:39:32+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/38RS0001.jsonl.gz exit=0
+[2026-05-18T20:39:32+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/38RS0006.jsonl.gz -> logs_retry/38RS0006.log
+[2026-05-18T20:39:55+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/38RS0006.jsonl.gz exit=0
+[2026-05-18T20:39:55+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/38RS0012.jsonl.gz -> logs_retry/38RS0012.log
+[2026-05-18T20:40:21+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/38RS0012.jsonl.gz exit=0
+[2026-05-18T20:40:21+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/38RS0013.jsonl.gz -> logs_retry/38RS0013.log
+[2026-05-18T20:40:57+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/38RS0013.jsonl.gz exit=0
+[2026-05-18T20:40:57+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/38RS0017.jsonl.gz -> logs_retry/38RS0017.log
+[2026-05-18T20:42:02+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/38RS0017.jsonl.gz exit=0
+[2026-05-18T20:42:02+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/38RS0018.jsonl.gz -> logs_retry/38RS0018.log
+[2026-05-18T20:42:23+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/38RS0018.jsonl.gz exit=0
+[2026-05-18T20:42:23+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/38RS0031.jsonl.gz -> logs_retry/38RS0031.log
+[2026-05-18T20:45:10+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/38RS0031.jsonl.gz exit=0
+[2026-05-18T20:45:10+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/39RS0013.jsonl.gz -> logs_retry/39RS0013.log
+[2026-05-18T20:45:24+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/39RS0013.jsonl.gz exit=0
+[2026-05-18T20:45:24+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/39RS0014.jsonl.gz -> logs_retry/39RS0014.log
+[2026-05-18T20:45:45+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/39RS0014.jsonl.gz exit=0
+[2026-05-18T20:45:45+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/39RS0022.jsonl.gz -> logs_retry/39RS0022.log
+[2026-05-18T20:46:29+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/39RS0022.jsonl.gz exit=0
+[2026-05-18T20:46:29+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/41RS0002.jsonl.gz -> logs_retry/41RS0002.log
+[2026-05-18T20:48:05+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/41RS0002.jsonl.gz exit=0
+[2026-05-18T20:48:05+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/41RS0003.jsonl.gz -> logs_retry/41RS0003.log
+[2026-05-18T20:48:56+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/41RS0003.jsonl.gz exit=0
+[2026-05-18T20:48:56+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/41RS0008.jsonl.gz -> logs_retry/41RS0008.log
+[2026-05-18T20:49:17+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/41RS0008.jsonl.gz exit=0
+[2026-05-18T20:49:17+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/42RS0002.jsonl.gz -> logs_retry/42RS0002.log
+[2026-05-18T20:51:27+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/42RS0002.jsonl.gz exit=0
+[2026-05-18T20:51:27+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/42RS0008.jsonl.gz -> logs_retry/42RS0008.log
+[2026-05-18T20:53:12+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/42RS0008.jsonl.gz exit=0
+[2026-05-18T20:53:12+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/42RS0009.jsonl.gz -> logs_retry/42RS0009.log
+[2026-05-18T20:57:39+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/42RS0009.jsonl.gz exit=0
+[2026-05-18T20:57:39+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/42RS0015.jsonl.gz -> logs_retry/42RS0015.log
+[2026-05-18T20:59:23+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/42RS0015.jsonl.gz exit=0
+[2026-05-18T20:59:23+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/42RS0022.jsonl.gz -> logs_retry/42RS0022.log
+[2026-05-18T20:59:43+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/42RS0022.jsonl.gz exit=0
+[2026-05-18T20:59:43+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/42RS0031.jsonl.gz -> logs_retry/42RS0031.log
+[2026-05-18T21:00:19+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/42RS0031.jsonl.gz exit=0
+[2026-05-18T21:00:19+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/42RS0032.jsonl.gz -> logs_retry/42RS0032.log
+[2026-05-18T21:02:05+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/42RS0032.jsonl.gz exit=0
+[2026-05-18T21:02:05+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/42RS0036.jsonl.gz -> logs_retry/42RS0036.log
+[2026-05-18T21:02:51+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/42RS0036.jsonl.gz exit=0
+[2026-05-18T21:02:51+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/42RS0037.jsonl.gz -> logs_retry/42RS0037.log
+[2026-05-18T21:03:41+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/42RS0037.jsonl.gz exit=0
+[2026-05-18T21:03:41+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/42RS0040.jsonl.gz -> logs_retry/42RS0040.log
+[2026-05-18T21:04:52+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/42RS0040.jsonl.gz exit=0
+[2026-05-18T21:04:52+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/42RS0041.jsonl.gz -> logs_retry/42RS0041.log
+[2026-05-18T21:05:30+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/42RS0041.jsonl.gz exit=0
+[2026-05-18T21:05:31+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/43RS0018.jsonl.gz -> logs_retry/43RS0018.log
+[2026-05-18T21:06:40+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/43RS0018.jsonl.gz exit=0
+[2026-05-18T21:06:40+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/43RS0028.jsonl.gz -> logs_retry/43RS0028.log
+[2026-05-18T21:07:14+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/43RS0028.jsonl.gz exit=0
+[2026-05-18T21:07:14+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/43RS0034.jsonl.gz -> logs_retry/43RS0034.log
+[2026-05-18T21:08:46+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/43RS0034.jsonl.gz exit=0
+[2026-05-18T21:08:46+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/43RS0035.jsonl.gz -> logs_retry/43RS0035.log
+[2026-05-18T21:09:23+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/43RS0035.jsonl.gz exit=0
+[2026-05-18T21:09:23+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/43RS0041.jsonl.gz -> logs_retry/43RS0041.log
+[2026-05-18T21:09:43+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/43RS0041.jsonl.gz exit=0
+[2026-05-18T21:09:43+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/44RS0003.jsonl.gz -> logs_retry/44RS0003.log
+[2026-05-18T21:10:39+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/44RS0003.jsonl.gz exit=0
+[2026-05-18T21:10:39+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/44RS0006.jsonl.gz -> logs_retry/44RS0006.log
+[2026-05-18T21:11:12+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/44RS0006.jsonl.gz exit=0
+[2026-05-18T21:11:12+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/44RS0011.jsonl.gz -> logs_retry/44RS0011.log
+[2026-05-18T21:11:34+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/44RS0011.jsonl.gz exit=0
+[2026-05-18T21:11:34+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/44RS0023.jsonl.gz -> logs_retry/44RS0023.log
+[2026-05-18T21:11:59+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/44RS0023.jsonl.gz exit=0
+[2026-05-18T21:11:59+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/44RS0026.jsonl.gz -> logs_retry/44RS0026.log
+[2026-05-18T21:12:51+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/44RS0026.jsonl.gz exit=0
+[2026-05-18T21:12:51+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/45RS0005.jsonl.gz -> logs_retry/45RS0005.log
+[2026-05-18T21:13:05+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/45RS0005.jsonl.gz exit=0
+[2026-05-18T21:13:05+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/45RS0006.jsonl.gz -> logs_retry/45RS0006.log
+[2026-05-18T21:13:39+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/45RS0006.jsonl.gz exit=0
+[2026-05-18T21:13:39+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/45RS0008.jsonl.gz -> logs_retry/45RS0008.log
+[2026-05-18T21:15:11+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/45RS0008.jsonl.gz exit=0
+[2026-05-18T21:15:11+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/45RS0010.jsonl.gz -> logs_retry/45RS0010.log
+[2026-05-18T21:15:34+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/45RS0010.jsonl.gz exit=0
+[2026-05-18T21:15:34+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/45RS0015.jsonl.gz -> logs_retry/45RS0015.log
+[2026-05-18T21:16:10+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/45RS0015.jsonl.gz exit=0
+[2026-05-18T21:16:10+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/45RS0016.jsonl.gz -> logs_retry/45RS0016.log
+[2026-05-18T21:16:15+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/45RS0016.jsonl.gz exit=0
+[2026-05-18T21:16:15+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/45RS0021.jsonl.gz -> logs_retry/45RS0021.log
+[2026-05-18T21:17:33+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/45RS0021.jsonl.gz exit=0
+[2026-05-18T21:17:33+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/46RS0001.jsonl.gz -> logs_retry/46RS0001.log
+[2026-05-18T21:17:47+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/46RS0001.jsonl.gz exit=0
+[2026-05-18T21:17:47+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/46RS0005.jsonl.gz -> logs_retry/46RS0005.log
+[2026-05-18T21:18:06+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/46RS0005.jsonl.gz exit=0
+[2026-05-18T21:18:06+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/46RS0006.jsonl.gz -> logs_retry/46RS0006.log
+[2026-05-18T21:19:28+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/46RS0006.jsonl.gz exit=0
+[2026-05-18T21:19:28+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/46RS0009.jsonl.gz -> logs_retry/46RS0009.log
+[2026-05-18T21:19:37+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/46RS0009.jsonl.gz exit=0
+[2026-05-18T21:19:37+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/46RS0018.jsonl.gz -> logs_retry/46RS0018.log
+[2026-05-18T21:19:50+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/46RS0018.jsonl.gz exit=0
+[2026-05-18T21:19:50+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/46RS0019.jsonl.gz -> logs_retry/46RS0019.log
+[2026-05-18T21:20:09+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/46RS0019.jsonl.gz exit=0
+[2026-05-18T21:20:09+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/46RS0027.jsonl.gz -> logs_retry/46RS0027.log
+[2026-05-18T21:20:22+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/46RS0027.jsonl.gz exit=0
+[2026-05-18T21:20:22+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/46RS0031.jsonl.gz -> logs_retry/46RS0031.log
+[2026-05-18T21:22:04+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/46RS0031.jsonl.gz exit=0
+[2026-05-18T21:22:04+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/47RS0004.jsonl.gz -> logs_retry/47RS0004.log
+[2026-05-18T21:26:07+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/47RS0004.jsonl.gz exit=0
+[2026-05-18T21:26:07+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/47RS0008.jsonl.gz -> logs_retry/47RS0008.log
+[2026-05-18T21:26:58+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/47RS0008.jsonl.gz exit=0
+[2026-05-18T21:26:58+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/47RS0011.jsonl.gz -> logs_retry/47RS0011.log
+[2026-05-18T21:28:05+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/47RS0011.jsonl.gz exit=0
+[2026-05-18T21:28:05+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/47RS0018.jsonl.gz -> logs_retry/47RS0018.log
+[2026-05-18T21:29:57+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/47RS0018.jsonl.gz exit=0
+[2026-05-18T21:29:57+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/48RS0003.jsonl.gz -> logs_retry/48RS0003.log
+[2026-05-18T21:32:39+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/48RS0003.jsonl.gz exit=0
+[2026-05-18T21:32:39+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/48RS0009.jsonl.gz -> logs_retry/48RS0009.log
+[2026-05-18T21:33:08+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/48RS0009.jsonl.gz exit=0
+[2026-05-18T21:33:08+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/49RS0001.jsonl.gz -> logs_retry/49RS0001.log
+[2026-05-18T21:34:00+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/49RS0001.jsonl.gz exit=0
+[2026-05-18T21:34:00+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/49RS0002.jsonl.gz -> logs_retry/49RS0002.log
+[2026-05-18T21:35:06+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/49RS0002.jsonl.gz exit=0
+[2026-05-18T21:35:06+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/49RS0005.jsonl.gz -> logs_retry/49RS0005.log
+[2026-05-18T21:35:27+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/49RS0005.jsonl.gz exit=0
+[2026-05-18T21:35:27+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0001.jsonl.gz -> logs_retry/50RS0001.log
+[2026-05-18T21:39:47+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0001.jsonl.gz exit=0
+[2026-05-18T21:39:47+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0004.jsonl.gz -> logs_retry/50RS0004.log
+[2026-05-18T21:41:27+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0004.jsonl.gz exit=0
+[2026-05-18T21:41:27+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0007.jsonl.gz -> logs_retry/50RS0007.log
+[2026-05-18T21:44:21+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0007.jsonl.gz exit=0
+[2026-05-18T21:44:21+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0009.jsonl.gz -> logs_retry/50RS0009.log
+[2026-05-18T21:46:01+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0009.jsonl.gz exit=0
+[2026-05-18T21:46:01+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0010.jsonl.gz -> logs_retry/50RS0010.log
+[2026-05-18T21:48:24+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0010.jsonl.gz exit=0
+[2026-05-18T21:48:24+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0020.jsonl.gz -> logs_retry/50RS0020.log
+[2026-05-18T21:50:38+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0020.jsonl.gz exit=0
+[2026-05-18T21:50:38+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0021.jsonl.gz -> logs_retry/50RS0021.log
+[2026-05-18T21:54:58+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0021.jsonl.gz exit=0
+[2026-05-18T21:54:58+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0026.jsonl.gz -> logs_retry/50RS0026.log
+[2026-05-18T22:01:29+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0026.jsonl.gz exit=0
+[2026-05-18T22:01:29+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0029.jsonl.gz -> logs_retry/50RS0029.log
+[2026-05-18T22:03:39+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0029.jsonl.gz exit=0
+[2026-05-18T22:03:39+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0034.jsonl.gz -> logs_retry/50RS0034.log
+[2026-05-18T22:05:08+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0034.jsonl.gz exit=0
+[2026-05-18T22:05:08+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0045.jsonl.gz -> logs_retry/50RS0045.log
+[2026-05-18T22:07:34+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0045.jsonl.gz exit=0
+[2026-05-18T22:07:34+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0052.jsonl.gz -> logs_retry/50RS0052.log
+[2026-05-18T22:11:29+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/50RS0052.jsonl.gz exit=0
+[2026-05-18T22:11:29+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/51RS0001.jsonl.gz -> logs_retry/51RS0001.log
+[2026-05-18T22:14:44+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/51RS0001.jsonl.gz exit=0
+[2026-05-18T22:14:44+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/51RS0003.jsonl.gz -> logs_retry/51RS0003.log
+[2026-05-18T22:17:06+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/51RS0003.jsonl.gz exit=0
+[2026-05-18T22:17:06+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/51RS0008.jsonl.gz -> logs_retry/51RS0008.log
+[2026-05-18T22:17:44+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/51RS0008.jsonl.gz exit=0
+[2026-05-18T22:17:44+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/51RS0017.jsonl.gz -> logs_retry/51RS0017.log
+[2026-05-18T22:18:36+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/51RS0017.jsonl.gz exit=0
+[2026-05-18T22:18:36+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/51RS0019.jsonl.gz -> logs_retry/51RS0019.log
+[2026-05-18T22:19:08+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/51RS0019.jsonl.gz exit=0
+[2026-05-18T22:19:08+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/51RS0021.jsonl.gz -> logs_retry/51RS0021.log
+[2026-05-18T22:20:39+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/51RS0021.jsonl.gz exit=0
+[2026-05-18T22:20:39+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0003.jsonl.gz -> logs_retry/52RS0003.log
+[2026-05-18T22:23:36+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0003.jsonl.gz exit=0
+[2026-05-18T22:23:36+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0004.jsonl.gz -> logs_retry/52RS0004.log
+[2026-05-18T22:25:33+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0004.jsonl.gz exit=0
+[2026-05-18T22:25:33+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0007.jsonl.gz -> logs_retry/52RS0007.log
+[2026-05-18T22:28:09+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0007.jsonl.gz exit=0
+[2026-05-18T22:28:09+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0010.jsonl.gz -> logs_retry/52RS0010.log
+[2026-05-18T22:28:52+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0010.jsonl.gz exit=0
+[2026-05-18T22:28:52+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0015.jsonl.gz -> logs_retry/52RS0015.log
+[2026-05-18T22:32:36+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0015.jsonl.gz exit=0
+[2026-05-18T22:32:36+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0018.jsonl.gz -> logs_retry/52RS0018.log
+[2026-05-18T22:34:00+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0018.jsonl.gz exit=0
+[2026-05-18T22:34:00+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0027.jsonl.gz -> logs_retry/52RS0027.log
+[2026-05-18T22:34:11+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0027.jsonl.gz exit=0
+[2026-05-18T22:34:11+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0032.jsonl.gz -> logs_retry/52RS0032.log
+[2026-05-18T22:34:28+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0032.jsonl.gz exit=0
+[2026-05-18T22:34:28+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0040.jsonl.gz -> logs_retry/52RS0040.log
+[2026-05-18T22:35:02+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0040.jsonl.gz exit=0
+[2026-05-18T22:35:02+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0041.jsonl.gz -> logs_retry/52RS0041.log
+[2026-05-18T22:35:37+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0041.jsonl.gz exit=0
+[2026-05-18T22:35:37+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0054.jsonl.gz -> logs_retry/52RS0054.log
+[2026-05-18T22:36:04+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0054.jsonl.gz exit=0
+[2026-05-18T22:36:04+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0055.jsonl.gz -> logs_retry/52RS0055.log
+[2026-05-18T22:36:25+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/52RS0055.jsonl.gz exit=0
+[2026-05-18T22:36:25+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/53RS0002.jsonl.gz -> logs_retry/53RS0002.log
+[2026-05-18T22:37:48+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/53RS0002.jsonl.gz exit=0
+[2026-05-18T22:37:48+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/53RS0003.jsonl.gz -> logs_retry/53RS0003.log
+[2026-05-18T22:38:32+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/53RS0003.jsonl.gz exit=0
+[2026-05-18T22:38:32+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/53RS0015.jsonl.gz -> logs_retry/53RS0015.log
+[2026-05-18T22:39:12+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/53RS0015.jsonl.gz exit=0
+[2026-05-18T22:39:12+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/53RS0022.jsonl.gz -> logs_retry/53RS0022.log
+[2026-05-18T22:44:08+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/53RS0022.jsonl.gz exit=0
+[2026-05-18T22:44:08+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/54RS0010.jsonl.gz -> logs_retry/54RS0010.log
+[2026-05-18T22:48:01+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/54RS0010.jsonl.gz exit=0
+[2026-05-18T22:48:01+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/54RS0012.jsonl.gz -> logs_retry/54RS0012.log
+[2026-05-18T22:49:01+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/54RS0012.jsonl.gz exit=0
+[2026-05-18T22:49:01+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/54RS0029.jsonl.gz -> logs_retry/54RS0029.log
+[2026-05-18T22:49:51+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/54RS0029.jsonl.gz exit=0
+[2026-05-18T22:49:51+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/54RS0030.jsonl.gz -> logs_retry/54RS0030.log
+[2026-05-18T22:52:47+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/54RS0030.jsonl.gz exit=0
+[2026-05-18T22:52:47+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/54RS0032.jsonl.gz -> logs_retry/54RS0032.log
+[2026-05-18T22:53:40+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/54RS0032.jsonl.gz exit=0
+[2026-05-18T22:53:40+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/54RS0041.jsonl.gz -> logs_retry/54RS0041.log
+[2026-05-18T22:54:40+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/54RS0041.jsonl.gz exit=0
+[2026-05-18T22:54:40+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/55RS0002.jsonl.gz -> logs_retry/55RS0002.log
+[2026-05-18T22:58:24+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/55RS0002.jsonl.gz exit=0
+[2026-05-18T22:58:24+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/55RS0003.jsonl.gz -> logs_retry/55RS0003.log
+[2026-05-18T23:01:47+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/55RS0003.jsonl.gz exit=0
+[2026-05-18T23:01:47+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/55RS0004.jsonl.gz -> logs_retry/55RS0004.log
+[2026-05-18T23:04:38+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/55RS0004.jsonl.gz exit=0
+[2026-05-18T23:04:38+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/55RS0014.jsonl.gz -> logs_retry/55RS0014.log
+[2026-05-18T23:05:21+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/55RS0014.jsonl.gz exit=0
+[2026-05-18T23:05:21+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/55RS0023.jsonl.gz -> logs_retry/55RS0023.log
+[2026-05-18T23:05:39+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/55RS0023.jsonl.gz exit=0
+[2026-05-18T23:05:39+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/55RS0026.jsonl.gz -> logs_retry/55RS0026.log
+[2026-05-18T23:07:41+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/55RS0026.jsonl.gz exit=0
+[2026-05-18T23:07:41+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/55RS0032.jsonl.gz -> logs_retry/55RS0032.log
+[2026-05-18T23:07:56+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/55RS0032.jsonl.gz exit=0
+[2026-05-18T23:07:56+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/56RS0010.jsonl.gz -> logs_retry/56RS0010.log
+[2026-05-18T23:08:47+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/56RS0010.jsonl.gz exit=0
+[2026-05-18T23:08:47+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/56RS0013.jsonl.gz -> logs_retry/56RS0013.log
+[2026-05-18T23:09:04+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/56RS0013.jsonl.gz exit=0
+[2026-05-18T23:09:04+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/56RS0024.jsonl.gz -> logs_retry/56RS0024.log
+[2026-05-18T23:09:42+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/56RS0024.jsonl.gz exit=0
+[2026-05-18T23:09:42+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/56RS0033.jsonl.gz -> logs_retry/56RS0033.log
+[2026-05-18T23:10:02+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/56RS0033.jsonl.gz exit=0
+[2026-05-18T23:10:02+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/56RS0042.jsonl.gz -> logs_retry/56RS0042.log
+[2026-05-18T23:13:16+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/56RS0042.jsonl.gz exit=0
+[2026-05-18T23:13:16+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/57RS0010.jsonl.gz -> logs_retry/57RS0010.log
+[2026-05-18T23:13:51+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/57RS0010.jsonl.gz exit=0
+[2026-05-18T23:13:51+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/57RS0023.jsonl.gz -> logs_retry/57RS0023.log
+[2026-05-18T23:16:23+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/57RS0023.jsonl.gz exit=0
+[2026-05-18T23:16:23+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/57RS0026.jsonl.gz -> logs_retry/57RS0026.log
+[2026-05-18T23:17:45+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/57RS0026.jsonl.gz exit=0
+[2026-05-18T23:17:45+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/58RS0003.jsonl.gz -> logs_retry/58RS0003.log
+[2026-05-18T23:18:06+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/58RS0003.jsonl.gz exit=0
+[2026-05-18T23:18:06+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/58RS0021.jsonl.gz -> logs_retry/58RS0021.log
+[2026-05-18T23:18:18+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/58RS0021.jsonl.gz exit=0
+[2026-05-18T23:18:18+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/58RS0023.jsonl.gz -> logs_retry/58RS0023.log
+[2026-05-18T23:18:37+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/58RS0023.jsonl.gz exit=0
+[2026-05-18T23:18:37+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/58RS0024.jsonl.gz -> logs_retry/58RS0024.log
+[2026-05-18T23:18:54+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/58RS0024.jsonl.gz exit=0
+[2026-05-18T23:18:54+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/58RS0030.jsonl.gz -> logs_retry/58RS0030.log
+[2026-05-18T23:21:06+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/58RS0030.jsonl.gz exit=0
+[2026-05-18T23:21:06+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/59RS0003.jsonl.gz -> logs_retry/59RS0003.log
+[2026-05-18T23:23:15+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/59RS0003.jsonl.gz exit=0
+[2026-05-18T23:23:15+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/59RS0006.jsonl.gz -> logs_retry/59RS0006.log
+[2026-05-18T23:25:41+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/59RS0006.jsonl.gz exit=0
+[2026-05-18T23:25:41+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/59RS0007.jsonl.gz -> logs_retry/59RS0007.log
+[2026-05-18T23:30:29+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/59RS0007.jsonl.gz exit=0
+[2026-05-18T23:30:29+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/59RS0008.jsonl.gz -> logs_retry/59RS0008.log
+[2026-05-18T23:32:53+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/59RS0008.jsonl.gz exit=0
+[2026-05-18T23:32:53+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/59RS0021.jsonl.gz -> logs_retry/59RS0021.log
+[2026-05-18T23:33:27+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/59RS0021.jsonl.gz exit=0
+[2026-05-18T23:33:27+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/59RS0024.jsonl.gz -> logs_retry/59RS0024.log
+[2026-05-18T23:33:41+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/59RS0024.jsonl.gz exit=0
+[2026-05-18T23:33:41+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/59RS0027.jsonl.gz -> logs_retry/59RS0027.log
+[2026-05-18T23:36:23+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/59RS0027.jsonl.gz exit=0
+[2026-05-18T23:36:23+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/59RS0028.jsonl.gz -> logs_retry/59RS0028.log
+[2026-05-18T23:37:37+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/59RS0028.jsonl.gz exit=0
+[2026-05-18T23:37:37+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/60RS0014.jsonl.gz -> logs_retry/60RS0014.log
+[2026-05-18T23:37:55+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/60RS0014.jsonl.gz exit=0
+[2026-05-18T23:37:55+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/60RS0020.jsonl.gz -> logs_retry/60RS0020.log
+[2026-05-18T23:38:37+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/60RS0020.jsonl.gz exit=0
+[2026-05-18T23:38:37+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/60RS0023.jsonl.gz -> logs_retry/60RS0023.log
+[2026-05-18T23:38:58+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/60RS0023.jsonl.gz exit=0
+[2026-05-18T23:38:58+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/60RS0024.jsonl.gz -> logs_retry/60RS0024.log
+[2026-05-18T23:39:07+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/60RS0024.jsonl.gz exit=0
+[2026-05-18T23:39:07+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/61RS0004.jsonl.gz -> logs_retry/61RS0004.log
+[2026-05-18T23:42:20+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/61RS0004.jsonl.gz exit=0
+[2026-05-18T23:42:20+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/61RS0009.jsonl.gz -> logs_retry/61RS0009.log
+[2026-05-18T23:44:27+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/61RS0009.jsonl.gz exit=0
+[2026-05-18T23:44:27+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/61RS0017.jsonl.gz -> logs_retry/61RS0017.log
+[2026-05-18T23:45:37+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/61RS0017.jsonl.gz exit=0
+[2026-05-18T23:45:37+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/61RS0022.jsonl.gz -> logs_retry/61RS0022.log
+[2026-05-18T23:50:07+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/61RS0022.jsonl.gz exit=0
+[2026-05-18T23:50:07+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/61RS0023.jsonl.gz -> logs_retry/61RS0023.log
+[2026-05-18T23:53:16+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/61RS0023.jsonl.gz exit=0
+[2026-05-18T23:53:16+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/61RS0025.jsonl.gz -> logs_retry/61RS0025.log
+[2026-05-18T23:54:03+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/61RS0025.jsonl.gz exit=0
+[2026-05-18T23:54:03+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/61RS0034.jsonl.gz -> logs_retry/61RS0034.log
+[2026-05-18T23:54:43+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/61RS0034.jsonl.gz exit=0
+[2026-05-18T23:54:43+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/61RS0036.jsonl.gz -> logs_retry/61RS0036.log
+[2026-05-18T23:56:23+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/61RS0036.jsonl.gz exit=0
+[2026-05-18T23:56:23+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/61RS0050.jsonl.gz -> logs_retry/61RS0050.log
+[2026-05-18T23:57:03+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/61RS0050.jsonl.gz exit=0
+[2026-05-18T23:57:03+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/61RS0053.jsonl.gz -> logs_retry/61RS0053.log
+[2026-05-18T23:57:46+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/61RS0053.jsonl.gz exit=0
+[2026-05-18T23:57:46+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/62RS0011.jsonl.gz -> logs_retry/62RS0011.log
+[2026-05-18T23:58:07+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/62RS0011.jsonl.gz exit=0
+[2026-05-18T23:58:07+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/62RS0012.jsonl.gz -> logs_retry/62RS0012.log
+[2026-05-18T23:58:28+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/62RS0012.jsonl.gz exit=0
+[2026-05-18T23:58:28+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/62RS0017.jsonl.gz -> logs_retry/62RS0017.log
+[2026-05-18T23:58:56+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/62RS0017.jsonl.gz exit=0
+[2026-05-18T23:58:56+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/62RS0021.jsonl.gz -> logs_retry/62RS0021.log
+[2026-05-18T23:59:08+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/62RS0021.jsonl.gz exit=0
+[2026-05-18T23:59:08+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/62RS0027.jsonl.gz -> logs_retry/62RS0027.log
+[2026-05-18T23:59:21+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/62RS0027.jsonl.gz exit=0
+[2026-05-18T23:59:21+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/62RS0030.jsonl.gz -> logs_retry/62RS0030.log
+[2026-05-18T23:59:40+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/62RS0030.jsonl.gz exit=0
+[2026-05-18T23:59:40+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/62RS0031.jsonl.gz -> logs_retry/62RS0031.log
+[2026-05-19T00:00:18+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/62RS0031.jsonl.gz exit=0
+[2026-05-19T00:00:18+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/63RS0018.jsonl.gz -> logs_retry/63RS0018.log
+[2026-05-19T00:01:12+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/63RS0018.jsonl.gz exit=0
+[2026-05-19T00:01:12+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/63RS0022.jsonl.gz -> logs_retry/63RS0022.log
+[2026-05-19T00:01:39+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/63RS0022.jsonl.gz exit=0
+[2026-05-19T00:01:39+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/63RS0030.jsonl.gz -> logs_retry/63RS0030.log
+[2026-05-19T00:02:39+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/63RS0030.jsonl.gz exit=0
+[2026-05-19T00:02:39+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/63RS0031.jsonl.gz -> logs_retry/63RS0031.log
+[2026-05-19T00:04:33+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/63RS0031.jsonl.gz exit=0
+[2026-05-19T00:04:33+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/63RS0037.jsonl.gz -> logs_retry/63RS0037.log
+[2026-05-19T00:05:13+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/63RS0037.jsonl.gz exit=0
+[2026-05-19T00:05:13+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/63RS0041.jsonl.gz -> logs_retry/63RS0041.log
+[2026-05-19T00:07:25+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/63RS0041.jsonl.gz exit=0
+[2026-05-19T00:07:25+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/63RS0045.jsonl.gz -> logs_retry/63RS0045.log
+[2026-05-19T00:09:29+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/63RS0045.jsonl.gz exit=0
+[2026-05-19T00:09:29+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/64RS0010.jsonl.gz -> logs_retry/64RS0010.log
+[2026-05-19T00:11:13+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/64RS0010.jsonl.gz exit=0
+[2026-05-19T00:11:13+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/64RS0017.jsonl.gz -> logs_retry/64RS0017.log
+[2026-05-19T00:11:57+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/64RS0017.jsonl.gz exit=0
+[2026-05-19T00:11:57+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/64RS0028.jsonl.gz -> logs_retry/64RS0028.log
+[2026-05-19T00:13:22+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/64RS0028.jsonl.gz exit=0
+[2026-05-19T00:13:22+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/64RS0045.jsonl.gz -> logs_retry/64RS0045.log
+[2026-05-19T00:18:42+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/64RS0045.jsonl.gz exit=0
+[2026-05-19T00:18:42+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/64RS0046.jsonl.gz -> logs_retry/64RS0046.log
+[2026-05-19T00:23:04+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/64RS0046.jsonl.gz exit=0
+[2026-05-19T00:23:04+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/65RS0001.jsonl.gz -> logs_retry/65RS0001.log
+[2026-05-19T00:27:56+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/65RS0001.jsonl.gz exit=0
+[2026-05-19T00:27:56+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/65RS0002.jsonl.gz -> logs_retry/65RS0002.log
+[2026-05-19T00:28:17+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/65RS0002.jsonl.gz exit=0
+[2026-05-19T00:28:17+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/65RS0005.jsonl.gz -> logs_retry/65RS0005.log
+[2026-05-19T00:29:09+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/65RS0005.jsonl.gz exit=0
+[2026-05-19T00:29:09+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/65RS0006.jsonl.gz -> logs_retry/65RS0006.log
+[2026-05-19T00:29:25+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/65RS0006.jsonl.gz exit=0
+[2026-05-19T00:29:25+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/65RS0015.jsonl.gz -> logs_retry/65RS0015.log
+[2026-05-19T00:29:48+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/65RS0015.jsonl.gz exit=0
+[2026-05-19T00:29:48+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/65RS0016.jsonl.gz -> logs_retry/65RS0016.log
+[2026-05-19T00:30:36+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/65RS0016.jsonl.gz exit=0
+[2026-05-19T00:30:36+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0004.jsonl.gz -> logs_retry/66RS0004.log
+[2026-05-19T00:35:40+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0004.jsonl.gz exit=0
+[2026-05-19T00:35:40+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0006.jsonl.gz -> logs_retry/66RS0006.log
+[2026-05-19T00:39:02+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0006.jsonl.gz exit=0
+[2026-05-19T00:39:02+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0009.jsonl.gz -> logs_retry/66RS0009.log
+[2026-05-19T00:41:31+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0009.jsonl.gz exit=0
+[2026-05-19T00:41:31+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0010.jsonl.gz -> logs_retry/66RS0010.log
+[2026-05-19T00:43:18+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0010.jsonl.gz exit=0
+[2026-05-19T00:43:18+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0014.jsonl.gz -> logs_retry/66RS0014.log
+[2026-05-19T00:44:25+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0014.jsonl.gz exit=0
+[2026-05-19T00:44:25+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0024.jsonl.gz -> logs_retry/66RS0024.log
+[2026-05-19T00:46:03+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0024.jsonl.gz exit=0
+[2026-05-19T00:46:03+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0032.jsonl.gz -> logs_retry/66RS0032.log
+[2026-05-19T00:46:40+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0032.jsonl.gz exit=0
+[2026-05-19T00:46:40+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0043.jsonl.gz -> logs_retry/66RS0043.log
+[2026-05-19T00:47:54+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0043.jsonl.gz exit=0
+[2026-05-19T00:47:54+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0044.jsonl.gz -> logs_retry/66RS0044.log
+[2026-05-19T00:50:18+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0044.jsonl.gz exit=0
+[2026-05-19T00:50:18+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0045.jsonl.gz -> logs_retry/66RS0045.log
+[2026-05-19T00:51:18+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0045.jsonl.gz exit=0
+[2026-05-19T00:51:18+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0048.jsonl.gz -> logs_retry/66RS0048.log
+[2026-05-19T00:52:15+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0048.jsonl.gz exit=0
+[2026-05-19T00:52:15+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0053.jsonl.gz -> logs_retry/66RS0053.log
+[2026-05-19T00:53:38+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0053.jsonl.gz exit=0
+[2026-05-19T00:53:38+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0056.jsonl.gz -> logs_retry/66RS0056.log
+[2026-05-19T00:54:38+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/66RS0056.jsonl.gz exit=0
+[2026-05-19T00:54:38+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/67RS0009.jsonl.gz -> logs_retry/67RS0009.log
+[2026-05-19T00:54:53+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/67RS0009.jsonl.gz exit=0
+[2026-05-19T00:54:53+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/67RS0017.jsonl.gz -> logs_retry/67RS0017.log
+[2026-05-19T00:55:12+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/67RS0017.jsonl.gz exit=0
+[2026-05-19T00:55:12+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/67RS0022.jsonl.gz -> logs_retry/67RS0022.log
+[2026-05-19T00:55:30+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/67RS0022.jsonl.gz exit=0
+[2026-05-19T00:55:30+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/68RS0003.jsonl.gz -> logs_retry/68RS0003.log
+[2026-05-19T00:57:04+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/68RS0003.jsonl.gz exit=0
+[2026-05-19T00:57:04+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/68RS0008.jsonl.gz -> logs_retry/68RS0008.log
+[2026-05-19T00:57:30+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/68RS0008.jsonl.gz exit=0
+[2026-05-19T00:57:30+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/68RS0011.jsonl.gz -> logs_retry/68RS0011.log
+[2026-05-19T00:58:04+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/68RS0011.jsonl.gz exit=0
+[2026-05-19T00:58:04+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/69RS0013.jsonl.gz -> logs_retry/69RS0013.log
+[2026-05-19T00:59:01+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/69RS0013.jsonl.gz exit=0
+[2026-05-19T00:59:01+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/69RS0021.jsonl.gz -> logs_retry/69RS0021.log
+[2026-05-19T00:59:21+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/69RS0021.jsonl.gz exit=0
+[2026-05-19T00:59:21+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/69RS0039.jsonl.gz -> logs_retry/69RS0039.log
+[2026-05-19T01:01:19+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/69RS0039.jsonl.gz exit=0
+[2026-05-19T01:01:19+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/70RS0002.jsonl.gz -> logs_retry/70RS0002.log
+[2026-05-19T01:04:47+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/70RS0002.jsonl.gz exit=0
+[2026-05-19T01:04:47+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/70RS0008.jsonl.gz -> logs_retry/70RS0008.log
+[2026-05-19T01:05:28+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/70RS0008.jsonl.gz exit=0
+[2026-05-19T01:05:28+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/70RS0016.jsonl.gz -> logs_retry/70RS0016.log
+[2026-05-19T01:05:52+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/70RS0016.jsonl.gz exit=0
+[2026-05-19T01:05:52+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/71RS0004.jsonl.gz -> logs_retry/71RS0004.log
+[2026-05-19T01:06:57+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/71RS0004.jsonl.gz exit=0
+[2026-05-19T01:06:57+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/71RS0013.jsonl.gz -> logs_retry/71RS0013.log
+[2026-05-19T01:07:56+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/71RS0013.jsonl.gz exit=0
+[2026-05-19T01:07:56+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/71RS0017.jsonl.gz -> logs_retry/71RS0017.log
+[2026-05-19T01:08:41+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/71RS0017.jsonl.gz exit=0
+[2026-05-19T01:08:41+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/71RS0018.jsonl.gz -> logs_retry/71RS0018.log
+[2026-05-19T01:09:30+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/71RS0018.jsonl.gz exit=0
+[2026-05-19T01:09:30+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/71RS0028.jsonl.gz -> logs_retry/71RS0028.log
+[2026-05-19T01:11:17+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/71RS0028.jsonl.gz exit=0
+[2026-05-19T01:11:17+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/71RS0029.jsonl.gz -> logs_retry/71RS0029.log
+[2026-05-19T01:14:17+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/71RS0029.jsonl.gz exit=0
+[2026-05-19T01:14:17+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/72RS0002.jsonl.gz -> logs_retry/72RS0002.log
+[2026-05-19T01:14:32+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/72RS0002.jsonl.gz exit=0
+[2026-05-19T01:14:32+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/72RS0010.jsonl.gz -> logs_retry/72RS0010.log
+[2026-05-19T01:15:24+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/72RS0010.jsonl.gz exit=0
+[2026-05-19T01:15:24+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/72RS0015.jsonl.gz -> logs_retry/72RS0015.log
+[2026-05-19T01:15:48+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/72RS0015.jsonl.gz exit=0
+[2026-05-19T01:15:48+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/72RS0017.jsonl.gz -> logs_retry/72RS0017.log
+[2026-05-19T01:15:57+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/72RS0017.jsonl.gz exit=0
+[2026-05-19T01:15:57+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/73RS0002.jsonl.gz -> logs_retry/73RS0002.log
+[2026-05-19T01:19:14+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/73RS0002.jsonl.gz exit=0
+[2026-05-19T01:19:14+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/73RS0008.jsonl.gz -> logs_retry/73RS0008.log
+[2026-05-19T01:19:58+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/73RS0008.jsonl.gz exit=0
+[2026-05-19T01:19:58+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/73RS0009.jsonl.gz -> logs_retry/73RS0009.log
+[2026-05-19T01:20:32+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/73RS0009.jsonl.gz exit=0
+[2026-05-19T01:20:32+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/73RS0013.jsonl.gz -> logs_retry/73RS0013.log
+[2026-05-19T01:23:19+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/73RS0013.jsonl.gz exit=0
+[2026-05-19T01:23:19+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/73RS0014.jsonl.gz -> logs_retry/73RS0014.log
+[2026-05-19T01:23:48+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/73RS0014.jsonl.gz exit=0
+[2026-05-19T01:23:48+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/73RS0024.jsonl.gz -> logs_retry/73RS0024.log
+[2026-05-19T01:25:00+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/73RS0024.jsonl.gz exit=0
+[2026-05-19T01:25:00+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/74RS0007.jsonl.gz -> logs_retry/74RS0007.log
+[2026-05-19T01:26:08+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/74RS0007.jsonl.gz exit=0
+[2026-05-19T01:26:08+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/74RS0008.jsonl.gz -> logs_retry/74RS0008.log
+[2026-05-19T01:26:42+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/74RS0008.jsonl.gz exit=0
+[2026-05-19T01:26:42+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/74RS0010.jsonl.gz -> logs_retry/74RS0010.log
+[2026-05-19T01:27:19+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/74RS0010.jsonl.gz exit=0
+[2026-05-19T01:27:19+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/74RS0013.jsonl.gz -> logs_retry/74RS0013.log
+[2026-05-19T01:27:37+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/74RS0013.jsonl.gz exit=0
+[2026-05-19T01:27:37+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/74RS0020.jsonl.gz -> logs_retry/74RS0020.log
+[2026-05-19T01:28:07+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/74RS0020.jsonl.gz exit=0
+[2026-05-19T01:28:07+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/74RS0025.jsonl.gz -> logs_retry/74RS0025.log
+[2026-05-19T01:28:44+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/74RS0025.jsonl.gz exit=0
+[2026-05-19T01:28:44+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/74RS0028.jsonl.gz -> logs_retry/74RS0028.log
+[2026-05-19T01:30:39+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/74RS0028.jsonl.gz exit=0
+[2026-05-19T01:30:39+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/74RS0041.jsonl.gz -> logs_retry/74RS0041.log
+[2026-05-19T01:31:11+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/74RS0041.jsonl.gz exit=0
+[2026-05-19T01:31:11+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/75RS0001.jsonl.gz -> logs_retry/75RS0001.log
+[2026-05-19T01:35:46+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/75RS0001.jsonl.gz exit=0
+[2026-05-19T01:35:46+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/75RS0007.jsonl.gz -> logs_retry/75RS0007.log
+[2026-05-19T01:35:57+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/75RS0007.jsonl.gz exit=0
+[2026-05-19T01:35:57+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/75RS0010.jsonl.gz -> logs_retry/75RS0010.log
+[2026-05-19T01:36:57+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/75RS0010.jsonl.gz exit=0
+[2026-05-19T01:36:57+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/75RS0011.jsonl.gz -> logs_retry/75RS0011.log
+[2026-05-19T01:37:15+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/75RS0011.jsonl.gz exit=0
+[2026-05-19T01:37:15+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/75RS0012.jsonl.gz -> logs_retry/75RS0012.log
+[2026-05-19T01:37:29+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/75RS0012.jsonl.gz exit=0
+[2026-05-19T01:37:29+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/75RS0015.jsonl.gz -> logs_retry/75RS0015.log
+[2026-05-19T01:38:43+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/75RS0015.jsonl.gz exit=0
+[2026-05-19T01:38:43+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/75RS0020.jsonl.gz -> logs_retry/75RS0020.log
+[2026-05-19T01:39:03+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/75RS0020.jsonl.gz exit=0
+[2026-05-19T01:39:03+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/75RS0021.jsonl.gz -> logs_retry/75RS0021.log
+[2026-05-19T01:39:33+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/75RS0021.jsonl.gz exit=0
+[2026-05-19T01:39:33+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/75RS0022.jsonl.gz -> logs_retry/75RS0022.log
+[2026-05-19T01:40:10+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/75RS0022.jsonl.gz exit=0
+[2026-05-19T01:40:10+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/75RS0023.jsonl.gz -> logs_retry/75RS0023.log
+[2026-05-19T01:41:57+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/75RS0023.jsonl.gz exit=0
+[2026-05-19T01:41:57+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/75RS0028.jsonl.gz -> logs_retry/75RS0028.log
+[2026-05-19T01:42:10+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/75RS0028.jsonl.gz exit=0
+[2026-05-19T01:42:10+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/76RS0002.jsonl.gz -> logs_retry/76RS0002.log
+[2026-05-19T01:42:22+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/76RS0002.jsonl.gz exit=0
+[2026-05-19T01:42:22+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/76RS0004.jsonl.gz -> logs_retry/76RS0004.log
+[2026-05-19T01:42:57+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/76RS0004.jsonl.gz exit=0
+[2026-05-19T01:42:57+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/76RS0005.jsonl.gz -> logs_retry/76RS0005.log
+[2026-05-19T01:43:23+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/76RS0005.jsonl.gz exit=0
+[2026-05-19T01:43:23+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/76RS0010.jsonl.gz -> logs_retry/76RS0010.log
+[2026-05-19T01:44:39+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/76RS0010.jsonl.gz exit=0
+[2026-05-19T01:44:39+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/76RS0013.jsonl.gz -> logs_retry/76RS0013.log
+[2026-05-19T01:47:14+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/76RS0013.jsonl.gz exit=0
+[2026-05-19T01:47:14+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/76RS0016.jsonl.gz -> logs_retry/76RS0016.log
+[2026-05-19T01:49:03+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/76RS0016.jsonl.gz exit=0
+[2026-05-19T01:49:03+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/76RS0021.jsonl.gz -> logs_retry/76RS0021.log
+[2026-05-19T01:49:48+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/76RS0021.jsonl.gz exit=0
+[2026-05-19T01:49:48+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/76RS0023.jsonl.gz -> logs_retry/76RS0023.log
+[2026-05-19T01:50:48+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/76RS0023.jsonl.gz exit=0
+[2026-05-19T01:50:48+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0002.jsonl.gz -> logs_retry/77RS0002.log
+[2026-05-19T01:54:15+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0002.jsonl.gz exit=0
+[2026-05-19T01:54:15+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0003.jsonl.gz -> logs_retry/77RS0003.log
+[2026-05-19T01:57:21+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0003.jsonl.gz exit=0
+[2026-05-19T01:57:21+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0007.jsonl.gz -> logs_retry/77RS0007.log
+[2026-05-19T02:01:08+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0007.jsonl.gz exit=0
+[2026-05-19T02:01:08+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0008.jsonl.gz -> logs_retry/77RS0008.log
+[2026-05-19T02:02:59+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0008.jsonl.gz exit=0
+[2026-05-19T02:02:59+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0010.jsonl.gz -> logs_retry/77RS0010.log
+[2026-05-19T02:06:38+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0010.jsonl.gz exit=0
+[2026-05-19T02:06:38+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0011.jsonl.gz -> logs_retry/77RS0011.log
+[2026-05-19T02:07:46+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0011.jsonl.gz exit=0
+[2026-05-19T02:07:46+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0014.jsonl.gz -> logs_retry/77RS0014.log
+[2026-05-19T02:10:53+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0014.jsonl.gz exit=0
+[2026-05-19T02:10:53+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0015.jsonl.gz -> logs_retry/77RS0015.log
+[2026-05-19T02:14:32+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0015.jsonl.gz exit=0
+[2026-05-19T02:14:32+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0016.jsonl.gz -> logs_retry/77RS0016.log
+[2026-05-19T02:20:12+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0016.jsonl.gz exit=0
+[2026-05-19T02:20:12+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0017.jsonl.gz -> logs_retry/77RS0017.log
+[2026-05-19T02:24:42+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0017.jsonl.gz exit=0
+[2026-05-19T02:24:42+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0018.jsonl.gz -> logs_retry/77RS0018.log
+[2026-05-19T02:27:57+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0018.jsonl.gz exit=0
+[2026-05-19T02:27:57+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0019.jsonl.gz -> logs_retry/77RS0019.log
+[2026-05-19T02:31:04+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0019.jsonl.gz exit=0
+[2026-05-19T02:31:04+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0020.jsonl.gz -> logs_retry/77RS0020.log
+[2026-05-19T02:34:34+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0020.jsonl.gz exit=0
+[2026-05-19T02:34:34+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0021.jsonl.gz -> logs_retry/77RS0021.log
+[2026-05-19T02:38:31+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0021.jsonl.gz exit=0
+[2026-05-19T02:38:31+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0022.jsonl.gz -> logs_retry/77RS0022.log
+[2026-05-19T02:42:19+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0022.jsonl.gz exit=0
+[2026-05-19T02:42:19+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0024.jsonl.gz -> logs_retry/77RS0024.log
+[2026-05-19T02:46:15+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0024.jsonl.gz exit=0
+[2026-05-19T02:46:15+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0026.jsonl.gz -> logs_retry/77RS0026.log
+[2026-05-19T02:48:25+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0026.jsonl.gz exit=0
+[2026-05-19T02:48:25+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0028.jsonl.gz -> logs_retry/77RS0028.log
+[2026-05-19T02:50:25+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/77RS0028.jsonl.gz exit=0
+[2026-05-19T02:50:25+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/78RS0004.jsonl.gz -> logs_retry/78RS0004.log
+[2026-05-19T02:50:43+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/78RS0004.jsonl.gz exit=0
+[2026-05-19T02:50:43+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/78RS0005.jsonl.gz -> logs_retry/78RS0005.log
+[2026-05-19T02:55:07+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/78RS0005.jsonl.gz exit=0
+[2026-05-19T02:55:07+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/78RS0008.jsonl.gz -> logs_retry/78RS0008.log
+[2026-05-19T02:58:43+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/78RS0008.jsonl.gz exit=0
+[2026-05-19T02:58:43+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/78RS0009.jsonl.gz -> logs_retry/78RS0009.log
+[2026-05-19T03:02:44+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/78RS0009.jsonl.gz exit=0
+[2026-05-19T03:02:44+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/78RS0012.jsonl.gz -> logs_retry/78RS0012.log
+[2026-05-19T03:04:32+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/78RS0012.jsonl.gz exit=0
+[2026-05-19T03:04:32+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/82RS0002.jsonl.gz -> logs_retry/82RS0002.log
+[2026-05-19T03:04:42+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/82RS0002.jsonl.gz exit=0
+[2026-05-19T03:04:42+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/83RS0001.jsonl.gz -> logs_retry/83RS0001.log
+[2026-05-19T03:05:37+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/83RS0001.jsonl.gz exit=0
+[2026-05-19T03:05:37+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/85RS0003.jsonl.gz -> logs_retry/85RS0003.log
+[2026-05-19T03:05:56+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/85RS0003.jsonl.gz exit=0
+[2026-05-19T03:05:56+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/86RS0004.jsonl.gz -> logs_retry/86RS0004.log
+[2026-05-19T03:12:39+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/86RS0004.jsonl.gz exit=0
+[2026-05-19T03:12:39+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/86RS0007.jsonl.gz -> logs_retry/86RS0007.log
+[2026-05-19T03:14:42+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/86RS0007.jsonl.gz exit=0
+[2026-05-19T03:14:42+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/86RS0009.jsonl.gz -> logs_retry/86RS0009.log
+[2026-05-19T03:15:26+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/86RS0009.jsonl.gz exit=0
+[2026-05-19T03:15:26+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/86RS0010.jsonl.gz -> logs_retry/86RS0010.log
+[2026-05-19T03:15:51+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/86RS0010.jsonl.gz exit=0
+[2026-05-19T03:15:51+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/86RS0012.jsonl.gz -> logs_retry/86RS0012.log
+[2026-05-19T03:16:28+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/86RS0012.jsonl.gz exit=0
+[2026-05-19T03:16:28+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/86RS0013.jsonl.gz -> logs_retry/86RS0013.log
+[2026-05-19T03:17:14+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/86RS0013.jsonl.gz exit=0
+[2026-05-19T03:17:14+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/86RS0015.jsonl.gz -> logs_retry/86RS0015.log
+[2026-05-19T03:18:24+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/86RS0015.jsonl.gz exit=0
+[2026-05-19T03:18:24+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/87RS0001.jsonl.gz -> logs_retry/87RS0001.log
+[2026-05-19T03:18:46+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/87RS0001.jsonl.gz exit=0
+[2026-05-19T03:18:46+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/87RS0006.jsonl.gz -> logs_retry/87RS0006.log
+[2026-05-19T03:19:01+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/87RS0006.jsonl.gz exit=0
+[2026-05-19T03:19:01+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/88RS0001.jsonl.gz -> logs_retry/88RS0001.log
+[2026-05-19T03:19:11+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/88RS0001.jsonl.gz exit=0
+[2026-05-19T03:19:11+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/88RS0002.jsonl.gz -> logs_retry/88RS0002.log
+[2026-05-19T03:19:19+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/88RS0002.jsonl.gz exit=0
+[2026-05-19T03:19:19+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/89RS0004.jsonl.gz -> logs_retry/89RS0004.log
+[2026-05-19T03:21:10+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/89RS0004.jsonl.gz exit=0
+[2026-05-19T03:21:10+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/89RS0007.jsonl.gz -> logs_retry/89RS0007.log
+[2026-05-19T03:21:55+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/89RS0007.jsonl.gz exit=0
+[2026-05-19T03:21:55+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/91RS0006.jsonl.gz -> logs_retry/91RS0006.log
+[2026-05-19T03:22:56+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/91RS0006.jsonl.gz exit=0
+[2026-05-19T03:22:56+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/91RS0008.jsonl.gz -> logs_retry/91RS0008.log
+[2026-05-19T03:23:18+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/91RS0008.jsonl.gz exit=0
+[2026-05-19T03:23:18+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/92RS0001.jsonl.gz -> logs_retry/92RS0001.log
+[2026-05-19T03:24:29+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/92RS0001.jsonl.gz exit=0
+[2026-05-19T03:24:29+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/93RS0005.jsonl.gz -> logs_retry/93RS0005.log
+[2026-05-19T03:24:45+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/93RS0005.jsonl.gz exit=0
+[2026-05-19T03:24:45+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/93RS0013.jsonl.gz -> logs_retry/93RS0013.log
+[2026-05-19T03:24:51+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/93RS0013.jsonl.gz exit=0
+[2026-05-19T03:24:51+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/93RS0015.jsonl.gz -> logs_retry/93RS0015.log
+[2026-05-19T03:24:57+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/93RS0015.jsonl.gz exit=0
+[2026-05-19T03:24:57+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/93RS0016.jsonl.gz -> logs_retry/93RS0016.log
+[2026-05-19T03:25:04+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/93RS0016.jsonl.gz exit=0
+[2026-05-19T03:25:04+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/93RS0023.jsonl.gz -> logs_retry/93RS0023.log
+[2026-05-19T03:25:14+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/93RS0023.jsonl.gz exit=0
+[2026-05-19T03:25:14+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/93RS0028.jsonl.gz -> logs_retry/93RS0028.log
+[2026-05-19T03:25:15+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/93RS0028.jsonl.gz exit=0
+[2026-05-19T03:25:15+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/93RS0031.jsonl.gz -> logs_retry/93RS0031.log
+[2026-05-19T03:25:20+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/93RS0031.jsonl.gz exit=0
+[2026-05-19T03:25:20+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/93RS0034.jsonl.gz -> logs_retry/93RS0034.log
+[2026-05-19T03:25:25+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/93RS0034.jsonl.gz exit=0

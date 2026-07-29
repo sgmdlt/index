@@ -241,8 +241,17 @@ def _warc_date_to_name(warc_date: str | None) -> str | None:
     return dt.strftime("%d-%m-%Y.%H:%M:%S.html")
 
 
-def enrich_mgs_meta(meta: dict, html) -> dict:
-    """Fill identity for an archived mos-gorsud card.
+def mgs_identity_of(html, url: str) -> dict:
+    """Read identity off an archived mos-gorsud card; {} for anything else.
+
+    This is the expensive half — it soups the card — so it belongs in a parse
+    worker, never on the parent's serial unit-assembly path.
+    """
+    return mgs_identity(html, url) if is_mgs(html) else {}
+
+
+def apply_mgs_identity(meta: dict, identity: dict) -> dict:
+    """Merge parsed identity into a manifest. Cheap; runs in the parent.
 
     The MGS crawler stores pages without parsing them, so its manifest carries
     only the url, the court derived from that url, and a dump-seeded id when
@@ -250,14 +259,18 @@ def enrich_mgs_meta(meta: dict, html) -> dict:
     always wins: it is what is already in Elasticsearch, and a case renumbered
     since the dump would otherwise land as a second document.
     """
-    if not is_mgs(html):
+    if not identity:
         return meta
-    enriched = dict(meta)
-    identity = mgs_identity(html, enriched.get("url", ""))
+    enriched, identity = dict(meta), dict(identity)
     if enriched.get("id_final") or enriched.get("ID"):
         identity.pop("id_final", None)
     enriched.update({k: v for k, v in identity.items() if v})
     return enriched
+
+
+def enrich_mgs_meta(meta: dict, html) -> dict:
+    """Both halves at once, for callers that already hold the card."""
+    return apply_mgs_identity(meta, mgs_identity_of(html, meta.get("url", "")))
 
 
 def _group_to_unit(locator: str, meta, html, warc_date) -> dict:
@@ -265,7 +278,8 @@ def _group_to_unit(locator: str, meta, html, warc_date) -> dict:
     return {
         "manifest_path": locator,
         "rel_from_root": locator,
-        "meta": enrich_mgs_meta(meta, html),
+        # raw: the worker that parses these bytes returns the identity
+        "meta": meta,
         "html_files": [fname],
         "html_bytes_by_name": {fname: html},
     }
@@ -341,7 +355,8 @@ def _warc_row_to_unit(fh, row: dict) -> tuple[dict | None, dict, str | None]:
         {
             "manifest_path": locator,
             "rel_from_root": locator,
-            "meta": enrich_mgs_meta(meta, html),
+            # raw: the worker that parses these bytes returns the identity
+            "meta": meta,
             "html_files": [fname],
             "html_bytes_by_name": {fname: html},
             "documents": documents,

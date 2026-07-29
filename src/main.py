@@ -35,8 +35,10 @@ from elasticsearch import Elasticsearch
 
 from src.bulk_indexer import BulkIndexer, build_update_item
 from src.load_from_db import (
+    apply_mgs_identity,
     mark_done,
     mark_failed,
+    mgs_identity_of,
     poll_batch,
     queue_redownload,
     rows_to_units,
@@ -76,13 +78,13 @@ def _parse_html_bytes(html_bytes: bytes, origin: str,
 
 
 def _parse_html_file(args: tuple) -> tuple:
-    """Worker: read one HTML file, return (prepared_doc, read_ms, n_bytes)."""
+    """Worker: read one HTML file -> (prepared_doc, read_ms, n_bytes, identity)."""
     html_path, _manifest_dir = args
     t0 = time.perf_counter()
     with open(html_path, "rb") as fh:
         html_bytes = fh.read()
     read_ms = (time.perf_counter() - t0) * 1000.0
-    return _parse_html_bytes(html_bytes, html_path), read_ms, len(html_bytes)
+    return _parse_html_bytes(html_bytes, html_path), read_ms, len(html_bytes), {}
 
 
 def _parse_warc_payload(args: tuple) -> tuple:
@@ -91,9 +93,15 @@ def _parse_warc_payload(args: tuple) -> tuple:
     `documents` rides along because it is the only route the archived files
     have into the parser; without it an MGS card indexes with the опись links
     still in place and no decision text at all.
+
+    The identity comes back with the parsed doc because deriving it means
+    souping the card, and these bytes are already souped here. Doing it during
+    unit assembly instead put a 42 ms serial step in the parent and held the
+    whole pipeline to ~23 units/s while the pool idled.
     """
-    html_bytes, origin, documents = args
-    return _parse_html_bytes(html_bytes, origin, documents), 0.0, len(html_bytes)
+    html_bytes, origin, documents, url = args
+    return (_parse_html_bytes(html_bytes, origin, documents), 0.0,
+            len(html_bytes), mgs_identity_of(html_bytes, url))
 
 
 def _normalize_strings(node):
@@ -509,7 +517,8 @@ def _run_pipelined(
                     fut = pool.submit(
                         _parse_warc_payload,
                         (bytes_map[fname], unit["manifest_path"],
-                         unit.get("documents")),
+                         unit.get("documents"),
+                         (unit.get("meta") or {}).get("url", "")),
                     )
                 else:
                     manifest_dir = os.path.dirname(unit["manifest_path"])
@@ -530,10 +539,13 @@ def _run_pipelined(
                 continue
 
             try:
-                prepared, read_ms, n_bytes = fut.result()
+                prepared, read_ms, n_bytes, identity = fut.result()
                 metrics.add_time("readHtmlMs", read_ms)
                 metrics.inc("htmlBytes", n_bytes)
                 state["results"][fname] = prepared
+                if identity:
+                    state["unit"]["meta"] = apply_mgs_identity(
+                        state["unit"].get("meta") or {}, identity)
             except Exception as exc:
                 logger.error("Parse error in %s/%s: %s", state["unit"].get("rel_from_root"), fname, exc)
                 metrics.inc("parseErrors")

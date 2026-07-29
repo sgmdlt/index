@@ -67,7 +67,7 @@ boolean insertAtFront = (incomingTs != null && currentTs != null && incomingTs.i
 mergeUniqueOrdered(ctx._source.articles, params.articles_add, insertAtFront);
 mergeUniqueOrdered(ctx._source.defendants, params.defendants_add, insertAtFront);
 mergeUniqueOrdered(ctx._source.participants, params.participants_add, insertAtFront);
-mergeUniqueOrdered(ctx._source.participants_and_defendants, params.participants_and_defendants_add, insertAtFront);
+//mergeUniqueOrdered(ctx._source.participants_and_defendants, params.participants_and_defendants_add, insertAtFront);
 mergeUniqueOrdered(ctx._source.full_document_texts, params.full_document_texts_add, insertAtFront);
 
 if (params.file_append != null) {

@@ -1,0 +1,6 @@
+[2026-05-19T08:13:46+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/03RS0003.jsonl.gz -> logs_retry2/03RS0003.log
+[2026-05-19T08:20:10+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/03RS0003.jsonl.gz exit=0
+[2026-05-19T08:20:10+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/21RS0025.jsonl.gz -> logs_retry2/21RS0025.log
+[2026-05-19T08:23:29+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/21RS0025.jsonl.gz exit=0
+[2026-05-19T08:23:29+02:00] start /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/35RS0023.jsonl.gz -> logs_retry2/35RS0023.log
+[2026-05-19T08:23:53+02:00] done  /home/ikuzminkin/sud_delo/cases_by_court/raw/RS/35RS0023.jsonl.gz exit=0

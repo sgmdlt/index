@@ -1,0 +1,26 @@
+WARNING __main__: No permission to create index 'sudata'; assuming it exists.
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/ltdmgs/index/src/main.py", line 791, in <module>
+    main()
+    ~~~~^^
+  File "/home/ltdmgs/index/src/main.py", line 734, in main
+    pg_conn = _open_pg() if args.redownload and not args.db else None
+              ~~~~~~~~^^
+  File "/home/ltdmgs/index/src/main.py", line 589, in _open_pg
+    return psycopg2.connect(
+           ~~~~~~~~~~~~~~~~^
+        host=os.environ.get("PGHOST", "127.0.0.1"),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        password=os.environ.get("PGPASSWORD", ""),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ltdmgs/index/.venv/lib/python3.13/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+psycopg2.OperationalError: connection to server at "127.0.0.1", port 8432 failed: server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
