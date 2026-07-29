@@ -67,6 +67,9 @@ def to_document(
     base_meta = {
         "case_number": meta.get("case_number"),
         "instance": meta.get("instance"),
+        # already-resolved name, for manifests that carry no short code to look
+        # up; the CASE_TYPE_MAPPING hit below still wins when there is one
+        "case_type": meta.get("case_type_name") or None,
         "court_name": meta.get("court_name"),
         "court_code": court_code,
         "tag": court_tag,
