@@ -287,15 +287,18 @@ def mgs_identity(html, url: str) -> dict:
         html = html.decode("utf-8", errors="replace")
     card = parse_card(html)
     court_code, date_reg, case_number = card_case_id(card, url)
-    instance, case_type = proceeding_from_url(url)
+    # case_type is measured alongside instance but deliberately not returned:
+    # `to_document` treats meta["case_type"] as a short code ('КоАП') to look up
+    # in CASE_TYPE_MAPPING, so a human-readable value here would mean one field
+    # holding two vocabularies.
+    instance, _case_type = proceeding_from_url(url)
     return {"court_code": court_code, "case_number": case_number,
             "date_reg": date_reg,
             "id_final": custom_id(court_code, date_reg, case_number),
             "link": url,
             "uuid": uuid_from_url(url),
             "court_name": COURT_NAME.get(court_code, ""),
-            "instance": instance,
-            "case_type": case_type}
+            "instance": instance}
 
 
 # --- ported so this module stands alone -------------------------------------
