@@ -100,3 +100,30 @@ def test_legacy_row_without_locator_uses_fs(tmp_path):
     assert unit["meta"] == {"ID": "legacy"}
     assert unit["html_files"] == ["1.html"]
     assert "html_bytes_by_name" not in unit
+
+
+def test_shard_path_prefix_is_configurable(tmp_path, monkeypatch):
+    """The crawler's container path is not always /app/court_warc/.
+
+    The MGS crawler writes /app/out/<host>/<shard>.warc.gz, so the prefix to
+    strip has to be settable alongside the host root it is replaced with.
+    """
+    import importlib
+
+    import src.load_from_db as mod
+
+    meta = {"ID": "x_2025-01-01_1-1"}
+    [locator] = make_shard(tmp_path / "s1.warc.gz", [(meta, b"<html>c</html>")])
+    shard, off, length = locator.rsplit(":", 2)
+    container = f"/app/out/{shard.rsplit('/', 1)[1]}:{off}:{length}"
+
+    monkeypatch.setenv("COURTS_WARC_DOCKER_ROOT", "/app/out/")
+    monkeypatch.setenv("COURTS_WARC_ROOT", f"{tmp_path}/")
+    mod = importlib.reload(mod)
+    try:
+        [(unit, _, reason)] = list(mod.rows_to_units([row(1, container)]))
+        assert reason is None
+        assert unit["meta"] == meta
+    finally:
+        monkeypatch.undo()
+        importlib.reload(mod)

@@ -20,7 +20,9 @@ logger = logging.getLogger(__name__)
 TABLE = os.environ.get("PG_TABLE", "outbox")
 REDOWNLOAD_TABLE = os.environ.get("PG_REDOWNLOAD_TABLE", "redownload_queue")
 DOCKER_ROOT = "/app/court_data/"
-DOCKER_WARC_ROOT = "/app/court_warc/"
+# The prefix to strip differs per crawler: courts writes /app/court_warc/, the
+# MGS crawler writes /app/out/. Both reach Postgres as container paths.
+DOCKER_WARC_ROOT = os.environ.get("COURTS_WARC_DOCKER_ROOT", "/app/court_warc/")
 MAX_ATTEMPTS = 5
 
 VALID_REASONS = {

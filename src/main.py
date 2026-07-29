@@ -86,9 +86,14 @@ def _parse_html_file(args: tuple) -> tuple:
 
 
 def _parse_warc_payload(args: tuple) -> tuple:
-    """Worker: parse HTML bytes already read from a WARC group."""
-    html_bytes, origin = args
-    return _parse_html_bytes(html_bytes, origin), 0.0, len(html_bytes)
+    """Worker: parse HTML bytes already read from a WARC group.
+
+    `documents` rides along because it is the only route the archived files
+    have into the parser; without it an MGS card indexes with the опись links
+    still in place and no decision text at all.
+    """
+    html_bytes, origin, documents = args
+    return _parse_html_bytes(html_bytes, origin, documents), 0.0, len(html_bytes)
 
 
 def _normalize_strings(node):
@@ -503,7 +508,8 @@ def _run_pipelined(
                     # manifest_path is a locator, not a directory
                     fut = pool.submit(
                         _parse_warc_payload,
-                        (bytes_map[fname], unit["manifest_path"]),
+                        (bytes_map[fname], unit["manifest_path"],
+                         unit.get("documents")),
                     )
                 else:
                     manifest_dir = os.path.dirname(unit["manifest_path"])
