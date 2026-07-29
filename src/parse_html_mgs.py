@@ -271,21 +271,31 @@ def build_record(url: str, card, doc_texts: dict) -> dict:
 
 
 def mgs_identity(html, url: str) -> dict:
-    """court_code / case_number / date_reg / id_final for one archived card.
+    """Identity and provenance for one archived card.
 
     The crawler cannot supply these — it does not parse — so the manifest is
     enriched here. The rule is the crawler's, validated at 99.815% against
     4 316 live cards: the case number is the head number up to the first ~ or (,
     and the registration date is the second «История состояний» row whenever a
     материал exists, because the head describes the материал rather than the дело.
+
+    link / uuid / court_name / instance all come from the URL, because the card
+    markup carries none of them: no head row names the instance, and a card
+    never states its own address.
     """
     if isinstance(html, bytes):
         html = html.decode("utf-8", errors="replace")
     card = parse_card(html)
     court_code, date_reg, case_number = card_case_id(card, url)
+    instance, case_type = proceeding_from_url(url)
     return {"court_code": court_code, "case_number": case_number,
             "date_reg": date_reg,
-            "id_final": custom_id(court_code, date_reg, case_number)}
+            "id_final": custom_id(court_code, date_reg, case_number),
+            "link": url,
+            "uuid": uuid_from_url(url),
+            "court_name": COURT_NAME.get(court_code, ""),
+            "instance": instance,
+            "case_type": case_type}
 
 
 # --- ported so this module stands alone -------------------------------------
@@ -342,6 +352,117 @@ def court_from_url(url: str) -> str:
     if not match:
         return ""
     return COURT_BY_ALIAS.get(match.group(1) or match.group(2), "")
+
+
+# Court names as already spelled in the index, taken from the aggregation over
+# every Moscow document there. Two courts appear in both ё and е spellings; the
+# dominant one wins, so re-indexing a case does not change its court name.
+COURT_NAME = {
+    "77OS0000": "Московский городской суд",
+    "77RS0001": "Бабушкинский районный суд",
+    "77RS0002": "Басманный районный суд",
+    "77RS0003": "Бутырский районный суд",
+    "77RS0004": "Гагаринский районный суд",
+    "77RS0005": "Головинский районный суд",
+    "77RS0006": "Дорогомиловский районный суд",
+    "77RS0007": "Замоскворецкий районный суд",
+    "77RS0008": "Зеленоградский районный суд",
+    "77RS0009": "Зюзинский районный суд",
+    "77RS0010": "Измайловский районный суд",
+    "77RS0011": "Коптевский районный суд",
+    "77RS0012": "Кузьминский районный суд",
+    "77RS0013": "Кунцевский районный суд",
+    "77RS0014": "Лефортовский районный суд",
+    "77RS0015": "Люблинский районный суд",
+    "77RS0016": "Мещанский районный суд",
+    "77RS0017": "Нагатинский районный суд",
+    "77RS0018": "Никулинский районный суд",
+    "77RS0019": "Останкинский районный суд",
+    "77RS0020": "Перовский районный суд",
+    "77RS0021": "Пресненский районный суд",
+    "77RS0022": "Преображенский районный суд",
+    "77RS0023": "Савёловский районный суд",
+    "77RS0024": "Симоновский районный суд",
+    "77RS0025": "Солнцевский районный суд",
+    "77RS0026": "Таганский районный суд",
+    "77RS0027": "Тверской районный суд",
+    "77RS0028": "Тимирязевский районный суд",
+    "77RS0029": "Тушинский районный суд",
+    "77RS0030": "Хамовнический районный суд",
+    "77RS0031": "Хорошевский районный суд",
+    "77RS0032": "Черемушкинский районный суд",
+    "77RS0033": "Чертановский районный суд",
+    "77RS0034": "Щербинский районный суд",
+    "77RS0035": "Троицкий районный суд",
+}
+
+_UUID_PATH = re.compile(r"/details/([0-9a-f]{8}-[0-9a-f-]+)")
+
+
+def uuid_from_url(url: str) -> str:
+    """mos-gorsud puts the case uuid last in the path, not in a query string."""
+    match = _UUID_PATH.search(url or "")
+    return match.group(1) if match else ""
+
+
+_SEGMENT = re.compile(r"/services/cases/([a-z0-9-]+)/details/")
+
+# (instance, case_type) per URL segment — the only place either is stated, since
+# no head row on the card names the instance.
+#
+# Read off the site's own classification rather than guessed from the names:
+# every segment below was matched to documents already in the index that carry
+# the instance the search API reported, sample size in the comment. Two would
+# have been guessed wrong — `review-not-yet` is Кассация, not Апелляция, and
+# `magistrate-cassation-*` is Надзор despite the name.
+_FIRST, _APPEAL = "Первая инстанция", "Апелляция"
+_CASSATION, _SUPERVISION = "Кассация", "Надзор"
+_CIVIL, _CRIMINAL = "Гражданское дело", "Уголовное дело"
+_ADMIN_CASE = "Административное дело"
+_ADMIN_OFFENCE = "Дело об административном правонарушении"
+_MATERIALS = "Производство по материалам"
+
+PROCEEDING_BY_SEGMENT = {
+    # measured
+    "admin": (_FIRST, _ADMIN_OFFENCE),                    # 12
+    "admin-exec": (_FIRST, _MATERIALS),                   # 21
+    "appeal-admin": (_APPEAL, _ADMIN_CASE),               # 1
+    "appeal-civil": (_APPEAL, _CIVIL),                    # 378
+    "appeal-kas": (_APPEAL, _ADMIN_CASE),                 # 1
+    "cassation-civil": (_CASSATION, _CIVIL),              # 1
+    "cassation-criminal": (_CASSATION, _CRIMINAL),        # 1
+    "civil": (_FIRST, _CIVIL),                            # 48
+    "claim-admin": (_FIRST, _ADMIN_CASE),                 # 76
+    "claim-civil": (_FIRST, _CIVIL),                      # 78
+    "claim-criminal": (_FIRST, _CRIMINAL),                # 2
+    "criminal": (_FIRST, _CRIMINAL),                      # 6
+    "criminal-materials": (_FIRST, _MATERIALS),           # 108
+    "first-admin": (_FIRST, _ADMIN_CASE),                 # 18
+    "first-admin-exec": (_FIRST, _MATERIALS),             # 4
+    "first-civil": (_FIRST, _CIVIL),                      # 5
+    "first-civil-exec": (_FIRST, _MATERIALS),             # 7
+    "first-criminal": (_FIRST, _CRIMINAL),                # 2
+    "first-criminal-exec": (_FIRST, _MATERIALS),          # 19
+    "kas": (_FIRST, _ADMIN_CASE),                         # 42
+    "magistrate-cassation-civil": (_SUPERVISION, _CIVIL),  # 3
+    "review-not-yet": (_CASSATION, _ADMIN_OFFENCE),       # 159
+    # no document in the index to match against; read off the sibling segments,
+    # which agree unanimously within each family
+    "appeal-criminal": (_APPEAL, _CRIMINAL),
+    "civil-exec": (_FIRST, _MATERIALS),
+    "magistrate-cassation-admin": (_SUPERVISION, _ADMIN_OFFENCE),
+    "magistrate-cassation-criminal": (_SUPERVISION, _CRIMINAL),
+    "review-supervision": (_SUPERVISION, _ADMIN_OFFENCE),
+}
+
+
+def proceeding_from_url(url: str) -> tuple:
+    """(instance, case_type). Empty pair for a segment we have no reading for —
+    better an absent field than a wrong one."""
+    match = _SEGMENT.search(url or "")
+    if not match:
+        return "", ""
+    return PROCEEDING_BY_SEGMENT.get(match.group(1), ("", ""))
 
 
 _SANITIZE = str.maketrans({" ": "", "/": "-", "\\": "-",

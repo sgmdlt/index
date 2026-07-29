@@ -61,7 +61,9 @@ def to_document(
     court_tag = meta.get("court_tag") or (court_code[2:4] if court_code else None)
     link = meta.get("link") or ""
     m = _UUID_RE.search(link)
-    uuid = m.group(1) if m else None
+    # sudrf carries the uuid in a _uid= query param; mos-gorsud puts it last in
+    # the path, so that manifest supplies it ready-made
+    uuid = meta.get("uuid") or (m.group(1) if m else None)
     base_meta = {
         "case_number": meta.get("case_number"),
         "instance": meta.get("instance"),
