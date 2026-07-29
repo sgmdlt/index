@@ -291,11 +291,15 @@ def units_from_warc(path: str) -> Generator[dict, None, None]:
     `path` is one shard or a directory of shards. Records are paired into
     (metadata, resource) groups; each group becomes one pipeline unit with a
     seek-compatible locator, identical to what db mode produces.
+
+    The walk is recursive: the MGS crawler used to nest each shard under its
+    container id, and a flat listing of the warc root found none of them.
     """
     if os.path.isdir(path):
         shards = sorted(
-            os.path.join(path, f)
-            for f in os.listdir(path)
+            os.path.join(root, f)
+            for root, _dirs, files in os.walk(path)
+            for f in files
             if f.endswith(".warc.gz")
         )
     else:
