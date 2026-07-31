@@ -25,6 +25,7 @@ import logging
 import os
 import re
 import sys
+import threading
 import time
 from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
 from pathlib import Path
@@ -495,7 +496,7 @@ def _run_pipelined(
 
             if not html_files:
                 if on_unit_complete:
-                    on_unit_complete(unit, False)
+                    on_unit_complete(unit, False, [])
                 continue
 
             uid = next_uid
@@ -578,7 +579,7 @@ def _run_pipelined(
             ]
             if not pairs:
                 if on_unit_complete:
-                    on_unit_complete(unit, False)
+                    on_unit_complete(unit, False, [])
                 continue
 
             html_files_done = [p[0] for p in pairs]
@@ -596,6 +597,7 @@ def _run_pipelined(
 
             bkey = bucket_key_fn(unit) if bucket_key_fn else _bucket_key(unit)
             indexed_any = False
+            doc_ids: list[str] = []
             is_warc = unit.get("html_bytes_by_name") is not None
             for filename, parsed in zip(html_files_done, parsed_files_done):
                 update = build_update_item(
@@ -612,12 +614,14 @@ def _run_pipelined(
                 )
                 if update:
                     metrics.inc("docsPrepared")
+                    doc_ids.append(update["_id"])
                     indexer.add(bkey, update)
                     indexed_any = True
                 else:
                     _append_failed_unit(unit["rel_from_root"], failed_log)
             if on_unit_complete:
-                on_unit_complete(unit, indexed_any)
+                # doc_ids связывают юнит с вердиктом ES, который придёт позже
+                on_unit_complete(unit, indexed_any, doc_ids)
 
         metrics.log()
 
@@ -699,6 +703,10 @@ def _run_db(
     conn = _open_pg()
     DONE_BATCH = 200
     done_buf: list[int] = []
+    # doc_id -> строки outbox, ждущие вердикта ES. Один doc_id может собраться
+    # из нескольких строк: разные локаторы одного дела дают один id_final.
+    awaiting: dict[str, list[dict]] = {}
+    lock = threading.Lock()
 
     def flush_done(force: bool = False) -> None:
         if not done_buf:
@@ -707,6 +715,17 @@ def _run_db(
             return
         mark_done(conn, done_buf)
         done_buf.clear()
+
+    def on_result(indexed_ids: list, failed_ids: list, reason: str) -> None:
+        """Вердикт ES. Приходит из потока сброса, отсюда блокировка."""
+        with lock:
+            done_rows = [r for i in indexed_ids for r in awaiting.pop(i, [])]
+            bad_rows = [r for i in failed_ids for r in awaiting.pop(i, [])]
+            done_buf.extend(r["id"] for r in done_rows)
+            flush_done(force=False)
+            for row in bad_rows:
+                mark_failed(conn, row["id"], row.get("attempts") or 0,
+                            reason[:500])
 
     def units_gen():
         while True:
@@ -726,13 +745,16 @@ def _run_db(
                 unit["_row"] = row
                 yield unit
 
-    def on_complete(unit: dict, indexed: bool) -> None:
+    def on_complete(unit: dict, indexed: bool, doc_ids: list) -> None:
         row = unit.get("_row")
         if row is None:
             return
         if indexed:
-            done_buf.append(row["id"])
-            flush_done(force=False)
+            # DONE ставит on_result, когда ES подтвердит запись: раньше строка
+            # уезжала в DONE уже здесь, и отклонённый батч терял дело молча
+            with lock:
+                for doc_id in doc_ids:
+                    awaiting.setdefault(doc_id, []).append(row)
         else:
             queue_redownload(
                 conn,
@@ -742,6 +764,7 @@ def _run_db(
                 outbox_row=row,
             )
 
+    indexer.set_on_result(on_result)
     try:
         _run_pipelined(
             units_gen(),
@@ -752,9 +775,16 @@ def _run_db(
             on_unit_complete=on_complete,
             bucket_key_fn=lambda _u: "db",
         )
+        # до закрытия соединения: on_result ходит в ту же базу
+        indexer.drain()
         flush_done(force=True)
     finally:
         flush_done(force=True)
+        with lock:
+            stranded = sum(len(rows) for rows in awaiting.values())
+        if stranded:
+            logger.error("%d outbox rows never got a verdict from ES; "
+                         "they stay leasable", stranded)
         conn.close()
 
 

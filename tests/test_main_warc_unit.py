@@ -41,7 +41,7 @@ def test_warc_unit_indexes_with_locator_debug_link(tmp_path):
             Metrics(),
             max_workers=1,
             failed_log=str(tmp_path / "failed.log"),
-            on_unit_complete=lambda unit, ok: completed.append(ok),
+            on_unit_complete=lambda unit, ok, ids: completed.append(ok),
         )
 
     assert completed == [True]
@@ -50,3 +50,20 @@ def test_warc_unit_indexes_with_locator_debug_link(tmp_path):
     assert update["_id"] == "warc-case-1"
     assert update["doc"]["path_manifest"] == LOCATOR
     assert update["version_ts"] == "2026-06-10T12:00:00Z"
+
+
+def test_the_unit_reports_the_ids_it_handed_to_the_indexer(tmp_path):
+    """Без них DB-режим не связал бы строку outbox с вердиктом ES и отмечал бы
+    её DONE ещё до записи."""
+    seen = []
+    with ProcessPoolExecutor(max_workers=1) as pool:
+        _run_pipelined(
+            [make_warc_unit()],
+            pool,
+            FakeIndexer(),
+            Metrics(),
+            max_workers=1,
+            failed_log=str(tmp_path / "failed.log"),
+            on_unit_complete=lambda unit, ok, ids: seen.append(ids),
+        )
+    assert seen == [["warc-case-1"]]

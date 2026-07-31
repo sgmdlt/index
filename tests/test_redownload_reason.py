@@ -43,7 +43,7 @@ def run_one(unit, tmp_path):
             Metrics(),
             max_workers=1,
             failed_log=str(tmp_path / "failed.log"),
-            on_unit_complete=lambda u, ok: completed.append((u, ok)),
+            on_unit_complete=lambda u, ok, ids: completed.append((u, ok)),
         )
     assert completed and completed[0][1] is False
     return completed[0][0]

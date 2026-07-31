@@ -363,6 +363,7 @@ class BulkIndexer:
         bulk_docs: int = 2000,
         flush_interval: float = 15.0,
         failed_log: str = "failed_paths.log",
+        on_result=None,
     ):
         self._es = es_client
         self._index = index
@@ -370,11 +371,20 @@ class BulkIndexer:
         self._bulk_docs = bulk_docs
         self._flush_interval = flush_interval
         self._failed_log = failed_log
+        # on_result(indexed_ids, failed_ids, reason): единственный способ для
+        # вызывающего узнать вердикт ES. Без него отказ виден только в файле, и
+        # строка outbox остаётся в DONE на потерянном деле.
+        self._on_result = on_result
 
         self._buffers: dict[str, list] = {}
         self._lock = threading.Lock()
         self._timer: threading.Timer | None = None
         self._flush_threads: list[threading.Thread] = []
+
+    def set_on_result(self, fn) -> None:
+        """DB-режим ставит колбэк уже после конструктора: он замыкает соединение
+        с Postgres, которое открывается позже самого индексатора."""
+        self._on_result = fn
 
     def add(self, bucket_key: str, item: dict) -> None:
         with self._lock:
@@ -440,6 +450,9 @@ class BulkIndexer:
         existing_by_id = mget(self._es, self._index, [item["_id"] for item in batch])
         merged_items = apply_merge(batch, existing_by_id)
 
+        # снимаем до build_bulk_index_ops: он вынимает _id из элементов
+        doc_ids = [item["_id"] for item in merged_items if item.get("_id")]
+
         ops = build_bulk_index_ops(merged_items, self._index)
         if not ops:
             return
@@ -451,24 +464,27 @@ class BulkIndexer:
                 if self._metrics:
                     self._metrics.add_time("bulkMs", (time.monotonic() - t0) * 1000)
                 items = res.get("items", [])
-                failed = 0
+                indexed_ids, failed_ids = [], []
                 for action in items:
                     status = action.get("index") or {}
+                    doc_id = status.get("_id", "")
                     if status.get("error"):
-                        failed += 1
-                        self._log_failure(
-                            status.get("_id", ""), json.dumps(status["error"])
-                        )
+                        failed_ids.append(doc_id)
+                        self._log_failure(doc_id, json.dumps(status["error"]))
+                    else:
+                        indexed_ids.append(doc_id)
                 if self._metrics:
-                    self._metrics.inc("docsIndexed", len(batch))
+                    # только принятые: считать весь батч значило отчитываться
+                    # об успехе там, где ES отверг документ
+                    self._metrics.inc("docsIndexed", len(indexed_ids))
                     self._metrics.inc("bulkDocsTotal", len(merged_items))
                     self._metrics.inc("bulkCalls", 1)
-                    if failed:
-                        self._metrics.inc("bulkFailedDocs", failed)
-                if failed:
-                    logger.warning(
-                        "Bucket %s: %d/%d docs failed", bucket_key, failed, len(batch)
-                    )
+                    if failed_ids:
+                        self._metrics.inc("bulkFailedDocs", len(failed_ids))
+                if failed_ids:
+                    logger.warning("Bucket %s: %d/%d docs failed",
+                                   bucket_key, len(failed_ids), len(batch))
+                self._report(indexed_ids, failed_ids, "bulk item rejected")
                 return
 
             except Exception as exc:
@@ -485,7 +501,27 @@ class BulkIndexer:
                     "Bulk error bucket=%s attempt=%d: %s", bucket_key, attempt, exc
                 )
                 if attempt == retries:
-                    raise
+                    # Раньше здесь был raise. Он ничего не защищал: _do_bulk
+                    # почти всегда крутится в демон-потоке, где исключение
+                    # пропадает вместе с потоком, а вызывающий считает батч
+                    # записанным. Сообщаем отказ по всему батчу — строки станут
+                    # перезаявляемыми, — и даём прогону дойти до конца.
+                    failed_ids = doc_ids
+                    for doc_id in failed_ids:
+                        self._log_failure(doc_id, f"bulk call failed: {exc}")
+                    if self._metrics:
+                        self._metrics.inc("bulkFailedDocs", len(failed_ids))
+                        self._metrics.inc("bulkCalls", 1)
+                    self._report([], failed_ids, f"bulk call failed: {exc}")
+                    return
+
+    def _report(self, indexed_ids: list, failed_ids: list, reason: str) -> None:
+        if self._on_result is None:
+            return
+        try:
+            self._on_result(indexed_ids, failed_ids, reason)
+        except Exception:
+            logger.exception("on_result callback raised; continuing")
 
     def _log_failure(self, doc_id: str, reason: str) -> None:
         try:
