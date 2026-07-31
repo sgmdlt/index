@@ -35,6 +35,25 @@ _ONHOLD_PATTERNS = {
 }
 
 
+# \s* first, so a quoted key after ", " is still seen as quoted rather than
+# swallowed whole by the bare branch
+_KEY = re.compile(r"\s*(?:'([^']*)'|\"([^\"]*)\"|([^,]+))")
+
+
+def _split_keys(content: str) -> list:
+    """Alternative keys inside [...] — commas separate them, but only outside
+    quotes. Splitting on every comma made any key that contains one
+    unreachable, and silently, because the path stayed syntactically valid:
+    'Суд первой инстанции, судья' became two keys that match nothing.
+    """
+    keys = []
+    for single, double, bare in _KEY.findall(content):
+        key = single or double or bare.strip()
+        if key:
+            keys.append(key)
+    return keys
+
+
 def _parse_segments(path: str) -> list:
     """Parse a JSONPath expression into a list of segments.
 
@@ -58,8 +77,7 @@ def _parse_segments(path: str) -> list:
             if content == "*":
                 segments.append(("wildcard",))
             else:
-                keys = [k.strip().strip("'\"") for k in content.split(",")]
-                segments.append(("keys", keys))
+                segments.append(("keys", _split_keys(content)))
         else:
             j = i
             while j < n and path[j] not in ".[":
