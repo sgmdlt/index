@@ -63,3 +63,37 @@ def test_a_real_card_in_flight_has_a_state_and_no_result():
     doc = prepare_doc(fill_raw_tables_mgs(CRIMINAL))
     assert doc["case_state"] == "Назначено судебное заседание на 28.07.2026 12:00"
     assert "result" not in doc
+
+
+# --- московский дамп out_real -------------------------------------------------
+# У его записей raw_tables несёт только «СУДЕБНЫЕ АКТЫ», а карточка лежит в
+# raw_json, где «Текущее состояние» называется publishingState — и стоит первым
+# в правиле result. Поэтому та же болезнь прошла по другой ветке и осталась у
+# 9.02M документов, когда правка для WARC починила 470k.
+
+
+def test_publishing_state_is_a_state_not_a_result():
+    doc = prepare_doc({"raw_json": {
+        "publishingState": "Назначено судебное заседание на 21.05.2026 10:00"}})
+    assert doc["case_state"] == "Назначено судебное заседание на 21.05.2026 10:00"
+    assert "result" not in doc
+
+
+def test_the_other_corpus_keeps_its_result():
+    """'status' и 'Result' приходят из sud_import, их трогать нельзя."""
+    assert prepare_doc({"raw_json": {"status": "Иск удовлетворен"}})["result"] \
+        == "Иск удовлетворен"
+    assert prepare_doc({"raw_json": {"Result": "Вынесен ПРИГОВОР"}})["result"] \
+        == "Вынесен ПРИГОВОР"
+
+
+def test_an_out_real_record_keeps_its_article_and_judge():
+    """Остальные поля записи дампа читаются как читались."""
+    doc = prepare_doc({"raw_json": {
+        "publishingState": "Вступило в силу, 13.01.2026",
+        "mainArticle": "Ст. 18.15, Ч. 4",
+        "judge": "Башкайкина Е.С."}})
+    assert doc["case_state"] == "Вступило в силу, 13.01.2026"
+    assert "result" not in doc
+    assert doc["articles"] == "Ст. 18.15, Ч. 4"
+    assert doc["judge"] == "Башкайкина Е.С."
