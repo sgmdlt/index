@@ -211,6 +211,19 @@ def _get_string(values: list) -> str:
     return ""
 
 
+# «Удовлетворено, 22.07.2026» / «... без изменения, 13.04.2026 10:00» — дата,
+# дописанная к исходу в московских строках. Только в хвосте: дата внутри
+# формулировки («отменить постановление от 01.02.2026 и прекратить») — часть
+# исхода. Поле keyword, поэтому такая дата плодит новое значение на каждое дело
+# и «Удовлетворено» перестаёт собираться в одну корзину; сама дата к этому
+# моменту уже лежит в date_result.
+_TRAILING_DATE = re.compile(r",\s*\d{2}\.\d{2}\.\d{4}(?:\s+\d{2}:\d{2}(?::\d{2})?)?\s*$")
+
+
+def _get_outcome(values: list) -> str:
+    return _TRAILING_DATE.sub("", _get_string(values)).strip()
+
+
 def _get_merge(values: list) -> str:
     parts = []
     for v in values:
@@ -304,6 +317,7 @@ _TYPE_HANDLERS = {
     "list": _get_list,
     "date": _get_date,
     "boolean": _get_boolean,
+    "outcome": _get_outcome,
     "progress_rows": _get_progress_rows,
 }
 
