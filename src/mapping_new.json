@@ -274,6 +274,10 @@
         "type": "keyword",
         "normalizer": "lowercase"
       },
+      "case_state": {
+        "type": "keyword",
+        "normalizer": "lowercase"
+      },
       "uuid": {
         "type": "keyword"
       },
