@@ -75,23 +75,28 @@ def main() -> None:
                 {"query": STALE, "script": {"source": 'ctx._source.remove("result")'}})["task"]
     print(f"задача: {task}")
 
+    # Следим счётчиком совпадений, а не через _tasks: у ключа нет прав на
+    # него (403), а задача к тому моменту уже принята сервером и идёт. Заодно
+    # это честнее — счётчик показывает результат, а не отчёт о работе.
+    remaining, stalled = before, 0
     while True:
         time.sleep(20)
-        info = call(key, f"_tasks/{task}")
-        status = info.get("task", {}).get("status", {})
-        done = info.get("completed", False)
-        print(f"  обновлено {status.get('updated', 0)} / {status.get('total', '?')}"
-              f"  конфликтов {status.get('version_conflicts', 0)}")
-        if done:
-            # failures смотрим отдельно: updated растёт и при частичных отказах
-            failures = info.get("response", {}).get("failures", [])
-            print(f"готово. отказов: {len(failures)}")
-            for f in failures[:5]:
-                print("   ", str(f)[:200])
+        previous, remaining = remaining, call(
+            key, f"{INDEX}/_count", {"query": STALE})["count"]
+        print(f"  осталось {remaining}  (-{previous - remaining})")
+        if remaining == 0:
+            print("готово")
+            break
+        stalled = stalled + 1 if remaining == previous else 0
+        if stalled >= 3:
+            # Задача либо кончилась, не добив остаток, либо не движется.
+            # Остаток — и есть перечень того, что не поддалось.
+            print(f"счётчик стоит третью проверку подряд; осталось {remaining}. "
+                  f"Задача {task} могла завершиться с отказами — "
+                  f"перезапустите скрипт, чтобы добрать остаток.")
             break
 
-    after = call(key, f"{INDEX}/_count", {"query": STALE})["count"]
-    print(f"осталось совпадений: {after}  (было {before})")
+    print(f"итог: {remaining} совпадений осталось (было {before})")
 
 
 if __name__ == "__main__":
