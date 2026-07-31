@@ -116,6 +116,45 @@ def fill_texts(tables: dict, texts: dict) -> dict:
 
 
 
+# Строки шапки, несущие обвинение. Замер на 1744 карточках: «Подсудимый» несёт
+# статью в 156 из 156 случаев, «Осужденный (оправданный, обвиняемый)» — в 51 из
+# 52, «Стороны» — ни разу из 1513. «Заявитель» тоже несёт скобку, но там ст. 125
+# УПК — предмет жалобы, а не обвинение, поэтому эта строка сюда не входит.
+_ACCUSED_ROWS = ("Подсудимый", "Осужденный (оправданный, обвиняемый)")
+
+# «(Ст. 228.1, Ч. 3, п. б)» — скобка сразу после ФИО. Отдельной строки со
+# статьёй у уголовного дела на карточке нет.
+_ARTICLE_PAREN = re.compile(r"\(([^)]*\b[Сс]т\.?\s*\d[^)]*)\)")
+_CODEX = re.compile(r"\b(УК|УПК|КоАП|КАС|ГК|ГПК|ТК|НК|УИК)\b")
+_LABELS = ((re.compile(r"\bСт\.\s*"), "ст."),
+           (re.compile(r"\bЧ\.\s*"), "ч."),
+           (re.compile(r"\bпп\.\s*"), "п.п."),
+           (re.compile(r"\bп\.\s*"), "п."))
+
+
+def _one_article(text: str) -> str:
+    """«Ст. 228.1, Ч. 3, п. б» -> «ст.228.1 ч.3 п.б УК РФ».
+
+    Формат тот же, в котором статья уже лежит в индексе от sudrf, иначе одно
+    поле держало бы две записи одной и той же статьи.
+    """
+    for pattern, label in _LABELS:
+        text = pattern.sub(label, text)
+    normalized = " ".join(text.replace(",", " ").split())
+    # кодекс дописываем, только если карточка его не назвала: эти две строки
+    # бывают лишь у уголовного дела, поэтому безымянная статья — УК
+    return normalized if _CODEX.search(normalized) else f"{normalized} УК РФ"
+
+
+def card_articles(head: dict) -> str:
+    """Обвинение из строк шапки, в формате «Перечень статей» у sudrf."""
+    articles = []
+    for row in _ACCUSED_ROWS:
+        for paren in _ARTICLE_PAREN.findall(head.get(row, "")):
+            articles.extend(_one_article(part) for part in paren.split(";"))
+    return "; ".join(articles)
+
+
 def _documents(card) -> list:
     """Every downloadable document, labelled by its own опись row.
 
@@ -170,7 +209,13 @@ def fill_raw_tables_mgs(html, documents: dict | None = None) -> dict:
         if extracted.text:
             texts[url] = extracted.text
     tables = fill_texts(card.tables, texts) if texts else card.tables
-    raw = {"Дело": card.head, **tables}
+    head = dict(card.head)
+    # синтетическая строка: правило articles уже читает «Перечень всех статей»,
+    # а на карточке статья лежит внутри строки подсудимого
+    articles = card_articles(head)
+    if articles:
+        head["Перечень всех статей"] = articles
+    raw = {"Дело": head, **tables}
     if texts:
         raw["СУДЕБНЫЕ АКТЫ"] = _acts(card, texts)
     return {"raw_tables": raw}
