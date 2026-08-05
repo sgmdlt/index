@@ -64,6 +64,17 @@ def _doc_canon(text: str) -> str:
 # container key "raw_json" that the old mgs court_decisions format surfaced as.
 _PLACEHOLDER_NAMES = frozenset({"", "raw_json"})
 
+_INDENTED_LINE = re.compile(r"^[ \t]+\S", re.M)
+
+
+def _layout_score(text: str) -> tuple[int, int]:
+    """How much of an act's layout the text still carries.
+
+    Line breaks first, then indented lines. Length would be the wrong measure:
+    a stray double space makes a text longer without making it laid out.
+    """
+    return text.count("\n"), len(_INDENTED_LINE.findall(text))
+
 
 def _merge_documents(existing_arr: list, incoming_arr: list) -> list:
     result = list(existing_arr)
@@ -81,9 +92,18 @@ def _merge_documents(existing_arr: list, incoming_arr: list) -> list:
         if i is None:
             canon_idx[canon] = len(result)
             result.append(entry)
-        elif ((result[i].get("name") or "") in _PLACEHOLDER_NAMES
-              and (entry.get("name") or "") not in _PLACEHOLDER_NAMES):
-            result[i] = entry    # same text, properly named copy wins
+            continue
+        kept = result[i]
+        if ((kept.get("name") or "") in _PLACEHOLDER_NAMES
+                and (entry.get("name") or "") not in _PLACEHOLDER_NAMES):
+            kept = entry    # same text, properly named copy wins
+        if _layout_score(entry.get("text", "")) > _layout_score(kept.get("text", "")):
+            # Same text up to whitespace, so the better-laid-out one wins —
+            # layout is the formatting of an act. This is what lets a
+            # re-extraction heal a text flattened by the old extractor, which
+            # collapsed every `\s+` and so left no line breaks at all.
+            kept = {**kept, "text": entry["text"]}
+        result[i] = kept
     return result
 
 

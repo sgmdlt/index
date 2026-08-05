@@ -38,7 +38,8 @@ import subprocess
 import tempfile
 
 _UNAVAILABLE = "временно недоступ"
-_WS = re.compile(r"\s+")
+_TRAILING_WS = re.compile(r"[ \t]+$", re.M)
+_BLANK_RUN = re.compile(r"\n{3,}")
 _IMAGE_EXTS = {"png", "jpg", "jpeg", "tiff", "gif", "bmp"}
 
 # OCR fallback for scanned PDFs (no text layer). Russian by default.
@@ -47,10 +48,24 @@ _OCR_DPI = int(os.getenv("OCR_DPI", "300"))
 _OCR_TESSDATA = os.getenv("OCR_TESSDATA", "/usr/share/tesseract-ocr/5/tessdata")
 
 
+def _flat(text: str) -> str:
+    """One line, single spaces — for matching, never for storing."""
+    return " ".join(text.split())
+
+
 def _norm(text: str) -> str:
-    text = text.replace("\xa0", " ")
-    text = _WS.sub(" ", text)
-    return text.strip()
+    """Drop whitespace noise, keep the layout.
+
+    Indentation and line breaks are the formatting of a court act: an
+    extracted document collapsed onto one line is unreadable, and the
+    `documents` dedup already encodes that rule by keeping the longest of two
+    whitespace variants. So only noise goes — carriage returns, non-breaking
+    spaces, trailing spaces, and runs of blank lines.
+    """
+    text = text.replace("\xa0", " ").replace("\r\n", "\n").replace("\r", "\n")
+    text = _TRAILING_WS.sub("", text)
+    text = _BLANK_RUN.sub("\n\n", text)
+    return text.strip("\n")
 
 
 def _txt(body: bytes) -> str:
@@ -142,7 +157,9 @@ def to_text(body: bytes, ext: str | None) -> ExtractResult:
     except Exception:
         raw = ""
     text = _norm(raw)
-    if _UNAVAILABLE in text:
+    # Matched against a flattened copy: now that line breaks survive, one
+    # falling inside the marker would otherwise hide it.
+    if _UNAVAILABLE in _flat(text):
         return ExtractResult("", "unavailable")
     if not text:
         if ext == "pdf":

@@ -352,8 +352,12 @@ def prepare_doc(raw: dict) -> dict:
                 for tab_name, text_val in get_named_values_by_path(raw, path):
                     if not isinstance(text_val, str):
                         continue
-                    text = text_val.strip()
-                    if not text:
+                    # Blank lines go, indentation stays: the leading spaces of
+                    # the opening line are part of the act's layout, and a
+                    # plain strip() was cutting them back off after the
+                    # extractor had carefully kept them.
+                    text = text_val.strip("\n")
+                    if not text.strip():
                         continue
                     if text not in name_by_text:
                         text_order.append(text)
