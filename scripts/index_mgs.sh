@@ -21,7 +21,7 @@ export PGUSER=${PGUSER:-mgs}
 export PGPASSWORD=${PGPASSWORD:-mgs}
 
 export COURTS_WARC_DOCKER_ROOT=${COURTS_WARC_DOCKER_ROOT:-/app/out/}
-export COURTS_WARC_ROOT=${COURTS_WARC_ROOT:-/home/ltdmgs/mgs_downloader/warc/}
+export COURTS_WARC_ROOT=${COURTS_WARC_ROOT:-/home/ltdmgs/courts_warc/mgs/}
 
 # Without this the progress lines sit in a 8 KB block buffer for the whole run,
 # because the log is a file rather than a tty.
