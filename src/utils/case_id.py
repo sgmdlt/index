@@ -25,7 +25,7 @@ def build_case_id(case_number: str, date_reg: str, court_id: str) -> str | None:
         if any(char in normalized for char in ["~", "∼"]):
             normalized = re.split(r"[~∼]", normalized, maxsplit=1)[1].strip()
 
-        if all(char not in normalized for char in ["(", "~", "∼"]):
+        if all(char not in normalized for char in ["(", " [", "~", "∼"]):
             case_id += normalized[: normalized.rfind("/")].replace("/", "-")
         elif date_reg[-4:] in normalized:
             case_id += re.findall(
