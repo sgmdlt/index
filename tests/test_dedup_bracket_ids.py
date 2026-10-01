@@ -1,4 +1,4 @@
-from scripts.dedup_bracket_ids import covered, fixed_id, fold
+from scripts.dedup_bracket_ids import covered, fixed_id, fold, fold_ids
 
 
 def test_fixed_id_rekeys_bracketed_cassation_number():
@@ -20,3 +20,12 @@ def test_fold_keeps_old_versions_and_takes_fresh_fields_from_twin():
     assert covered(bad["html_files"], got["html_files"])
     assert got["id_final"] == "X_2025-05-22_88а-1"
     assert got["result"] == "свежее"
+
+
+def test_fold_takes_every_pair_with_a_twin_covered_or_not():
+    # docs from the old JSONL import have no html_files, so "covered" holds
+    # vacuously and says nothing about what only the bad doc carries
+    rows = [{"_id": "a", "twin": True, "covered": True},
+            {"_id": "b", "twin": True, "covered": False},
+            {"_id": "c", "twin": False, "covered": False}]
+    assert fold_ids(rows) == ["a", "b"]

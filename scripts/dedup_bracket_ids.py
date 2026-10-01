@@ -35,7 +35,6 @@ from src.utils.case_id import build_case_id
 ES = "http://10.13.12.1:9200"
 INDEX = "sudata"
 ENV = Path(__file__).resolve().parent.parent / ".env"
-BRACKET = {"wildcard": {"id_final": {"value": "* [*"}}}
 PAGE = 10000  # потолок scroll; каждая страница — полный перебор словаря, их должно быть мало
 
 
@@ -73,9 +72,9 @@ def call(key: str, path: str, body=None, timeout=900):
         return json.loads(r.read().decode("utf-8"), strict=False)
 
 
-def scan_bracket(key: str):
+def scan_bracket(key: str, pattern: str):
     resp = call(key, f"{INDEX}/_search?scroll=5m", {
-        "query": BRACKET, "size": PAGE,
+        "query": {"wildcard": {"id_final": {"value": pattern}}}, "size": PAGE,
         "_source": ["case_number", "path_manifest", "html_files"]})
     print(f"найдено {resp['hits']['total']['value']}", flush=True)
     while hits := resp["hits"]["hits"]:
@@ -95,6 +94,13 @@ def fetch_by_ids(key: str, ids: list[str]):
                     {"ids": ids[i:i + 1000]})
         yield from (d for d in resp["docs"] if d.get("found"))
         print(f"  {time.strftime('%H:%M:%S')} {i + 1000} из {len(ids)}", flush=True)
+
+
+def fold_ids(rows: list[dict]) -> list[str]:
+    # все пары, а не только непокрытые: у документов старого импорта JSONL
+    # html_files пуст, и «покрыт» для них выполняется впустую. Уже удалённые
+    # кривые повторно не тронутся — _mget их просто не найдёт
+    return [r["_id"] for r in rows if r["twin"]]
 
 
 def sources(key: str, ids: list[str]) -> dict[str, dict]:
@@ -146,14 +152,15 @@ def main() -> None:
                    help="удалить кривые документы, у которых есть правильный близнец")
     p.add_argument("--out", default="bracket_ids", help="префикс выходных файлов")
     p.add_argument("--ids", help="взять кривые id из прошлого .jsonl вместо поиска по индексу")
+    p.add_argument("--pattern", default="* [*",
+                   help="шаблон wildcard по id_final; '*]-*' — оренбургские «2]-50» при «1[2]-50»")
     p.add_argument("--fold", action="store_true",
                    help="слить оставшиеся кривые (из --ids) в близнеца из ES и удалить их")
     args = p.parse_args()
 
     key = api_key()
     if args.fold:
-        fold_all(key, [r["_id"] for r in map(json.loads, open(args.ids, encoding="utf-8"))
-                       if r["twin"] and not r["covered"]])
+        fold_all(key, fold_ids(list(map(json.loads, open(args.ids, encoding="utf-8")))))
         return
     rows = [
         {"_id": h["_id"], "new_id": fixed_id(h["_id"], h["_source"]["case_number"]),
@@ -161,7 +168,7 @@ def main() -> None:
          "html_files": h["_source"].get("html_files") or []}
         for h in (fetch_by_ids(key, [r["_id"] for r in map(json.loads, open(args.ids, encoding="utf-8"))
                                      if " [" in r["_id"]])
-                  if args.ids else scan_bracket(key))
+                  if args.ids else scan_bracket(key, args.pattern))
     ]
     # new_id == _id значит формула номер не починила — такой документ близнецом
     # сам себе не считается, иначе --delete удалил бы единственную копию
