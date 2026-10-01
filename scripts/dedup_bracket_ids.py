@@ -103,6 +103,17 @@ def fold_ids(rows: list[dict]) -> list[str]:
     return [r["_id"] for r in rows if r["twin"]]
 
 
+def moved(bad: dict, new_id: str) -> dict:
+    return {**bad, "id_final": new_id}
+
+
+def move_ids(rows: list[dict]) -> list[str]:
+    # близнеца нет — сливать не с чем, документ просто переезжает на свой id
+    return [r["_id"] for r in rows
+            if not r["twin"] and r["new_id"] and r["new_id"] != r["_id"]
+            and "ID_NOT_PARSED" not in r["new_id"]]
+
+
 def sources(key: str, ids: list[str]) -> dict[str, dict]:
     resp = call(key, f"{INDEX}/_mget", {"ids": ids})
     return {d["_id"]: d for d in resp["docs"] if d.get("found")}
@@ -133,12 +144,35 @@ def fold_all(key: str, bad_ids: list[str], batch: int = 200) -> None:
         # кривой удаляем, только если запись слитого документа ES принял
         ok = [b for b, it in zip(pairs, items) if it["index"].get("status") in (200, 201)]
         folded += len(ok)
-        if ok:
-            deleted += sum(it["delete"]["result"] == "deleted"
-                           for it in bulk(key, [{"delete": {"_id": b}} for b in ok]))
+        deleted += delete_ids(key, ok)
         print(f"  {time.strftime('%H:%M:%S')} {i + batch} из {len(bad_ids)}: "
               f"слито {folded}, удалено {deleted}", flush=True)
     print(f"итог: слито {folded}, удалено кривых {deleted} из {len(bad_ids)}")
+
+
+def move_all(key: str, bad_ids: list[str], batch: int = 200) -> None:
+    created = deleted = 0
+    for i in range(0, len(bad_ids), batch):
+        bads = sources(key, bad_ids[i:i + batch])
+        new_id = {b: fixed_id(b, d["_source"]["case_number"]) for b, d in bads.items()}
+        # create, а не index: если под новым id документ уже появился (два
+        # кривых id на одно дело, или cron успел), ES ответит 409 и ничего не
+        # перезапишет — такой кривой останется для --fold
+        items = bulk(key, [op for b, n in new_id.items() for op in (
+            {"create": {"_id": n}}, moved(bads[b]["_source"], n))]) if new_id else []
+        ok = [b for b, it in zip(new_id, items) if it["create"].get("status") == 201]
+        created += len(ok)
+        deleted += delete_ids(key, ok)
+        print(f"  {time.strftime('%H:%M:%S')} {i + batch} из {len(bad_ids)}: "
+              f"перенесено {created}, удалено {deleted}", flush=True)
+    print(f"итог: перенесено {created}, удалено кривых {deleted} из {len(bad_ids)}")
+
+
+def delete_ids(key: str, ids: list[str]) -> int:
+    if not ids:
+        return 0
+    return sum(it["delete"]["result"] == "deleted"
+               for it in bulk(key, [{"delete": {"_id": i}} for i in ids]))
 
 
 def existing(key: str, ids: list[str]) -> dict[str, list[str]]:
@@ -154,11 +188,16 @@ def main() -> None:
     p.add_argument("--ids", help="взять кривые id из прошлого .jsonl вместо поиска по индексу")
     p.add_argument("--pattern", default="* [*",
                    help="шаблон wildcard по id_final; '*]-*' — оренбургские «2]-50» при «1[2]-50»")
+    p.add_argument("--move", action="store_true",
+                   help="перенести кривые без близнеца (из --ids) на правильный id")
     p.add_argument("--fold", action="store_true",
                    help="слить оставшиеся кривые (из --ids) в близнеца из ES и удалить их")
     args = p.parse_args()
 
     key = api_key()
+    if args.move:
+        move_all(key, move_ids(list(map(json.loads, open(args.ids, encoding="utf-8")))))
+        return
     if args.fold:
         fold_all(key, fold_ids(list(map(json.loads, open(args.ids, encoding="utf-8")))))
         return
@@ -193,8 +232,7 @@ def main() -> None:
     if not args.delete or not twins:
         return
 
-    deleted = sum(it["delete"]["result"] == "deleted"
-                  for it in bulk(key, [{"delete": {"_id": i}} for i in twins]))
+    deleted = delete_ids(key, twins)
     print(f"удалено {deleted} из {len(twins)}; осталось кривых {len(rows) - deleted}")
 
 

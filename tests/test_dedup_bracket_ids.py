@@ -1,4 +1,4 @@
-from scripts.dedup_bracket_ids import covered, fixed_id, fold, fold_ids
+from scripts.dedup_bracket_ids import covered, fixed_id, fold, fold_ids, move_ids, moved
 
 
 def test_fixed_id_rekeys_bracketed_cassation_number():
@@ -29,3 +29,17 @@ def test_fold_takes_every_pair_with_a_twin_covered_or_not():
             {"_id": "b", "twin": True, "covered": False},
             {"_id": "c", "twin": False, "covered": False}]
     assert fold_ids(rows) == ["a", "b"]
+
+
+def test_moved_doc_carries_its_new_id_and_nothing_else_changes():
+    bad = {"id_final": "56RS0007_2013-04-17_1]-649", "result": "приговор"}
+    got = moved(bad, "56RS0007_2013-04-17_М[1]-649")
+    assert got == {"id_final": "56RS0007_2013-04-17_М[1]-649", "result": "приговор"}
+
+
+def test_move_takes_only_rekeyable_docs_without_a_twin():
+    rows = [{"_id": "a", "new_id": "A", "twin": False},
+            {"_id": "b", "new_id": "B", "twin": True},
+            {"_id": "c", "new_id": "c", "twin": False},
+            {"_id": "d", "new_id": "X_ID_NOT_PARSED", "twin": False}]
+    assert move_ids(rows) == ["a"]
