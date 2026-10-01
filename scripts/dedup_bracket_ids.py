@@ -11,8 +11,13 @@
     2. переиндексировать bracket_ids_fs.txt через --folders (и WARC-список,
        если он не пуст) — уже с исправленной формулой документы лягут на
        правильный id и сольются с тем, что там лежит
-    3. python -m scripts.dedup_bracket_ids            # проверить: twin=N из N
-    4. python -m scripts.dedup_bracket_ids --delete   # удалить кривые
+    3. python -m scripts.dedup_bracket_ids --ids bracket_ids.jsonl --out bracket_check
+                                                      # проверить: twin=N из N
+    4. python -m scripts.dedup_bracket_ids --ids bracket_check.jsonl --delete
+                                                      # удалить кривые
+    5. python -m scripts.dedup_bracket_ids --ids bracket_check.jsonl --fold
+                                                      # у кого остались скачивания, которых
+                                                      # нет у близнеца: слить их прямо из ES
 
 Удаляется только тот кривой документ, у которого правильный близнец уже есть в
 индексе. Что не переиндексировалось — остаётся и видно в выводе.
@@ -23,6 +28,7 @@ import time
 import urllib.request
 from pathlib import Path
 
+from src.bulk_indexer import merge_docs
 from src.dump_none_ids import is_warc_locator
 from src.utils.case_id import build_case_id
 
@@ -43,6 +49,12 @@ def covered(bad_files: list[str], twin_files: list[str]) -> bool:
     # одно дело собирается из нескольких WARC-записей, а path_manifest хранит
     # только одну — удалять можно, лишь когда близнец уже держит все версии
     return set(bad_files) <= set(twin_files)
+
+
+def fold(bad: dict, twin: dict) -> dict:
+    # близнец идёт входящим: его поля свежие (переиндексирован новым кодом),
+    # а кривой докладывает старые скачивания, до которых WARC-локатора у нас нет
+    return merge_docs(bad, twin)
 
 
 def api_key() -> str:
@@ -76,6 +88,53 @@ def scan_bracket(key: str):
         resp = call(key, "_search/scroll", {"scroll": "5m", "scroll_id": resp["_scroll_id"]})
 
 
+def fetch_by_ids(key: str, ids: list[str]):
+    # без перебора словаря: id уже известны из прошлой выгрузки, _mget по _id дешёвый
+    for i in range(0, len(ids), 1000):
+        resp = call(key, f"{INDEX}/_mget?_source_includes=case_number,path_manifest,html_files",
+                    {"ids": ids[i:i + 1000]})
+        yield from (d for d in resp["docs"] if d.get("found"))
+        print(f"  {time.strftime('%H:%M:%S')} {i + 1000} из {len(ids)}", flush=True)
+
+
+def sources(key: str, ids: list[str]) -> dict[str, dict]:
+    resp = call(key, f"{INDEX}/_mget", {"ids": ids})
+    return {d["_id"]: d for d in resp["docs"] if d.get("found")}
+
+
+def bulk(key: str, ops: list[dict]) -> list[dict]:
+    body = "".join(json.dumps(op, ensure_ascii=False) + "\n" for op in ops).encode()
+    req = urllib.request.Request(
+        f"{ES}/{INDEX}/_bulk", data=body, method="POST",
+        headers={"Content-Type": "application/x-ndjson", "Authorization": "ApiKey " + key})
+    with urllib.request.urlopen(req, timeout=900) as r:
+        return json.loads(r.read().decode("utf-8"))["items"]
+
+
+def fold_all(key: str, bad_ids: list[str], batch: int = 200) -> None:
+    folded = deleted = 0
+    for i in range(0, len(bad_ids), batch):
+        bads = sources(key, bad_ids[i:i + batch])
+        new_id = {b: fixed_id(b, d["_source"]["case_number"]) for b, d in bads.items()}
+        twins = sources(key, [n for n in new_id.values() if n])
+        pairs = {b: n for b, n in new_id.items() if n in twins and n != b}
+        # if_seq_no: если cron успел обновить близнеца после нашего чтения, ES
+        # ответит 409, кривой останется и доберётся повторным запуском
+        items = bulk(key, [op for b, n in pairs.items() for op in (
+            {"index": {"_id": n, "if_seq_no": twins[n]["_seq_no"],
+                       "if_primary_term": twins[n]["_primary_term"]}},
+            fold(bads[b]["_source"], twins[n]["_source"]))]) if pairs else []
+        # кривой удаляем, только если запись слитого документа ES принял
+        ok = [b for b, it in zip(pairs, items) if it["index"].get("status") in (200, 201)]
+        folded += len(ok)
+        if ok:
+            deleted += sum(it["delete"]["result"] == "deleted"
+                           for it in bulk(key, [{"delete": {"_id": b}} for b in ok]))
+        print(f"  {time.strftime('%H:%M:%S')} {i + batch} из {len(bad_ids)}: "
+              f"слито {folded}, удалено {deleted}", flush=True)
+    print(f"итог: слито {folded}, удалено кривых {deleted} из {len(bad_ids)}")
+
+
 def existing(key: str, ids: list[str]) -> dict[str, list[str]]:
     resp = call(key, f"{INDEX}/_mget?_source_includes=html_files", {"ids": ids})
     return {d["_id"]: d["_source"].get("html_files") or [] for d in resp["docs"] if d.get("found")}
@@ -86,14 +145,23 @@ def main() -> None:
     p.add_argument("--delete", action="store_true",
                    help="удалить кривые документы, у которых есть правильный близнец")
     p.add_argument("--out", default="bracket_ids", help="префикс выходных файлов")
+    p.add_argument("--ids", help="взять кривые id из прошлого .jsonl вместо поиска по индексу")
+    p.add_argument("--fold", action="store_true",
+                   help="слить оставшиеся кривые (из --ids) в близнеца из ES и удалить их")
     args = p.parse_args()
 
     key = api_key()
+    if args.fold:
+        fold_all(key, [r["_id"] for r in map(json.loads, open(args.ids, encoding="utf-8"))
+                       if r["twin"] and not r["covered"]])
+        return
     rows = [
         {"_id": h["_id"], "new_id": fixed_id(h["_id"], h["_source"]["case_number"]),
          "path_manifest": h["_source"].get("path_manifest") or "",
          "html_files": h["_source"].get("html_files") or []}
-        for h in scan_bracket(key)
+        for h in (fetch_by_ids(key, [r["_id"] for r in map(json.loads, open(args.ids, encoding="utf-8"))
+                                     if " [" in r["_id"]])
+                  if args.ids else scan_bracket(key))
     ]
     # new_id == _id значит формула номер не починила — такой документ близнецом
     # сам себе не считается, иначе --delete удалил бы единственную копию
@@ -118,14 +186,8 @@ def main() -> None:
     if not args.delete or not twins:
         return
 
-    body = "".join(json.dumps({"delete": {"_id": i}}, ensure_ascii=False) + "\n" for i in twins)
-    data = body.encode()
-    req = urllib.request.Request(
-        f"{ES}/{INDEX}/_bulk", data=data, method="POST",
-        headers={"Content-Type": "application/x-ndjson", "Authorization": "ApiKey " + key})
-    with urllib.request.urlopen(req, timeout=900) as r:
-        resp = json.loads(r.read().decode("utf-8"))
-    deleted = sum(1 for it in resp["items"] if it["delete"]["result"] == "deleted")
+    deleted = sum(it["delete"]["result"] == "deleted"
+                  for it in bulk(key, [{"delete": {"_id": i}} for i in twins]))
     print(f"удалено {deleted} из {len(twins)}; осталось кривых {len(rows) - deleted}")
 
 
