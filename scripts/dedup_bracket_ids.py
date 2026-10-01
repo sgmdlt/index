@@ -115,6 +115,9 @@ def move_ids(rows: list[dict]) -> list[str]:
 
 
 def sources(key: str, ids: list[str]) -> dict[str, dict]:
+    # пачка уже разобрана прошлым запуском — на пустой _mget ES отвечает 400
+    if not ids:
+        return {}
     resp = call(key, f"{INDEX}/_mget", {"ids": ids})
     return {d["_id"]: d for d in resp["docs"] if d.get("found")}
 
