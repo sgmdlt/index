@@ -131,10 +131,16 @@ def bulk(key: str, ops: list[dict]) -> list[dict]:
         return json.loads(r.read().decode("utf-8"))["items"]
 
 
+def first_error(items: list[dict], op: str) -> str:
+    errs = [it[op] for it in items if it[op].get("status") not in (200, 201)]
+    return f"; отказов {len(errs)}, первый: {errs[0].get('status')} {errs[0].get('error')}" if errs else ""
+
+
 def fold_all(key: str, bad_ids: list[str], batch: int = 200) -> None:
-    folded = deleted = 0
+    folded = deleted = found = 0
     for i in range(0, len(bad_ids), batch):
         bads = sources(key, bad_ids[i:i + batch])
+        found += len(bads)
         new_id = {b: fixed_id(b, d["_source"]["case_number"]) for b, d in bads.items()}
         twins = sources(key, [n for n in new_id.values() if n])
         pairs = {b: n for b, n in new_id.items() if n in twins and n != b}
@@ -149,8 +155,9 @@ def fold_all(key: str, bad_ids: list[str], batch: int = 200) -> None:
         folded += len(ok)
         deleted += delete_ids(key, ok)
         print(f"  {time.strftime('%H:%M:%S')} {i + batch} из {len(bad_ids)}: "
-              f"слито {folded}, удалено {deleted}", flush=True)
-    print(f"итог: слито {folded}, удалено кривых {deleted} из {len(bad_ids)}")
+              f"найдено кривых {len(bads)}, пар {len(pairs)}, слито {folded}, удалено {deleted}"
+              f"{first_error(items, 'index')}", flush=True)
+    print(f"итог: найдено кривых {found}, слито {folded}, удалено {deleted} из {len(bad_ids)}")
 
 
 def move_all(key: str, bad_ids: list[str], batch: int = 200) -> None:
@@ -167,7 +174,7 @@ def move_all(key: str, bad_ids: list[str], batch: int = 200) -> None:
         created += len(ok)
         deleted += delete_ids(key, ok)
         print(f"  {time.strftime('%H:%M:%S')} {i + batch} из {len(bad_ids)}: "
-              f"перенесено {created}, удалено {deleted}", flush=True)
+              f"перенесено {created}, удалено {deleted}{first_error(items, 'create')}", flush=True)
     print(f"итог: перенесено {created}, удалено кривых {deleted} из {len(bad_ids)}")
 
 
