@@ -18,6 +18,13 @@ from datetime import datetime
 def build_case_id(case_number: str, date_reg: str, court_id: str) -> str | None:
     if not date_reg:
         return None
+    # "4У-0 [44У-113/2011]": the complaint number is a placeholder, so the case
+    # keys on the proceeding in brackets — and if the date is the 01.01.1900
+    # placeholder too, on that proceeding's year, else every such case of a
+    # court shares one id
+    placeholder = re.match(r"[^\[]*-0\s*/[^\[]* \[[^\]]*/\s*((?:19|20)\d{2})\s*\]", case_number or "")
+    if date_reg == "01.01.1900" and placeholder:
+        date_reg = f"01.01.{placeholder.group(1)}"
     id_date = datetime.strptime(date_reg, "%d.%m.%Y").strftime("%Y-%m-%d")
     case_id = court_id + "_" + id_date + "_"
     try:
@@ -25,11 +32,18 @@ def build_case_id(case_number: str, date_reg: str, court_id: str) -> str | None:
         if any(char in normalized for char in ["~", "∼"]):
             normalized = re.split(r"[~∼]", normalized, maxsplit=1)[1].strip()
 
-        if all(char not in normalized for char in ["(", " [", "~", "∼"]):
+        if " [" in normalized:
+            # "<complaint> [<proceeding>]": a card is scraped as "8Г-7981/2026"
+            # first and gets its proceeding later, so the complaint number is
+            # what stays put; complaints of one proceeding stay apart
+            head, proceeding = normalized.split(" [", 1)
+            number = proceeding if placeholder else head
+            case_id += number[: number.rfind("/")].replace("/", "-")
+        elif all(char not in normalized for char in ["(", "~", "∼"]):
             case_id += normalized[: normalized.rfind("/")].replace("/", "-")
         elif date_reg[-4:] in normalized:
             case_id += re.findall(
-                r"([^ ~∼\(\[\{]+) ?[/\\\|] ?" + date_reg[-4:],
+                r"([^ ~∼\(\{]+) ?[/\\\|] ?" + date_reg[-4:],
                 normalized,
             )[-1].replace("/", "-")
         else:
