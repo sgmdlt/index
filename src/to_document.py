@@ -12,6 +12,12 @@ from .utils.dates import date_value_to_iso, get_files_version
 from .utils.paths import dir_of_rel, norm_path
 
 _UUID_RE = re.compile(r"_uid=([0-9a-f-]+)")
+# court_list.csv used to name the 86RS courts differently from 86OS0000; the
+# scraper is fixed, but archived manifests still carry the old spelling
+_REGION_ALIASES = {
+    "Ханты-Мансийский автономный округ - Югра (Тюменская область)":
+        "Ханты-Мансийский автономный округ - Югра",
+}
 _NUMBER_YEAR_RE = re.compile(r"/\s*((?:19|20)\d{2})")
 
 
@@ -73,7 +79,7 @@ def to_document(
         "court_name": meta.get("court_name"),
         "court_code": court_code,
         "tag": court_tag,
-        "region": meta.get("region"),
+        "region": _REGION_ALIASES.get(meta.get("region"), meta.get("region")),
         "link": link or None,
         "uuid": uuid,
         "date_reg": date_value_to_iso(meta.get("date_reg")),

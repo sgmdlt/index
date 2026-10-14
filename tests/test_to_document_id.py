@@ -29,3 +29,9 @@ def test_old_and_new_collision_converge_to_same_id():
 def test_fallback_to_stored_id_when_no_date_reg():
     doc = to_document("m.json", _REL, _meta(date_reg=None, ID="61RS0018_2016-03-30_1-76"), [], [])
     assert doc["id_final"] == "61RS0018_2016-03-30_1-76"
+
+
+def test_hmao_region_alias_folds_to_one_name():
+    meta = _meta(region="Ханты-Мансийский автономный округ - Югра (Тюменская область)")
+    doc = to_document("m.json", _REL, meta, [], [])
+    assert doc["meta"]["region"] == "Ханты-Мансийский автономный округ - Югра"
