@@ -397,6 +397,13 @@ def _fast_ingest_off(es, index: str, orig: dict) -> None:
         logger.warning("Could not restore index settings: %s", exc)
 
 
+def _refresh_index(es, index: str) -> None:
+    try:
+        es.indices.refresh(index=index)
+    except Exception as exc:
+        logger.warning("Could not refresh index %r: %s", index, exc)
+
+
 # Unit processing
 
 def _process_unit(
@@ -918,7 +925,9 @@ def main():
             logger.info("Indexing complete, flushing remaining buffers and restoring index settings")
             _fast_ingest_off(es, args.index, orig_settings)
             if args.priority_only:
-                es.indices.refresh(index=args.index)
+                # Must run even if nothing was indexed: sudata has refresh_interval=-1
+                # during big runs, and this refresh makes priority docs visible.
+                _refresh_index(es, args.index)
             metrics.log(force=True)
             if pg_conn is not None:
                 pg_conn.close()

@@ -15,3 +15,15 @@ def test_priority_only_defaults_false():
 def test_priority_only_requires_db():
     with pytest.raises(SystemExit):
         parse_args(["--index", "x", "--priority-only"])
+
+
+def test_refresh_failure_does_not_propagate():
+    from src.main import _refresh_index
+
+    class Es:
+        class indices:
+            @staticmethod
+            def refresh(index):
+                raise RuntimeError("es down")
+
+    _refresh_index(Es(), "x")

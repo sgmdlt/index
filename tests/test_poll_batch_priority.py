@@ -5,10 +5,9 @@ import pytest
 
 from src.load_from_db import poll_batch
 
-DSN = os.environ.get(
-    "INDEX_TEST_PG_DSN",
-    "host=127.0.0.1 port=8433 dbname=court_db user=postgres password=password",
-)
+DSN = os.environ.get("INDEX_TEST_PG_DSN")
+if not DSN:
+    pytest.skip("INDEX_TEST_PG_DSN not set", allow_module_level=True)
 
 
 @pytest.fixture
