@@ -397,6 +397,13 @@ def _fast_ingest_off(es, index: str, orig: dict) -> None:
         logger.warning("Could not restore index settings: %s", exc)
 
 
+def _refresh_index(es, index: str) -> None:
+    try:
+        es.indices.refresh(index=index)
+    except Exception as exc:
+        logger.warning("Could not refresh index %r: %s", index, exc)
+
+
 # Unit processing
 
 def _process_unit(
@@ -698,6 +705,7 @@ def _run_db(
     indexer: BulkIndexer,
     metrics: Metrics,
     max_workers: int,
+    priority_only: bool = False,
 ) -> None:
     worker_id = f"worker-{os.getpid()}"
     conn = _open_pg()
@@ -729,7 +737,7 @@ def _run_db(
 
     def units_gen():
         while True:
-            rows = poll_batch(conn, worker_id)
+            rows = poll_batch(conn, worker_id, priority_only=priority_only)
             if not rows:
                 return
             for unit, row, reason in rows_to_units(rows):
@@ -790,7 +798,7 @@ def _run_db(
 
 # CLI
 
-def parse_args():
+def parse_args(argv=None):
     p = argparse.ArgumentParser(description="Court case ES indexer")
     p.add_argument("--index", required=True, help="Elasticsearch index name")
     p.add_argument("--root", help="Root directory with court cases")
@@ -807,6 +815,12 @@ def parse_args():
         help="Shard .warc.gz file or directory of shards: stream start-to-end for a full reindex (no DB)",
     )
     p.add_argument("--db", action="store_true")
+    p.add_argument(
+        "--priority-only",
+        dest="priority_only",
+        action="store_true",
+        help="With --db: lease only priority rows, leave index settings alone, refresh at the end",
+    )
     p.add_argument("--insecure", action="store_true")
     p.add_argument("--workers", type=int, default=os.cpu_count() or 6)
     p.add_argument(
@@ -821,7 +835,10 @@ def parse_args():
         action="store_true",
         help="In fs/folders modes, queue failed cases into Postgres redownload_queue instead of writing to --failed-log",
     )
-    return p.parse_args()
+    args = p.parse_args(argv)
+    if args.priority_only and not args.db:
+        p.error("--priority-only requires --db")
+    return args
 
 
 def main():
@@ -859,7 +876,7 @@ def main():
         flush_interval=15.0,
     )
 
-    orig_settings = _fast_ingest_on(es, args.index)
+    orig_settings = {} if args.priority_only else _fast_ingest_on(es, args.index)
 
     pg_conn = _open_pg() if args.redownload and not args.db and not args.warc else None
     on_redownload = None
@@ -880,7 +897,7 @@ def main():
                     failed_log=args.failed_log,
                 )
             elif args.db:
-                _run_db(pool, indexer, metrics, args.workers)
+                _run_db(pool, indexer, metrics, args.workers, args.priority_only)
             elif args.folders:
                 _run_pipelined(
                     _units_from_folders(
@@ -907,6 +924,10 @@ def main():
             indexer.drain()
             logger.info("Indexing complete, flushing remaining buffers and restoring index settings")
             _fast_ingest_off(es, args.index, orig_settings)
+            if args.priority_only:
+                # Must run even if nothing was indexed: sudata has refresh_interval=-1
+                # during big runs, and this refresh makes priority docs visible.
+                _refresh_index(es, args.index)
             metrics.log(force=True)
             if pg_conn is not None:
                 pg_conn.close()
