@@ -841,6 +841,15 @@ def parse_args(argv=None):
     return args
 
 
+def _exit_status(jsonl: bool, counters) -> int:
+    """A jsonl run with unwritten docs fails, so its caller keeps the file.
+
+    Other sources retry through the outbox; a jsonl file is deleted by its
+    caller on success, and that would lose the docs for good.
+    """
+    return 1 if jsonl and counters.get("bulkFailedDocs") else 0
+
+
 def main():
     args = parse_args()
 
@@ -942,6 +951,7 @@ def main():
                 f"elapsed={elapsed:.1f}s ===",
                 flush=True,
             )
+    sys.exit(_exit_status(bool(args.jsonl), metrics.counters))
 
 
 if __name__ == "__main__":

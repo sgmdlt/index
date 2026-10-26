@@ -116,3 +116,29 @@ def test_a_clean_batch_reports_success(tmp_path):
     idx.add("k", _item("b"))
     idx.drain()
     assert seen == [(["a", "b"], [])]
+
+
+class FailingMgetES(FakeES):
+    def mget(self, index=None, body=None, **kw):
+        raise ConnectionError("es read timed out")
+
+
+def test_a_failed_mget_writes_nothing_and_reports_the_batch(tmp_path):
+    """Без существующих документов слияние превращается в перезапись: частичная
+    пометка (id_final + case_hidden) затёрла бы видимое дело целиком."""
+    es = FailingMgetES(_ok("a", "b"))
+    reported = []
+    metrics = Metrics()
+    idx = _indexer(es, tmp_path, lambda ok, bad, why: reported.append((ok, bad, why)),
+                   metrics=metrics)
+    idx._do_bulk([_item("a"), _item("b")], "k")
+    assert es.calls == 0
+    assert reported and reported[0][0] == [] and sorted(reported[0][1]) == ["a", "b"]
+    assert metrics.counters["bulkFailedDocs"] == 2
+
+
+def test_jsonl_run_with_failed_docs_exits_nonzero():
+    from src.main import _exit_status
+    assert _exit_status(jsonl=True, counters={"bulkFailedDocs": 2}) == 1
+    assert _exit_status(jsonl=True, counters={"bulkFailedDocs": 0}) == 0
+    assert _exit_status(jsonl=False, counters={"bulkFailedDocs": 2}) == 0

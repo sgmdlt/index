@@ -323,16 +323,12 @@ def build_update_item(
 
 def mget(es_client, index: str, ids: list[str]) -> dict[str, dict]:
     """Fetch existing documents by ID. Returns {id: _source} for found docs."""
-    try:
-        resp = es_client.mget(index=index, ids=ids)
-        return {
-            doc["_id"]: doc["_source"]
-            for doc in resp.get("docs", [])
-            if doc.get("found")
-        }
-    except Exception as exc:
-        logger.warning("mget failed, treating all as new: %s", exc)
-        return {}
+    resp = es_client.mget(index=index, ids=ids)
+    return {
+        doc["_id"]: doc["_source"]
+        for doc in resp.get("docs", [])
+        if doc.get("found")
+    }
 
 
 def apply_merge(batch: list[dict], existing_by_id: dict[str, dict]) -> list[dict]:
@@ -467,7 +463,21 @@ class BulkIndexer:
         # Sort oldest-first so latest values win for non-array fields
         batch.sort(key=lambda x: x.get("version_ts") or "")
 
-        existing_by_id = mget(self._es, self._index, [item["_id"] for item in batch])
+        try:
+            existing_by_id = mget(self._es, self._index, [item["_id"] for item in batch])
+        except Exception as exc:
+            # Раньше это считалось «все документы новые», и слияние становилось
+            # перезаписью: старые документы дела и история терялись, а частичная
+            # пометка (id_final + case_hidden) затирала дело целиком. Отказ по
+            # батчу — строки перезаявятся, jsonl останется на диске.
+            failed_ids = [item["_id"] for item in batch if item.get("_id")]
+            logger.error("mget failed bucket=%s, batch not written: %s", bucket_key, exc)
+            for doc_id in failed_ids:
+                self._log_failure(doc_id, f"mget failed: {exc}")
+            if self._metrics:
+                self._metrics.inc("bulkFailedDocs", len(failed_ids))
+            self._report([], failed_ids, f"mget failed: {exc}")
+            return
         merged_items = apply_merge(batch, existing_by_id)
 
         # снимаем до build_bulk_index_ops: он вынимает _id из элементов
