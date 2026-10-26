@@ -47,7 +47,7 @@ def test_documents_accumulate_across_html_files():
 
     # Simulate _do_bulk: sort oldest-first, no existing ES doc
     batch = sorted([item1, item2], key=lambda x: x.get("version_ts") or "")
-    merged_items = apply_merge(batch, existing_by_id={})
+    merged_items = apply_merge(batch, existing_by_id={}, now="2026-10-26T12:00:00Z")
 
     # Only one merged doc should come out (deduplicated by _id)
     assert len(merged_items) == 1, f"Expected 1 merged doc, got {len(merged_items)}"

@@ -5,7 +5,7 @@ import logging
 import re
 import threading
 import time
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 from .text_filters import broken_text_message, fix_date_reg
@@ -413,11 +413,13 @@ def fold_group(docs: list[dict | None], target: str) -> dict:
     return {**acc, "id_final": target}
 
 
-def apply_merge(batch: list[dict], existing_by_id: dict[str, dict]) -> list[dict]:
+def apply_merge(batch: list[dict], existing_by_id: dict[str, dict], now: str) -> list[dict]:
     """Merge batch items against each other and existing ES docs.
 
     Items sharing the same _id are folded together in order (batch is pre-sorted
     oldest-first) so that all HTML files for one case accumulate into a single doc.
+    Каждому результату ставится indexed_at = now; created_at = now только у
+    документов, которых ещё нет в ES (у существующих остаётся как есть).
     """
     # Accumulate within-batch merges per id, preserving insertion order
     acc: dict[str, dict] = {}
@@ -429,6 +431,9 @@ def apply_merge(batch: list[dict], existing_by_id: dict[str, dict]) -> list[dict
     result = []
     for doc_id, doc in acc.items():
         doc["_id"] = doc_id
+        doc["indexed_at"] = now
+        if doc_id not in existing_by_id:
+            doc["created_at"] = now
         result.append(doc)
     return result
 
@@ -576,7 +581,8 @@ class BulkIndexer:
             return
         for target, sources in twins_for.items():
             existing_by_id[target] = fold_group([existing_by_id.get(target), *sources], target)
-        merged_items = apply_merge(batch, existing_by_id)
+        now = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+        merged_items = apply_merge(batch, existing_by_id, now)
 
         # снимаем до build_bulk_index_ops: он вынимает _id из элементов
         doc_ids = [item["_id"] for item in merged_items if item.get("_id")]
