@@ -1,6 +1,6 @@
 from scripts import rekey_case_ids
 from scripts.dedup_bracket_ids import fold
-from src.bulk_indexer import apply_merge
+from src.bulk_indexer import BulkIndexer, apply_merge
 from tests.test_bulk_uuid_fold import FakeES, _doc, _index_ops, _indexer, _item
 
 NOW = "2026-10-26T12:00:00Z"
@@ -98,3 +98,13 @@ def test_rekey_move_carries_created_and_indexed_at(monkeypatch, tmp_path):
     ops.write_text('{"op": "move", "from": "old", "to": "new"}\n')
     rekey_case_ids.apply("key", str(ops))
     assert writes[:2] == [{"create": {"_id": "new"}}, {**src, "id_final": "new"}]
+
+
+def test_full_reindex_leaves_created_at_unset(tmp_path):
+    # --warc в пустой индекс: все дела старые, created_at=now разослал бы их подписчикам
+    es = FakeES()
+    indexer = BulkIndexer(es_client=es, index="t", bulk_docs=1000, flush_interval=3600,
+                          failed_log=str(tmp_path / "failed.log"), stamp_created_at=False)
+    indexer._do_bulk([_item(TARGET, "a.html", "2026-09-28")], "k")
+    [(_, source)] = _index_ops(es.bulk_calls[0])
+    assert "created_at" not in source and source["indexed_at"]

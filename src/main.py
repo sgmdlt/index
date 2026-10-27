@@ -891,6 +891,7 @@ def main():
         metrics=metrics,
         bulk_docs=bulk_docs,
         flush_interval=15.0,
+        stamp_created_at=not args.warc,
     )
 
     orig_settings = {} if args.priority_only else _fast_ingest_on(es, args.index)

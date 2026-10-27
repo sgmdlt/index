@@ -422,7 +422,8 @@ def fold_group(docs: list[dict | None], target: str) -> dict:
     return with_group_created_at({**acc, "id_final": target}, docs)
 
 
-def apply_merge(batch: list[dict], existing_by_id: dict[str, dict], now: str) -> list[dict]:
+def apply_merge(batch: list[dict], existing_by_id: dict[str, dict], now: str,
+                stamp_created_at: bool = True) -> list[dict]:
     """Merge batch items against each other and existing ES docs.
 
     Items sharing the same _id are folded together in order (batch is pre-sorted
@@ -430,6 +431,7 @@ def apply_merge(batch: list[dict], existing_by_id: dict[str, dict], now: str) ->
     Каждому результату ставится indexed_at = now; created_at = now только у
     документов, которых ещё нет в ES (у существующих остаётся как есть; слитые
     близнецы лежат в existing_by_id под целевым id — см. fold_group).
+    stamp_created_at=False — полная переиндексация: новых дел в ней нет.
     """
     # Accumulate within-batch merges per id, preserving insertion order
     acc: dict[str, dict] = {}
@@ -442,7 +444,7 @@ def apply_merge(batch: list[dict], existing_by_id: dict[str, dict], now: str) ->
     for doc_id, doc in acc.items():
         doc["_id"] = doc_id
         doc["indexed_at"] = now
-        if doc_id not in existing_by_id:
+        if stamp_created_at and doc_id not in existing_by_id:
             doc["created_at"] = now
         result.append(doc)
     return result
@@ -477,6 +479,7 @@ class BulkIndexer:
         flush_interval: float = 15.0,
         failed_log: str = "failed_paths.log",
         on_result=None,
+        stamp_created_at: bool = True,
     ):
         self._es = es_client
         self._index = index
@@ -488,6 +491,9 @@ class BulkIndexer:
         # вызывающего узнать вердикт ES. Без него отказ виден только в файле, и
         # строка outbox остаётся в DONE на потерянном деле.
         self._on_result = on_result
+        # полная переиндексация (--warc) пишет в пустой индекс: всё — «легаси»,
+        # иначе любое старое дело ушло бы подписчикам как новое
+        self._stamp_created_at = stamp_created_at
 
         self._buffers: dict[str, list] = {}
         self._lock = threading.Lock()
@@ -592,7 +598,7 @@ class BulkIndexer:
         for target, sources in twins_for.items():
             existing_by_id[target] = fold_group([existing_by_id.get(target), *sources], target)
         now = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
-        merged_items = apply_merge(batch, existing_by_id, now)
+        merged_items = apply_merge(batch, existing_by_id, now, self._stamp_created_at)
 
         # снимаем до build_bulk_index_ops: он вынимает _id из элементов
         doc_ids = [item["_id"] for item in merged_items if item.get("_id")]
