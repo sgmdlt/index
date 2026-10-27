@@ -19,12 +19,18 @@ def case_id_from_fields(case_number: str | None, date_reg: str | None,
                         court: str | None, link: str | None) -> str | None:
     """id из полей записи любого источника: манифест даёт дату «дд.мм.гггг»,
     JSONL и ES — «гггг-мм-дд[T…]». МГС ключуется своим правилом
-    (parse_html_mgs.card_case_id) — для него None, берётся сохранённый id."""
+    (parse_html_mgs.card_case_id) — для него None, берётся сохранённый id.
+    None и тогда, когда формула не нашла номер или дату не удалось разобрать."""
     if "mos-gorsud" in (link or "") or not (case_number and date_reg and court):
         return None
     iso = re.match(r"(\d{4})-(\d{2})-(\d{2})", date_reg)
     ru = f"{iso.group(3)}.{iso.group(2)}.{iso.group(1)}" if iso else date_reg
-    return build_case_id(case_number, ru, court)
+    try:
+        case_id = build_case_id(case_number, ru, court)
+    except ValueError:  # дата не разобралась — пусть решает сохранённый id
+        return None
+    # «…_ID_NOT_PARSED» склеил бы все такие дела суда за день в один документ
+    return None if case_id is None or case_id.endswith("ID_NOT_PARSED") else case_id
 
 
 # "<number>/<year>" inside a case number string; the number may itself hold
@@ -62,6 +68,10 @@ def build_case_id(case_number: str, date_reg: str, court_id: str) -> str | None:
 
     pairs = _NUMBER_YEAR.findall(text)
     if not pairs:
+        # "2-5/20": a two-digit year — the number is what precedes the last "/"
+        single = text.strip()
+        if "/" in single and not re.search(r"[\s~∼(){};,]", single):
+            return case_id + single[: single.rfind("/")].replace("/", "-")
         return case_id + "ID_NOT_PARSED"
     # "4У-47/2017 - (4У-2186/2016)", registered 2016: the number of the
     # registration year; "2-1/2011 (2-2/2010;)", registered 2008, lost its

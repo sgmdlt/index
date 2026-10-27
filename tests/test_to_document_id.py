@@ -63,3 +63,16 @@ def test_derive_id_final_recomputes_jsonl_record():
     data = {"case_number": "2-1/2011 (2-2/2010;)", "date_reg": "2008-12-09",
             "court_code": "78OS0000", "id_final": "78OS0000_2008-12-09_2-1"}
     assert _derive_id_final(data) == "78OS0000_2008-12-09_2-2"
+
+
+def test_unparsed_number_keeps_the_stored_id():
+    # «…_ID_NOT_PARSED» склеил бы все такие дела суда за день в один документ
+    meta = {"case_number": "Материалы дела", "date_reg": "2010-01-01",
+            "court_code": "61RS0018", "id_final": "61RS0018_2010-01-01_М-1"}
+    assert to_document("", "x", meta, [], [])["id_final"] == "61RS0018_2010-01-01_М-1"
+
+
+def test_derive_id_final_survives_a_bad_date():
+    data = {"case_number": "2-5/2008", "date_reg": "2008/12/09",
+            "court_code": "78OS0000", "id_final": "78OS0000_2008-12-09_2-5"}
+    assert _derive_id_final(data) == "78OS0000_2008-12-09_2-5"
