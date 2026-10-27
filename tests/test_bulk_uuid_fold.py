@@ -8,7 +8,8 @@ LINK = "https://x.sudrf.ru/modules.php?name_op=case&case_uid=u"
 
 
 class FakeES:
-    """search/mget отвечают из store; bulk — по сценарию и запоминает операции."""
+    """search отдаёт id (near-real-time, может быть устаревшим), mget — свежий
+    документ с версией; bulk отвечает по сценарию и запоминает операции."""
 
     def __init__(self, store=None, bulk_error_ids=(), search_error=None):
         self.store = store or {}
@@ -21,13 +22,13 @@ class FakeES:
         self.search_calls += 1
         if self.search_error:
             raise self.search_error
+        assert size <= 10000 and len(query["terms"]["uuid"]) <= 1000  # max_result_window
         uuids = set(query["terms"]["uuid"])
-        hits = [{"_id": i, "_source": s} for i, s in self.store.items() if s.get("uuid") in uuids]
-        return {"hits": {"hits": hits}}
+        return {"hits": {"hits": [{"_id": i} for i, s in self.store.items() if s.get("uuid") in uuids]}}
 
     def mget(self, index=None, ids=None, **kw):
-        return {"docs": [{"_id": i, "found": i in self.store, "_source": self.store.get(i)}
-                         for i in ids]}
+        return {"docs": [{"_id": i, "found": i in self.store, "_source": self.store.get(i),
+                          "_seq_no": 7, "_primary_term": 1} for i in ids]}
 
     def bulk(self, operations=None, refresh=False):
         self.bulk_calls.append(operations)
@@ -64,6 +65,10 @@ def _index_ops(ops):
 
 def _delete_ids(ops):
     return [op["delete"]["_id"] for op in ops if "delete" in op]
+
+
+def _delete_ops(ops):
+    return [op["delete"] for op in ops if "delete" in op]
 
 
 def test_incoming_lands_on_earliest_date_and_twin_is_deleted(tmp_path):
@@ -114,3 +119,48 @@ def test_mgs_and_no_uuid_items_skip_the_search(tmp_path):
     assert es.search_calls == 0
     assert sorted(i for i, _ in _index_ops(es.bulk_calls[0])) == ["61RS0018_2016-03-30_1-76",
                                                                    "77RS0018_2025-01-14_02-3415"]
+
+
+def test_many_uuids_are_searched_in_chunks(tmp_path):
+    # пачка FS-режима — 1500 дел; больше 10000 хитов ES не отдаст (max_result_window)
+    es = FakeES()
+    items = [_item(f"A_2026-01-01_{n}", "a.html", "2026-01-01", uuid=f"u{n}") for n in range(1500)]
+    _indexer(es, tmp_path)._do_bulk(items, "k")
+    assert es.search_calls == 2
+    assert len(_index_ops(es.bulk_calls[0])) == 1500
+
+
+def test_twin_is_deleted_only_at_the_version_that_was_read(tmp_path):
+    # если близнеца обновили после чтения, удаление получит 409, а не сотрёт запись
+    es = FakeES({"50RS0030_2026-05-20_5-225": _doc("50RS0030_2026-05-20_5-225", "old.html", "2026-06-25")})
+    _indexer(es, tmp_path)._do_bulk([_item("50RS0030_2026-05-19_5-225", "new.html", "2026-09-28")], "k")
+    assert _delete_ops(es.bulk_calls[1]) == [
+        {"_index": "t", "_id": "50RS0030_2026-05-20_5-225", "if_seq_no": 7, "if_primary_term": 1}]
+
+
+def test_callers_learn_the_verdict_under_their_own_ids(tmp_path):
+    # outbox ждёт ответа по id, который сам отправил; переписанный id его теряет
+    seen = []
+    es = FakeES({"50RS0030_2026-05-19_5-225": _doc("50RS0030_2026-05-19_5-225", "old.html", "2026-06-25")})
+    _indexer(es, tmp_path, seen)._do_bulk([_item("50RS0030_2026-05-20_5-225", "new.html", "2026-09-28")], "k")
+    assert seen == [(["50RS0030_2026-05-20_5-225"], [], "bulk item rejected")]
+
+
+def test_fresher_target_fields_survive_an_older_twin(tmp_path):
+    target = {**_doc("50RS0030_2026-05-19_5-225", "b.html", "2026-09-28"), "result": "свежее"}
+    twin = {**_doc("50RS0030_2026-05-20_5-225", "a.html", "2026-06-25"), "result": "старое"}
+    es = FakeES({target["id_final"]: target, twin["id_final"]: twin})
+    _indexer(es, tmp_path)._do_bulk([_item("50RS0030_2026-05-20_5-225", "c.html", "2026-06-26")], "k")
+    [(doc_id, source)] = _index_ops(es.bulk_calls[0])
+    assert doc_id == "50RS0030_2026-05-19_5-225"
+    assert source["result"] == "свежее"
+
+
+def test_twin_on_a_legacy_id_ranks_by_its_formula_id(tmp_path):
+    # старый id «_2-1» свежее входящего, но формула дела даёт «_2-2» — туда и ляжет
+    legacy = {**_doc("78OS0000_2008-12-09_2-1", "old.html", "2026-10-01"),
+              "case_number": "2-1/2011 (2-2/2010;)", "date_reg": "2008-12-09", "court_code": "78OS0000"}
+    es = FakeES({legacy["id_final"]: legacy})
+    _indexer(es, tmp_path)._do_bulk([_item("78OS0000_2008-12-09_2-2", "new.html", "2026-06-19")], "k")
+    assert [i for i, _ in _index_ops(es.bulk_calls[0])] == ["78OS0000_2008-12-09_2-2"]
+    assert _delete_ids(es.bulk_calls[1]) == ["78OS0000_2008-12-09_2-1"]
