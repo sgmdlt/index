@@ -51,6 +51,7 @@ from src.parse_html import fill_raw_tables
 from src.prepare_doc import prepare_doc
 from src.to_document import to_document
 from src.traverse import traverse_cases
+from src.utils.case_id import case_id_from_fields
 from src.utils.text import normalize_jsonl_text
 
 load_dotenv()
@@ -636,6 +637,13 @@ def _run_pipelined(
 # Source runners
 
 def _derive_id_final(data: dict) -> str:
+    # сохранённый id_final мог посчитать старой формулой — пересчитываем
+    recomputed = case_id_from_fields(
+        data.get("case_number"), data.get("date_reg"),
+        data.get("court_code"), data.get("link"),
+    )
+    if recomputed:
+        return recomputed
     if data.get("id_final"):
         return data["id_final"]
     case_number = data.get("case_number", "")

@@ -15,6 +15,18 @@ import re
 from datetime import datetime
 
 
+def case_id_from_fields(case_number: str | None, date_reg: str | None,
+                        court: str | None, link: str | None) -> str | None:
+    """id из полей записи любого источника: манифест даёт дату «дд.мм.гггг»,
+    JSONL и ES — «гггг-мм-дд[T…]». МГС ключуется своим правилом
+    (parse_html_mgs.card_case_id) — для него None, берётся сохранённый id."""
+    if "mos-gorsud" in (link or "") or not (case_number and date_reg and court):
+        return None
+    iso = re.match(r"(\d{4})-(\d{2})-(\d{2})", date_reg)
+    ru = f"{iso.group(3)}.{iso.group(2)}.{iso.group(1)}" if iso else date_reg
+    return build_case_id(case_number, ru, court)
+
+
 # "<number>/<year>" inside a case number string; the number may itself hold
 # "/" ("М-2/6/2025") or brackets ("1[2]-50/2022")
 _NUMBER_YEAR = re.compile(r"([^\s~∼(){};,]+)\s?[/\\|]\s?((?:19|20)\d{2})(?!\d)")
