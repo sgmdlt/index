@@ -35,7 +35,7 @@ import time
 from itertools import groupby
 
 from scripts.dedup_bracket_ids import INDEX, api_key, bulk, call, first_error, sources
-from src.bulk_indexer import merge_docs
+from src.bulk_indexer import merge_docs, with_group_created_at
 from src.utils.case_id import case_id_from_fields
 from src.uuid_group import in_group_scope, pick_group_id
 
@@ -87,7 +87,7 @@ def uuid_groups(lines):
 def merged_doc(a: dict, b: dict, target: str) -> dict:
     """Слитый документ двух скачиваний одной карточки: свежий идёт входящим."""
     older, newer = sorted((a, b), key=lambda d: d.get("version_ts") or "")
-    return {**merge_docs(older, newer), "id_final": target}
+    return with_group_created_at({**merge_docs(older, newer), "id_final": target}, [a, b])
 
 
 # --- выгрузка / проверка / применение ---------------------------------------

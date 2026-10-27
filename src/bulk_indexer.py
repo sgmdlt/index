@@ -404,13 +404,22 @@ def regroup(batch: list[dict], twins: dict[str, list[dict]]) -> tuple[list[dict]
     return regrouped, twins_for, delete_for
 
 
+def with_group_created_at(merged: dict, docs: list[dict]) -> dict:
+    """created_at слитого дела — самый ранний из слитых документов; если хоть
+    один записан до created_at (легаси), его нет и у слитого: дело старое."""
+    stamps = [d.get("created_at") for d in docs]
+    merged = {k: v for k, v in merged.items() if k != "created_at"}
+    return merged if None in stamps else {**merged, "created_at": min(stamps)}
+
+
 def fold_group(docs: list[dict | None], target: str) -> dict:
     """Скачивания одной карточки в один документ: по version_ts, свежее —
     входящим, чтобы старый близнец не перетёр поля свежего."""
+    docs = [d for d in docs if d]
     acc = None
-    for doc in sorted((d for d in docs if d), key=lambda d: d.get("version_ts") or ""):
+    for doc in sorted(docs, key=lambda d: d.get("version_ts") or ""):
         acc = merge_docs(acc, doc)
-    return {**acc, "id_final": target}
+    return with_group_created_at({**acc, "id_final": target}, docs)
 
 
 def apply_merge(batch: list[dict], existing_by_id: dict[str, dict], now: str) -> list[dict]:
@@ -419,7 +428,8 @@ def apply_merge(batch: list[dict], existing_by_id: dict[str, dict], now: str) ->
     Items sharing the same _id are folded together in order (batch is pre-sorted
     oldest-first) so that all HTML files for one case accumulate into a single doc.
     Каждому результату ставится indexed_at = now; created_at = now только у
-    документов, которых ещё нет в ES (у существующих остаётся как есть).
+    документов, которых ещё нет в ES (у существующих остаётся как есть; слитые
+    близнецы лежат в existing_by_id под целевым id — см. fold_group).
     """
     # Accumulate within-batch merges per id, preserving insertion order
     acc: dict[str, dict] = {}
