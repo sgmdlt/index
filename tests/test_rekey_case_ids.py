@@ -37,18 +37,31 @@ def test_unparsed_formula_is_skipped():
 
 
 def test_groups_fold_into_earliest_date():
-    rows = [{"_id": "50RS0030_2026-05-20_5-225", "uuid": "u", "version_ts": "2026-06-25"},
-            {"_id": "50RS0030_2026-05-19_5-225", "uuid": "u", "version_ts": "2026-09-28"}]
+    rows = [{"_id": "50RS0030_2026-05-20_5-225", "formula": "50RS0030_2026-05-20_5-225", "uuid": "u",
+             "version_ts": "2026-06-25"},
+            {"_id": "50RS0030_2026-05-19_5-225", "formula": "50RS0030_2026-05-19_5-225", "uuid": "u",
+             "version_ts": "2026-09-28"}]
     assert plan_groups(rows) == [
         {"op": "fold", "from": "50RS0030_2026-05-20_5-225", "to": "50RS0030_2026-05-19_5-225"}]
 
 
 def test_single_doc_group_is_left_alone():
-    assert plan_groups([{"_id": "A_2026-01-01_1", "uuid": "u", "version_ts": "x"}]) == []
+    assert plan_groups([{"_id": "A_2026-01-01_1", "formula": "A_2026-01-01_1", "uuid": "u", "version_ts": "x"}]) == []
+
+
+def test_group_target_is_a_formula_id_not_a_legacy_one():
+    # «_2-1» — старый id свежего скачивания; формула обоих даёт «_2-2»
+    rows = [{"_id": "78OS0000_2008-12-09_2-1", "formula": "78OS0000_2008-12-09_2-2", "uuid": "u",
+             "version_ts": "2026-10-01"},
+            {"_id": "78OS0000_2008-12-09_2-2", "formula": "78OS0000_2008-12-09_2-2", "uuid": "u",
+             "version_ts": "2026-06-19"}]
+    assert plan_groups(rows) == [
+        {"op": "fold", "from": "78OS0000_2008-12-09_2-1", "to": "78OS0000_2008-12-09_2-2"}]
 
 
 def test_uuid_groups_split_a_sorted_stream():
-    lines = ["u1\tA_2026-01-01_1\t2026-01-02", "u1\tA_2026-01-02_1\t2026-01-03", "u2\tB_2026-01-01_1\t"]
+    lines = ["u1\tA_2026-01-01_1\tA_2026-01-01_1\t2026-01-02", "u1\tA_2026-01-02_1\tA_2026-01-02_1\t2026-01-03",
+             "u2\tB_2026-01-01_1\tB_2026-01-01_1\t"]
     assert [[r["_id"] for r in g] for g in uuid_groups(lines)] == [
         ["A_2026-01-01_1", "A_2026-01-02_1"], ["B_2026-01-01_1"]]
 

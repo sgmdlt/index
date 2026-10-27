@@ -10,16 +10,20 @@ docs/superpowers/specs/2026-10-27-stable-case-id-design.md). Индекс соб
     1. python -m scripts.rekey_case_ids --export rk [--slice I --slices N]
                          # выгрузка без _source; N процессов с I = 0..N-1 параллельно.
                          # пишет rk[.I].rekey.jsonl (id ≠ формула) и rk[.I].uuid.tsv
-    2. cat rk*.uuid.tsv | LC_ALL=C sort -t$'\\t' -k1,1 -S 20G > rk.uuid.sorted.tsv
-    3. python -m scripts.rekey_case_ids --check rk*.rekey.jsonl --out rk
+    2. python -m scripts.rekey_case_ids --check rk*.rekey.jsonl --out rk
                          # без записи: rk.ops.jsonl, rk.manual.jsonl, сводка
-    4. python -m scripts.rekey_case_ids --groups rk.uuid.sorted.tsv --out rk
-                         # без записи: rk.groups.ops.jsonl
-    5. python -m scripts.rekey_case_ids --apply rk.ops.jsonl
-       python -m scripts.rekey_case_ids --apply rk.groups.ops.jsonl
-                         # конфликты (409) — в *.retry.jsonl, их можно подать в --apply снова;
-                         # повторный --apply идемпотентен: перенесённые уже не найдутся
-    6. контрольная выборка: доля id ≠ формула и групп одного uuid ≈ 0
+    3. python -m scripts.rekey_case_ids --apply rk.ops.jsonl
+                         # конфликты (409) — в rk.ops.retry.jsonl; подать в --apply снова.
+                         # Повторный --apply идемпотентен: перенесённые уже не найдутся
+    4. повторить шаг 1 с новым префиксом (rk2): после шага 3 старые _id в
+       uuid.tsv устарели, план групп по ним пропустил бы перенесённые документы
+    5. cat rk2*.uuid.tsv | LC_ALL=C sort -t$'\\t' -k1,1 -S 20G > rk2.uuid.sorted.tsv
+       python -m scripts.rekey_case_ids --groups rk2.uuid.sorted.tsv --out rk2
+                         # без записи: rk2.groups.ops.jsonl
+    6. python -m scripts.rekey_case_ids --apply rk2.groups.ops.jsonl
+                         # два слияния в один целевой id в одной пачке — второе
+                         # получит 409 и уйдёт в retry: подать retry в --apply ещё раз
+    7. контрольная выборка: доля id ≠ формула и групп одного uuid ≈ 0
 
 МГС (mos-gorsud) не трогаем: у него свой ключ. Документ на id с «чужим» uuid
 не сливается — уходит в *.manual.jsonl. Старый id удаляется только после того,
@@ -63,18 +67,19 @@ def plan_rekey(rows: list[dict], existing: dict[str, dict]) -> list[dict]:
 
 
 def plan_groups(rows: list[dict]) -> list[dict]:
-    """rows — документы одного uuid."""
-    ids = {r["_id"]: r.get("version_ts") or "" for r in rows}
+    """rows — документы одного uuid; кандидаты — их формульные id, чтобы
+    старый id из прошлой формулы не стал целевым только потому, что занят."""
+    ids = {r["_id"] for r in rows}
     if len(ids) < 2:
         return []
-    target = pick_group_id(list(ids.items()))
+    target = pick_group_id([(r.get("formula") or r["_id"], r.get("version_ts") or "") for r in rows])
     return [{"op": "fold", "from": i, "to": target} for i in sorted(ids) if i != target]
 
 
 def uuid_groups(lines):
-    """Строки «uuid\\t_id\\tversion_ts», отсортированные по uuid → группы."""
-    rows = ({"uuid": u, "_id": i, "version_ts": v}
-            for u, i, v in (line.rstrip("\n").split("\t") for line in lines))
+    """Строки «uuid\t_id\tформульный id\tversion_ts», отсортированные по uuid → группы."""
+    rows = ({"uuid": u, "_id": i, "formula": f, "version_ts": v}
+            for u, i, f, v in (line.rstrip("\n").split("\t") for line in lines))
     for _, group in groupby(rows, key=lambda r: r["uuid"]):
         yield list(group)
 
@@ -105,7 +110,7 @@ def export(key: str, prefix: str, slice_id: int, slices: int) -> None:
                     rk.write(json.dumps(row, ensure_ascii=False) + "\n")
                     candidates += 1
                 if in_group_scope(row):
-                    uu.write(f"{row['uuid']}\t{row['_id']}\t{row.get('version_ts') or ''}\n")
+                    uu.write(f"{row['uuid']}\t{row['_id']}\t{target or row['_id']}\t{row.get('version_ts') or ''}\n")
             seen += len(hits)
             print(f"  {time.strftime('%H:%M:%S')} просмотрено {seen}, к переносу {candidates}", flush=True)
             resp = call(key, "_search/scroll", {"scroll": "10m", "scroll_id": resp["_scroll_id"]})
