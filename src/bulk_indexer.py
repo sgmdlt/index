@@ -59,7 +59,9 @@ def _merge_array(existing_arr: list, incoming_arr: list) -> list:
 
 
 def _doc_canon(text: str) -> str:
-    return " ".join(text.split()) if text else ""
+    # без единого пробела: экстракторы расходятся и внутри слов («2- 01/11»,
+    # «П Р И Г О В О Р»), а пробел — это вёрстка, не текст акта
+    return "".join(text.split()) if text else ""
 
 
 # Names that carry no information about the document type: "" and the JSONPath
