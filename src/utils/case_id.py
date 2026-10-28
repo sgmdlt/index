@@ -34,8 +34,12 @@ def case_id_from_fields(case_number: str | None, date_reg: str | None,
 
 
 # "<number>/<year>" inside a case number string; the number may itself hold
-# "/" ("М-2/6/2025") or brackets ("1[2]-50/2022")
-_NUMBER_YEAR = re.compile(r"([^\s~∼(){};,]+)\s?[/\\|]\s?((?:19|20)\d{2})(?!\d)")
+# "/" ("М-2/6/2025"), brackets ("1[2]-50/2022") or a court-panel digit in
+# round ones ("М(2)-32/2026" — without it М(2)-32 and М(3)-32 share an id)
+_NUMBER_UNIT = r"(?:[^\s~∼(){};,/\\|]|\(\d+\)(?=[^\s(){};,/\\|]))"
+_NUMBER_YEAR = re.compile(
+    rf"({_NUMBER_UNIT}+(?:/{_NUMBER_UNIT}+)*)\s?[/\\|]\s?((?:19|20)\d{{2}})(?!\d)"
+)
 
 
 def build_case_id(case_number: str, date_reg: str, court_id: str) -> str | None:
