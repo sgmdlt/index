@@ -1,0 +1,27 @@
+WARNING __main__: No permission to create index 'sudata'; assuming it exists.
+rss_MB=256.7 | time=5.0s | units=4338 | html=0 | docs_prepared=4338 | docs_indexed=0 | avg_bulk_size=0.0 | bulk_calls=0 | bulk_failed_docs=0 | rate_docs/s=0.0 | rate_units/s=867.49 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=1941 | toDoc_ms=158 | bulk_ms=0 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=316.7 | time=10.0s | units=8636 | html=0 | docs_prepared=8636 | docs_indexed=7000 | avg_bulk_size=1000.0 | bulk_calls=7 | bulk_failed_docs=0 | rate_docs/s=699.9 | rate_units/s=863.53 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=3921 | toDoc_ms=319 | bulk_ms=18431 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=316.7 | time=15.0s | units=13379 | html=0 | docs_prepared=13379 | docs_indexed=11000 | avg_bulk_size=1000.0 | bulk_calls=11 | bulk_failed_docs=0 | rate_docs/s=733.2 | rate_units/s=891.83 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=5877 | toDoc_ms=479 | bulk_ms=23729 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=316.7 | time=17.4s | units=13956 | html=0 | docs_prepared=13956 | docs_indexed=13956 | avg_bulk_size=930.4 | bulk_calls=15 | bulk_failed_docs=0 | rate_docs/s=804.0 | rate_units/s=803.99 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=6206 | toDoc_ms=505 | bulk_ms=28724 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+=== Indexation COMPLETED: index=sudata units=13956 docsPrepared=13956 docsIndexed=13956 parseErrors=0 elapsed=17.4s ===
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/ltdmgs/index/src/main.py", line 791, in <module>
+    main()
+    ~~~~^^
+  File "/home/ltdmgs/index/src/main.py", line 745, in main
+    _run_jsonl(args.jsonl, indexer, metrics, failed_log=args.failed_log)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ltdmgs/index/src/main.py", line 550, in _run_jsonl
+    for unit in _units_from_jsonl(jsonl_path):
+                ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/home/ltdmgs/index/src/main.py", line 174, in _units_from_jsonl
+    data = json.loads(line)
+  File "/home/ltdmgs/.local/share/uv/python/cpython-3.13.1-linux-x86_64-gnu/lib/python3.13/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/home/ltdmgs/.local/share/uv/python/cpython-3.13.1-linux-x86_64-gnu/lib/python3.13/json/decoder.py", line 346, in decode
+    end = _w(s, end).end()
+          ~~^^^^^^^^
+KeyboardInterrupt

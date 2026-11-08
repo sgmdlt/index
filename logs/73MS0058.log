@@ -1,0 +1,4 @@
+WARNING __main__: No permission to create index 'sudata'; assuming it exists.
+rss_MB=114.4 | time=5.0s | units=5806 | html=0 | docs_prepared=5806 | docs_indexed=4000 | avg_bulk_size=972.5 | bulk_calls=4 | bulk_failed_docs=0 | rate_docs/s=799.8 | rate_units/s=1160.85 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=2425 | toDoc_ms=193 | bulk_ms=3495 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+rss_MB=127.0 | time=8.6s | units=8131 | html=0 | docs_prepared=8131 | docs_indexed=8131 | avg_bulk_size=858.7 | bulk_calls=9 | bulk_failed_docs=0 | rate_docs/s=945.7 | rate_units/s=945.71 | read_ms=0 | active_read_MBps=0.00 | window_read_MBps=0.00 | cpu_parse_ms=0 | parse_ms=3456 | toDoc_ms=276 | bulk_ms=7900 | manifest_ms=0 | html_MB=0.0 | html_MBps=0.00
+=== Indexation COMPLETED: index=sudata units=8131 docsPrepared=8131 docsIndexed=8131 parseErrors=0 elapsed=8.6s ===
