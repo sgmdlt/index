@@ -152,38 +152,20 @@ don't rewrite assertions to use fixture-derived constants.
 
 `rtk` (Rust Token Killer) prefix is set in the user's global `~/.claude/CLAUDE.md` — apply globally, no need to re-document here.
 
-## Subagents v1.0
+## Agent skills
 
-Spawn subagents to isolate context, parallelize independent work, or offload bulk mechanical tasks. Don't spawn when the parent needs the reasoning, when synthesis requires holding things together, or when spawn overhead dominates.
+### Issue tracker
 
-Pick the cheapest model that can do the subtask well:
-- Haiku: bulk mechanical work, no judgment
-- Sonnet: scoped research, code exploration, in-scope synthesis
-- Opus: subtasks needing real planning or tradeoffs
+Issues live in beads of the courts repo (`cd /home/ltdmgs/courts && bd ...`), labelled `repo:index`; a spec is an epic. See `docs/agents/issue-tracker.md`.
 
-If a subagent realizes it needs a higher tier than itself, return to the parent.
+### Triage labels
 
-Parent owns final output and cross-spawn synthesis. User instructions override.
+Default five-role vocabulary, applied as beads labels. See `docs/agents/triage-labels.md`.
 
-## Code Practices
+### Domain docs
 
-- Minimalist Codebase: "No code, no problems." Actively cut unnecessary features and aim to reduce the number of possible states rather than programming for all of them.
+Single-context: root `GLOSSARY.md` + `docs/adr/`. Terms match courts' `GLOSSARY.md` for shared concepts. See `docs/agents/domain.md`.
 
-- Functional Core, Imperative Shell: Isolate side effects and minimize mutable state. Keep logic pure and push side effects to the boundaries to simplify debugging and testing.
+### Workflow
 
-- Consistency > Cleverness: Uniformity across the project is more valuable than local optimizations. Use standard patterns to leverage associative memory and reduce cognitive load.
-
-- Readable Abstractions: Prioritize clear, non-leaky abstractions. It is easier to optimize readable code later than to fix "fast" but incomprehensible logic.
-
-- Integration-Heavy Testing: Prioritize integration tests that provide real confidence. Avoid excessive mocking; use stubs and work with real databases where possible.
-
-## Compact
-
- - Compact `/compact` after completing a discrete sub-task, before moving to the next one. Think of it as checkpointing.
-
- - Before compact preserve key decisions in its summary
-
-## Output
-
-- Give changes as a diff, not the full file
-- Give me a bare implementation that passes the basic case — no edge case handling yet
+The global Matt Pocock flow applies (`~/.claude/CLAUDE.md`). Historical specs live in their epics' `design` field, historical plans in their epics' comments (`bd comments <id>`).
