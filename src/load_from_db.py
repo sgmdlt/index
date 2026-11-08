@@ -53,8 +53,9 @@ def _loc_parts(locator: str) -> tuple[str, int, int]:
     return path.replace(DOCKER_WARC_ROOT, WARC_FS_ROOT), int(off), int(length)
 
 
-def poll_batch(conn, worker_id: str, batch_size: int = 5000) -> list[dict]:
-    """Lease a batch of NEW/FAILED rows and return them."""
+def poll_batch(conn, worker_id: str, batch_size: int = 5000, priority_only: bool = False
+) -> list[dict]:
+    """Lease a batch of NEW/FAILED rows, priority rows first, and return them."""
     with conn.cursor() as cur:
         cur.execute(
             f"""
@@ -67,10 +68,11 @@ def poll_batch(conn, worker_id: str, batch_size: int = 5000) -> list[dict]:
                 WHERE status IN ('NEW', 'FAILED')
                   AND attempts < %s
                   AND (lease_until IS NULL OR lease_until < NOW())
-                ORDER BY id ASC
+                  {"AND priority > 0" if priority_only else ""}
+                ORDER BY priority DESC, id ASC
                 LIMIT %s FOR UPDATE SKIP LOCKED
             )
-            RETURNING id, filename, manifest, attempts, warc_locator
+            RETURNING id, filename, manifest, attempts, warc_locator, priority
             """,
             (worker_id, MAX_ATTEMPTS, batch_size),
         )
@@ -81,6 +83,7 @@ def poll_batch(conn, worker_id: str, batch_size: int = 5000) -> list[dict]:
                 "manifest": r[2],
                 "attempts": r[3],
                 "warc_locator": r[4],
+                "priority": r[5],
             }
             for r in cur.fetchall()
         ]

@@ -21,7 +21,9 @@ CREATE TABLE outbox (
     last_error TEXT,
     locked_by VARCHAR(64),
     locked_at TIMESTAMP WITH TIME ZONE,
-    lease_until TIMESTAMP WITH TIME ZONE
+    lease_until TIMESTAMP WITH TIME ZONE,
+    warc_locator VARCHAR,
+    priority INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE TABLE redownload_queue (
