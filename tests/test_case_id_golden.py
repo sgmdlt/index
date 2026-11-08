@@ -1,6 +1,6 @@
 """Эталон формулы id дела: тот же файл лежит в courts (tests/fixtures), и
 build_case_id обоих репо обязан давать по нему одно и то же. Ключ — первый
-выданный номер карточки (docs/superpowers/specs/2026-10-27-stable-case-id-design.md)."""
+выданный номер карточки (docs/adr/0001-stable-case-id.md, courts-271g)."""
 import json
 from pathlib import Path
 
