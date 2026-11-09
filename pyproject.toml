@@ -15,7 +15,7 @@ dependencies = [
     "selectolax>=0.4.8",
     "warcio>=1.8.1",
     "docx2txt>=0.9",
-    "striprtf>=0.0.32",
+    "striprtf>=0.0.35",
     "pymupdf>=1.28.0",
 ]
 
