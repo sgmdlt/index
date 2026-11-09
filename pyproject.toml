@@ -12,8 +12,6 @@ dependencies = [
     "psycopg2-binary>=2.9.0",
     "boto3>=1.34.0",
     "python-dotenv>=1.0.0",
-    "pytest>=9.0.3",
-    "pytest-asyncio>=1.3.0",
     "selectolax>=0.4.8",
     "warcio>=1.8.1",
     "docx2txt>=0.9",
@@ -23,6 +21,9 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "deptry==0.25.1",
+    "pytest==9.0.3",
+    "pytest-asyncio==1.3.0",
     "ruff==0.17.4",
     "ty==0.0.99",
 ]
@@ -44,3 +45,11 @@ ignore = [
     "C901",  # too complex
     "W191",  # indentation contains tabs
 ]
+
+[tool.deptry.per_rule_ignores]
+# lxml is never imported: BeautifulSoup loads it by name, BeautifulSoup(html, "lxml").
+DEP002 = ["lxml"]
+# botocore ships with boto3 and moves in lockstep with it (scripts/upload_to_minio.py).
+DEP003 = ["botocore"]
+# Only the root sud_delo_mgs_*.py scrapers import these; they are not part of the indexer.
+DEP001 = ["aiohttp", "pdfplumber"]
