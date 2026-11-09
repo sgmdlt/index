@@ -33,7 +33,7 @@ def _incoming(data: dict) -> dict:
         unit={"rel_from_root": data["id_final"]},
         filename="hidden-v285.jsonl",
         source_path="jsonl:x",
-    )
+    )  # ty: ignore[invalid-return-type]
 
 
 def test_mark_keeps_its_id():

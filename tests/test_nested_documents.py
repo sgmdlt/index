@@ -30,7 +30,7 @@ def _make_item(doc_data: dict, filename: str) -> dict:
         "html_files": ["01-01-2010.03:00:01.html", "02-01-2010.03:00:01.html"],
         "meta": {"ID": "test-case-id"},
     }
-    return build_update_item(doc, doc_data, unit, filename, tag=None)
+    return build_update_item(doc, doc_data, unit, filename, tag=None)  # ty: ignore[invalid-return-type, unknown-argument]
 
 
 @pytest.mark.xfail(

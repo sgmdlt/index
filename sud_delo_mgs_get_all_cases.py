@@ -8,9 +8,9 @@ import sys
 import tempfile
 from datetime import datetime
 
-import aiohttp
+import aiohttp  # ty: ignore[import-not-found]
 import docx2txt
-import pdfplumber
+import pdfplumber  # ty: ignore[import-not-found]
 from bs4 import BeautifulSoup
 from striprtf.striprtf import rtf_to_text
 
@@ -19,7 +19,7 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) "
     + "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Mobile Safari/537.36"
 }
-asyncio.sslproto._SSLProtocolTransport._start_tls_compatible = True
+asyncio.sslproto._SSLProtocolTransport._start_tls_compatible = True  # ty: ignore[possibly-missing-submodule]
 
 
 # Обработка ошибок при запросе
@@ -284,10 +284,10 @@ async def get_acts(task_number, queue, input_filename):
                     "date_reg": datetime.strptime(
                         soup.select_one(
                             "div.row_card:-soup-contains('Дата поступления', 'Дата регистрации') div.right"
-                        ).get_text(" ", strip=True),
+                        ).get_text(" ", strip=True),  # ty: ignore[unresolved-attribute]
                         "%d.%m.%Y",
                     ).strftime("%Y-%m-%d"),
-                    "court_code": soup.select_one("input[name=courtCode]")["value"],
+                    "court_code": soup.select_one("input[name=courtCode]")["value"],  # ty: ignore[not-subscriptable]
                     "link": result.strip(),
                 }
 
@@ -346,7 +346,7 @@ async def get_acts(task_number, queue, input_filename):
                 # Составляем идентификатор
                 case_number = soup.select_one(
                     "h1:-soup-contains('Информация')"
-                ).get_text(" ", strip=True)
+                ).get_text(" ", strip=True)  # ty: ignore[unresolved-attribute]
                 formatted_case["case_number"] = case_number[case_number.find("№") + 2 :]
                 formatted_case["id_final"] = get_custom_id(
                     formatted_case["court_code"],
@@ -362,16 +362,16 @@ async def get_acts(task_number, queue, input_filename):
                     formatted_case["raw_tables"]["Дело"] = {}
                     for row_card in soup.select("div.detail-cart div.row_card"):
                         formatted_case["raw_tables"]["Дело"][
-                            row_card.select_one("div.left").get_text(" ", strip=True)
-                        ] = row_card.select_one("div.right").get_text(" ", strip=True)
+                            row_card.select_one("div.left").get_text(" ", strip=True)  # ty: ignore[unresolved-attribute]
+                        ] = row_card.select_one("div.right").get_text(" ", strip=True)  # ty: ignore[unresolved-attribute]
 
                         # Если есть ссылка, дописываем её туда же
                         if row_card_link := row_card.select_one("div.right a"):
                             formatted_case["raw_tables"]["Дело"][
-                                row_card.select_one("div.left").get_text(
+                                row_card.select_one("div.left").get_text(  # ty: ignore[unresolved-attribute]
                                     " ", strip=True
                                 )
-                            ] += "\n\nhttps://mos-sud.ru" + row_card_link["href"]
+                            ] += "\n\nhttps://mos-sud.ru" + row_card_link["href"]  # ty: ignore[unsupported-operator]
 
                     # Берём вкладки
                     for tab_name, tab in zip(
@@ -392,14 +392,14 @@ async def get_acts(task_number, queue, input_filename):
                                 session_video = {}
                                 for row_card in cardsud.select("div.row_card"):
                                     session_video[
-                                        row_card.select_one("div.left").get_text(
+                                        row_card.select_one("div.left").get_text(  # ty: ignore[unresolved-attribute]
                                             " ", strip=True
                                         )
-                                    ] = row_card.select_one("div.right").get_text(
+                                    ] = row_card.select_one("div.right").get_text(  # ty: ignore[unresolved-attribute]
                                         " ", strip=True
                                     )
                                 session_video["embed_link"] = iframe["src"]
-                                formatted_case["raw_tables"][tab_name].append(
+                                formatted_case["raw_tables"][tab_name].append(  # ty: ignore[unresolved-attribute]
                                     session_video
                                 )
 
@@ -426,7 +426,7 @@ async def get_acts(task_number, queue, input_filename):
                             for table_name, table in zip(
                                 table_names, tab.select("table"), strict=True
                             ):
-                                formatted_case["raw_tables"][tab_name].append(
+                                formatted_case["raw_tables"][tab_name].append(  # ty: ignore[unresolved-attribute]
                                     {
                                         table_name: await tab_to_dict(
                                             soup, table, task_number, session
@@ -478,7 +478,7 @@ async def get_acts(task_number, queue, input_filename):
                     # file_path = "RS-KoAP20.3.jsonl"
                     file_path = (
                         f"cases_by_court/{sys.argv[2]}/"
-                        + formatted_case["court_code"][2:4]
+                        + formatted_case["court_code"][2:4]  # ty: ignore[unsupported-operator]
                         + "/"
                         + formatted_case["court_code"]
                         + ".jsonl"

@@ -799,7 +799,7 @@ def _run_db(
                         outbox_row=row,
                     )
                     continue
-                unit["_row"] = row
+                unit["_row"] = row  # ty: ignore[invalid-assignment]
                 yield unit
 
     def on_complete(unit: dict, indexed: bool, doc_ids: list) -> None:

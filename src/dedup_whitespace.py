@@ -98,7 +98,11 @@ def build_query(
 def run(es: Elasticsearch, index: str, apply: bool, query: dict) -> None:
     fixed = scanned = 0
     resp = es.search(
-        index=index, query=query, size=500, scroll="5m", _source=["documents", "id_uid"]
+        index=index,
+        query=query,
+        size=500,
+        scroll="5m",
+        _source=["documents", "id_uid"],  # ty: ignore[unknown-argument]
     )
     scroll_id = resp["_scroll_id"]
     while hits := resp["hits"]["hits"]:

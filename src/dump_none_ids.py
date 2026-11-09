@@ -40,7 +40,7 @@ def run(es: Elasticsearch, index: str, out_prefix: str) -> None:
             "court_code",
             "path_manifest",
             "html_files",
-        ],
+        ],  # ty: ignore[unknown-argument]
     )
     scroll_id = resp["_scroll_id"]
     with (

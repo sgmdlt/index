@@ -51,7 +51,7 @@ def run(es: Elasticsearch, index: str, apply: bool) -> None:
         query=build_query(),
         size=500,
         scroll="5m",
-        _source=["date_reg", "progress", "date_result", "case_number", "id_uid"],
+        _source=["date_reg", "progress", "date_result", "case_number", "id_uid"],  # ty: ignore[unknown-argument]
     )
     scroll_id = resp["_scroll_id"]
     while hits := resp["hits"]["hits"]:

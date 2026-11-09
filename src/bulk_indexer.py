@@ -431,7 +431,7 @@ def with_group_created_at(merged: dict, docs: list[dict]) -> dict:
     один записан до created_at (легаси), его нет и у слитого: дело старое."""
     stamps = [d.get("created_at") for d in docs]
     merged = {k: v for k, v in merged.items() if k != "created_at"}
-    return merged if None in stamps else {**merged, "created_at": min(stamps)}
+    return merged if None in stamps else {**merged, "created_at": min(stamps)}  # ty: ignore[invalid-argument-type]
 
 
 def fold_group(docs: list[dict | None], target: str) -> dict:
@@ -439,9 +439,9 @@ def fold_group(docs: list[dict | None], target: str) -> dict:
     входящим, чтобы старый близнец не перетёр поля свежего."""
     docs = [d for d in docs if d]
     acc = None
-    for doc in sorted(docs, key=lambda d: d.get("version_ts") or ""):
-        acc = merge_docs(acc, doc)
-    return with_group_created_at({**acc, "id_final": target}, docs)
+    for doc in sorted(docs, key=lambda d: d.get("version_ts") or ""):  # ty: ignore[unresolved-attribute]
+        acc = merge_docs(acc, doc)  # ty: ignore[invalid-argument-type]
+    return with_group_created_at({**acc, "id_final": target}, docs)  # ty: ignore[invalid-argument-type]
 
 
 def apply_merge(

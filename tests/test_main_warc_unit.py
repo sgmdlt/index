@@ -37,7 +37,7 @@ def test_warc_unit_indexes_with_locator_debug_link(tmp_path):
         _run_pipelined(
             [make_warc_unit()],
             pool,
-            indexer,
+            indexer,  # ty: ignore[invalid-argument-type]
             Metrics(),
             max_workers=1,
             failed_log=str(tmp_path / "failed.log"),
@@ -60,7 +60,7 @@ def test_the_unit_reports_the_ids_it_handed_to_the_indexer(tmp_path):
         _run_pipelined(
             [make_warc_unit()],
             pool,
-            FakeIndexer(),
+            FakeIndexer(),  # ty: ignore[invalid-argument-type]
             Metrics(),
             max_workers=1,
             failed_log=str(tmp_path / "failed.log"),

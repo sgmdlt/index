@@ -24,9 +24,9 @@ class FakeES:
         if self.search_error:
             raise self.search_error
         assert (
-            size <= 10000 and len(query["terms"]["uuid"]) <= 1000
+            size <= 10000 and len(query["terms"]["uuid"]) <= 1000  # ty: ignore[not-subscriptable, unsupported-operator]
         )  # max_result_window
-        uuids = set(query["terms"]["uuid"])
+        uuids = set(query["terms"]["uuid"])  # ty: ignore[not-subscriptable]
         return {
             "hits": {
                 "hits": [
@@ -45,14 +45,14 @@ class FakeES:
                     "_seq_no": 7,
                     "_primary_term": 1,
                 }
-                for i in ids
+                for i in ids  # ty: ignore[not-iterable]
             ]
         }
 
     def bulk(self, operations=None, refresh=False):
         self.bulk_calls.append(operations)
         items = []
-        for op in operations:
+        for op in operations:  # ty: ignore[not-iterable]
             for action in ("index", "delete"):
                 if action in op:
                     i = op[action]["_id"]

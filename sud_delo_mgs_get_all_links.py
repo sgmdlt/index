@@ -5,7 +5,7 @@ import re
 import urllib.parse
 from datetime import datetime
 
-import aiohttp
+import aiohttp  # ty: ignore[import-not-found]
 from bs4 import BeautifulSoup
 
 # Заголовки для запроса
@@ -13,7 +13,7 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) "
     + "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Mobile Safari/537.36"
 }
-asyncio.sslproto._SSLProtocolTransport._start_tls_compatible = True
+asyncio.sslproto._SSLProtocolTransport._start_tls_compatible = True  # ty: ignore[possibly-missing-submodule]
 
 
 # Обработка ошибок при запросе
@@ -102,7 +102,7 @@ async def get_cases(task_number, courts, query_list, output_filename):
                         if soup.select("div.resultsearch_text"):
                             if target_str := re.search(
                                 r"По вашему запросу найдено записей: (\d+)",
-                                soup.select_one("div.resultsearch_text").get_text(),
+                                soup.select_one("div.resultsearch_text").get_text(),  # ty: ignore[unresolved-attribute]
                             ):
                                 target_count = int(target_str.group(1))
 
@@ -114,8 +114,8 @@ async def get_cases(task_number, courts, query_list, output_filename):
                         if row.select("td")[0].select_one("a.detailsLink"):
                             link = row.select("td")[0].select_one("a.detailsLink")[
                                 "href"
-                            ]
-                            link = "https://mos-gorsud.ru" + link[: link.find("?")]
+                            ]  # ty: ignore[not-subscriptable]
+                            link = "https://mos-gorsud.ru" + link[: link.find("?")]  # ty: ignore[unresolved-attribute, unsupported-operator]
                             open(output_filename + ".txt", "a").write(link + "\n")
 
                             card_count += 1
@@ -124,7 +124,7 @@ async def get_cases(task_number, courts, query_list, output_filename):
                     # Перебор страниц
                     next_page = False
                     for link in soup.select("div.paginationContainer a.next[href]"):
-                        url = "https://mos-gorsud.ru" + link["href"]
+                        url = "https://mos-gorsud.ru" + link["href"]  # ty: ignore[unsupported-operator]
                         next_page = True
                         break
 

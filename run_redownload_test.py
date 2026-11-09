@@ -42,7 +42,7 @@ def fetch_rows():
         ]
     conn.close()
     # only rows whose html file actually exists on disk
-    rows = [r for r in rows if os.path.exists(_fix_path(r["filename"]))]
+    rows = [r for r in rows if os.path.exists(_fix_path(r["filename"]))]  # ty: ignore[invalid-argument-type]
     return rows
 
 

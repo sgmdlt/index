@@ -50,7 +50,7 @@ def test_the_worker_still_delivers_the_enriched_identity(tmp_path):
         _run_pipelined(
             [unit],
             pool,
-            indexer,
+            indexer,  # ty: ignore[invalid-argument-type]
             Metrics(),
             max_workers=1,
             failed_log=str(tmp_path / "failed.log"),
@@ -79,7 +79,7 @@ def test_a_seeded_id_still_beats_the_parsed_one(tmp_path):
         _run_pipelined(
             [unit],
             pool,
-            indexer,
+            indexer,  # ty: ignore[invalid-argument-type]
             Metrics(),
             max_workers=1,
             failed_log=str(tmp_path / "failed.log"),

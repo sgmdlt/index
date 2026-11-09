@@ -81,7 +81,7 @@ def fix_date_reg(
         if _is_valid(iso, today)
     ]
     if candidates:
-        return min(candidates)
+        return min(candidates)  # ty: ignore[invalid-argument-type]
     if _is_valid(date_result, today):
         return date_result
     # Mangled year (e.g. 0217-08-28) — but not the no-info placeholder, whose

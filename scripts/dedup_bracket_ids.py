@@ -350,7 +350,7 @@ def move_all(key: str, bad_ids: list[str], batch: int = 200) -> None:
                 [
                     op
                     for b, n in new_id.items()
-                    for op in ({"create": {"_id": n}}, moved(bads[b]["_source"], n))
+                    for op in ({"create": {"_id": n}}, moved(bads[b]["_source"], n))  # ty: ignore[invalid-argument-type]
                 ],
             )
             if new_id
@@ -483,7 +483,7 @@ def main() -> None:
     found = {
         k: v
         for i in range(0, len(new_ids), 1000)
-        for k, v in existing(key, new_ids[i : i + 1000]).items()
+        for k, v in existing(key, new_ids[i : i + 1000]).items()  # ty: ignore[invalid-argument-type]
     }
     rows = [
         {
@@ -491,7 +491,7 @@ def main() -> None:
             "twin": r["new_id"] in found and r["new_id"] != r["_id"],
             "covered": r["new_id"] in found
             and r["new_id"] != r["_id"]
-            and covered(r["html_files"], found[r["new_id"]]),
+            and covered(r["html_files"], found[r["new_id"]]),  # ty: ignore[invalid-argument-type]
         }
         for r in rows
     ]
@@ -503,20 +503,20 @@ def main() -> None:
     ):
         for r in rows:
             jl.write(json.dumps(r, ensure_ascii=False) + "\n")
-            (warc if is_warc_locator(r["path_manifest"]) else fs).write(
-                r["path_manifest"] + "\n"
+            (warc if is_warc_locator(r["path_manifest"]) else fs).write(  # ty: ignore[invalid-argument-type]
+                r["path_manifest"] + "\n"  # ty: ignore[unsupported-operator]
             )
 
     twins = [r["_id"] for r in rows if r["covered"]]
     print(
-        f"кривых id: {len(rows)}, с правильным близнецом: {sum(r['twin'] for r in rows)}, "
+        f"кривых id: {len(rows)}, с правильным близнецом: {sum(r['twin'] for r in rows)}, "  # ty: ignore[no-matching-overload]
         f"из них близнец держит все версии (будут удалены): {len(twins)}"
     )
     print(f"записано {args.out}.jsonl, {args.out}_fs.txt, {args.out}_warc.txt")
     if not args.delete or not twins:
         return
 
-    deleted = delete_ids(key, twins)
+    deleted = delete_ids(key, twins)  # ty: ignore[invalid-argument-type]
     print(f"удалено {deleted} из {len(twins)}; осталось кривых {len(rows) - deleted}")
 
 

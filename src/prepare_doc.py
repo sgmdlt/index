@@ -394,7 +394,7 @@ def prepare_doc(raw: dict) -> dict:
                 continue
 
             handler = _TYPE_HANDLERS.get(field_type, _get_string)
-            result = handler(values, fmt) if field_type == "date" else handler(values)
+            result = handler(values, fmt) if field_type == "date" else handler(values)  # ty: ignore[missing-argument, too-many-positional-arguments]
 
             if not _is_empty(result):
                 doc[field] = result

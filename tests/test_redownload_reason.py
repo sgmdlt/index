@@ -39,7 +39,7 @@ def run_one(unit, tmp_path):
         _run_pipelined(
             [unit],
             pool,
-            FakeIndexer(),
+            FakeIndexer(),  # ty: ignore[invalid-argument-type]
             Metrics(),
             max_workers=1,
             failed_log=str(tmp_path / "failed.log"),

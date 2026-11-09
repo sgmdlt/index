@@ -54,12 +54,12 @@ def test_warc_rows_yield_units_without_fs_tree(tmp_path):
 
     assert reason is None
     assert out_row["id"] == 1
-    assert unit["meta"] == meta
-    assert unit["manifest_path"] == locator
+    assert unit["meta"] == meta  # ty: ignore[not-subscriptable]
+    assert unit["manifest_path"] == locator  # ty: ignore[not-subscriptable]
     # filename synthesized from WARC-Date (download time) so version_ts works
-    [fname] = unit["html_files"]
+    [fname] = unit["html_files"]  # ty: ignore[not-subscriptable]
     assert fname.endswith(".html")
-    assert unit["html_bytes_by_name"] == {fname: html}
+    assert unit["html_bytes_by_name"] == {fname: html}  # ty: ignore[not-subscriptable]
 
 
 def test_warc_batch_two_shards_shuffled_order(tmp_path):
@@ -81,9 +81,9 @@ def test_warc_batch_two_shards_shuffled_order(tmp_path):
     assert len(results) == 6
     assert all(reason is None for _, _, reason in results)
     by_id = {r["id"]: u for u, r, _ in results}
-    assert by_id[3]["meta"] == {"ID": "a0"}
-    assert by_id[4]["meta"] == {"ID": "b2"}
-    got_ids = [u["meta"]["ID"] for u, _, _ in results]
+    assert by_id[3]["meta"] == {"ID": "a0"}  # ty: ignore[not-subscriptable]
+    assert by_id[4]["meta"] == {"ID": "b2"}  # ty: ignore[not-subscriptable]
+    got_ids = [u["meta"]["ID"] for u, _, _ in results]  # ty: ignore[not-subscriptable]
     # grouped per shard, ascending offsets within each shard
     assert got_ids in (
         ["a0", "a1", "a2", "b0", "b1", "b2"],
@@ -114,9 +114,9 @@ def test_legacy_row_without_locator_uses_fs(tmp_path):
     [(unit, _, reason)] = list(rows_to_units([legacy]))
 
     assert reason is None
-    assert unit["meta"] == {"ID": "legacy"}
-    assert unit["html_files"] == ["1.html"]
-    assert "html_bytes_by_name" not in unit
+    assert unit["meta"] == {"ID": "legacy"}  # ty: ignore[not-subscriptable]
+    assert unit["html_files"] == ["1.html"]  # ty: ignore[not-subscriptable]
+    assert "html_bytes_by_name" not in unit  # ty: ignore[unsupported-operator]
 
 
 def test_shard_path_prefix_is_configurable(tmp_path, monkeypatch):

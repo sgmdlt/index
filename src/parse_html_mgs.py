@@ -84,7 +84,7 @@ def parse_card(html: str, base: str = BASE) -> Card:
         value = _text(right)
         if related is not None:
             href = related["href"]
-            value += "\n\n" + (href if href.startswith("http") else base + href)
+            value += "\n\n" + (href if href.startswith("http") else base + href)  # ty: ignore[unresolved-attribute, unsupported-operator]
         head[_text(left)] = value
 
     tab_names = {
@@ -94,7 +94,7 @@ def parse_card(html: str, base: str = BASE) -> Card:
     for panel in soup.select("ul.tablist__panels li[data-tab]"):
         key = panel["data-tab"]
         name = tab_names.get(key, key)
-        tables[name] = _panel(panel, name, base)
+        tables[name] = _panel(panel, name, base)  # ty: ignore[invalid-argument-type]
 
     links = []
     for groups in tables.values():

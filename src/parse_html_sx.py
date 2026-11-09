@@ -154,7 +154,7 @@ def _parse_table(table: LexborNode):
                 continue
             if _has_nested_table(v_cell):
                 nested = _first_descendant(v_cell, "table")
-                result[key] = _parse_table(nested)
+                result[key] = _parse_table(nested)  # ty: ignore[invalid-argument-type]
             else:
                 result[key] = _text(v_cell)
         return result
@@ -193,7 +193,7 @@ def _parse_table(table: LexborNode):
             cell = tds[i]
             if _has_nested_table(cell):
                 nested = _first_descendant(cell, "table")
-                row[key] = _parse_table(nested)
+                row[key] = _parse_table(nested)  # ty: ignore[invalid-argument-type]
             else:
                 row[key] = _text(cell)
         if row:
@@ -248,7 +248,7 @@ def tab_to_dict(tab: LexborNode):
                 row_dict[_text(key)] = _text(value)
             parsed_tab.append(row_dict)
 
-            if "table>" in row.html:
+            if "table>" in row.html:  # ty: ignore[unsupported-operator]
                 raise ValueError
 
     else:
@@ -283,7 +283,7 @@ def tab_to_dict(tab: LexborNode):
                         for key, value in zip(header_tds, row_tds, strict=True):
                             row_dict[_text(key)] = _text(value)
                         parsed_tab.append(row_dict)
-                        if "table>" in row.html:
+                        if "table>" in row.html:  # ty: ignore[unsupported-operator]
                             raise ValueError
 
                 else:
@@ -302,7 +302,7 @@ def tab_to_dict(tab: LexborNode):
                                     parsed_tab.append({label: col_text})
                                 else:
                                     parsed_tab[index][label] = col_text
-                            if "table>" in row.html:
+                            if "table>" in row.html:  # ty: ignore[unsupported-operator]
                                 raise ValueError
 
             else:
@@ -317,7 +317,8 @@ def tab_to_dict(tab: LexborNode):
 
         elif tab.css("tr"):
             logger.debug(
-                "tab_to_dict: unrecognized table structure: %s", tab.html[:200]
+                "tab_to_dict: unrecognized table structure: %s",
+                tab.html[:200],  # ty: ignore[not-subscriptable]
             )
             raise ValueError
 

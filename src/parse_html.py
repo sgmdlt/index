@@ -77,7 +77,7 @@ def _parse_table(table: Tag):
                 continue
             if _has_nested_table(v_cell):
                 nested = v_cell.find("table")
-                result[key] = _parse_table(nested)
+                result[key] = _parse_table(nested)  # ty: ignore[invalid-argument-type]
             else:
                 result[key] = _text(v_cell)
         return result
@@ -118,7 +118,7 @@ def _parse_table(table: Tag):
             cell = tds[i]
             if _has_nested_table(cell):
                 nested = cell.find("table")
-                row[key] = _parse_table(nested)
+                row[key] = _parse_table(nested)  # ty: ignore[invalid-argument-type]
             else:
                 row[key] = _text(cell)
         if row:
@@ -146,8 +146,8 @@ def _resolve_table_name(soup: BeautifulSoup, table: Tag) -> str:
 
     # Try parent tab label
     tab_content = table.find_parent(class_="lawcase-tab-content")
-    if tab_content and tab_content.get("id", "").startswith("tab_content_"):
-        suffix = tab_content["id"].replace("tab_content_", "")
+    if tab_content and tab_content.get("id", "").startswith("tab_content_"):  # ty: ignore[unresolved-attribute]
+        suffix = tab_content["id"].replace("tab_content_", "")  # ty: ignore[unresolved-attribute]
         tab_label = soup.find(id=f"tab_id_{suffix}")
         if tab_label:
             txt = _text(tab_label)
@@ -207,7 +207,7 @@ def fill_raw_tables(html: bytes | str, documents: dict | None = None) -> dict:
         # Формат 2: ul#case_bookmarks + div.lawcase-tab-content[id=tab_content_X]
         if soup.select_one("ul#case_bookmarks"):
             for label_el in soup.select("ul#case_bookmarks li[id^=tab_id_]"):
-                suffix = label_el["id"].replace("tab_id_", "")
+                suffix = label_el["id"].replace("tab_id_", "")  # ty: ignore[unresolved-attribute]
                 tab_name = label_el.get_text(" ", strip=True)
                 content_div = soup.find(id=f"tab_content_{suffix}")
                 if not content_div:
@@ -220,7 +220,7 @@ def fill_raw_tables(html: bytes | str, documents: dict | None = None) -> dict:
                 if doc_labels:
                     docs = []
                     for doc_label_el in doc_labels:
-                        doc_suffix = doc_label_el["id"].replace("doctab_id_", "")
+                        doc_suffix = doc_label_el["id"].replace("doctab_id_", "")  # ty: ignore[unresolved-attribute]
                         doc_div = content_div.find(id=f"doctab_content_{doc_suffix}")
                         if not doc_div:
                             continue
@@ -264,7 +264,7 @@ def fill_raw_tables(html: bytes | str, documents: dict | None = None) -> dict:
                         ):
                             for meta in doc.find_all("meta"):
                                 meta.decompose()
-                            formatted_case["raw_tables"][tab_name].append(
+                            formatted_case["raw_tables"][tab_name].append(  # ty: ignore[unresolved-attribute]
                                 {doc_name.get_text(" ", strip=True): doc.get_text()}
                             )
                     # Если один текст
@@ -288,7 +288,7 @@ def fill_raw_tables(html: bytes | str, documents: dict | None = None) -> dict:
                             tab.select(":scope > table tr:first-child [colspan]"),
                             tab.select(":scope > table"),
                         ):
-                            formatted_case["raw_tables"][tab_name].append(
+                            formatted_case["raw_tables"][tab_name].append(  # ty: ignore[unresolved-attribute]
                                 {
                                     table_name.get_text(" ", strip=True): tab_to_dict(
                                         table
