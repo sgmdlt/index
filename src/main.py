@@ -89,20 +89,11 @@ def _parse_html_bytes(
     return prepared
 
 
-def _parse_html_file(args: tuple) -> tuple:
-    """Worker: read one HTML file -> (prepared_doc, read_ms, n_bytes, identity)."""
-    html_path, _manifest_dir = args
-    t0 = time.perf_counter()
-    with open(html_path, "rb") as fh:
-        html_bytes = fh.read()
-    read_ms = (time.perf_counter() - t0) * 1000.0
-    return _parse_html_bytes(html_bytes, html_path), read_ms, len(html_bytes), {}
+def _parse_payload(args: tuple) -> tuple:
+    """Worker: one HTML payload -> (prepared_doc, read_ms, n_bytes, identity).
 
-
-def _parse_warc_payload(args: tuple) -> tuple:
-    """Worker: parse HTML bytes already read from a WARC group.
-
-    `documents` rides along because it is the only route the archived files
+    The payload is a file path (read here) or bytes already read from a WARC
+    group. `documents` rides along because it is the only route the archived files
     have into the parser; without it an MGS card indexes with the опись links
     still in place and no decision text at all.
 
@@ -111,10 +102,17 @@ def _parse_warc_payload(args: tuple) -> tuple:
     unit assembly instead put a 42 ms serial step in the parent and held the
     whole pipeline to ~23 units/s while the pool idled.
     """
-    html_bytes, origin, documents, url = args
+    payload, origin, documents, url = args
+    t0 = time.perf_counter()
+    if isinstance(payload, bytes):
+        html_bytes = payload
+    else:
+        with open(payload, "rb") as fh:
+            html_bytes = fh.read()
+    read_ms = (time.perf_counter() - t0) * 1000.0
     return (
         _parse_html_bytes(html_bytes, origin, documents),
-        0.0,
+        read_ms,
         len(html_bytes),
         mgs_identity_of(html_bytes, url),
     )
@@ -439,6 +437,18 @@ def _refresh_index(es, index: str) -> None:
 # Unit processing
 
 
+def _parse_job(unit: dict, fname: str) -> tuple:
+    """Args for _parse_payload: WARC units carry the bytes, fs units a path."""
+    bytes_map = unit.get("html_bytes_by_name")
+    if bytes_map is not None:
+        # payload already read from the shard; manifest_path is a locator
+        payload, origin = bytes_map[fname], unit["manifest_path"]
+    else:
+        payload = origin = os.path.join(os.path.dirname(unit["manifest_path"]), fname)
+    url = (unit.get("meta") or {}).get("url", "")
+    return payload, origin, unit.get("documents"), url
+
+
 def _source_path_of(unit: dict):
     """filename -> sourcePath for the item's debug metadata."""
     if unit.get("html_bytes_by_name") is not None:
@@ -496,24 +506,8 @@ def _run_pipelined(
                 "t0": metrics.now_ms(),
                 "had_error": False,
             }
-            bytes_map = unit.get("html_bytes_by_name")
             for fname in html_files:
-                if bytes_map is not None:
-                    # WARC unit: payload already read in rows_to_units;
-                    # manifest_path is a locator, not a directory
-                    fut = pool.submit(
-                        _parse_warc_payload,
-                        (
-                            bytes_map[fname],
-                            unit["manifest_path"],
-                            unit.get("documents"),
-                            (unit.get("meta") or {}).get("url", ""),
-                        ),
-                    )
-                else:
-                    manifest_dir = os.path.dirname(unit["manifest_path"])
-                    path = os.path.join(manifest_dir, fname)
-                    fut = pool.submit(_parse_html_file, (path, manifest_dir))
+                fut = pool.submit(_parse_payload, _parse_job(unit, fname))
                 pending[fut] = (uid, fname)
 
         if not pending:
