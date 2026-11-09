@@ -1,0 +1,10 @@
+# Betterleaks: the default rules plus one narrow allowlist.
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Throwaway password of the local test Postgres image"
+targetRules = ["generic-password"]
+paths = ['''^Dockerfile\.test$''']
+regexTarget = "match"
+regexes = ['''POSTGRES_PASSWORD=password''']

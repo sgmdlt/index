@@ -11,6 +11,7 @@ PYTHONDONTWRITEBYTECODE = "1"
 [tools]
 uv = "0.13.7"
 shellcheck = "0.11.0"
+betterleaks = "1.9.0"
 osv-scanner = "2.7.0"
 jactionlint = "2.5.0"
 hk = "2.11.1"
@@ -24,6 +25,9 @@ run = [
   "uv run --locked deptry .",
   "uv run --locked lint-imports",
   "git ls-files -z '*.sh' | xargs -0 shellcheck",
+  # Whole git history: covers every committed file in seconds (per-file `dir` over ~7000
+  # tracked logs takes minutes). Staged changes are scanned by the pre-commit hook.
+  "betterleaks git -c .betterleaks.toml --no-banner --redact -l warn .",
   # Needs the network (api.osv.dev); CI also runs it weekly, since advisories land without a diff.
   "osv-scanner scan source -L uv.lock",
   "git ls-files -z '.github/*.yml' | xargs -0 jactionlint",
