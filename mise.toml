@@ -1,0 +1,22 @@
+# One toolchain for developers, git hooks and CI: `mise install`, then `mise run check`.
+# Python and its packages (ruff, ty, deptry, import-linter, pytest) stay on uv and are
+# pinned by uv.lock; mise pins uv itself and the tools that are not Python packages.
+# Linters get `git ls-files`, so untracked scratch files never fail the check.
+min_version = "2026.11.3"
+
+[env]
+# __pycache__ is tracked in git: a check run must not dirty the tree.
+PYTHONDONTWRITEBYTECODE = "1"
+
+[tools]
+uv = "0.13.7"
+
+[tasks.check]
+description = "Run every check, the same set CI runs"
+run = [
+  "uv run --locked pytest tests -q -p no:cacheprovider",
+]
+
+[tasks.fix]
+description = "Apply the automatic fixes"
+run = []
