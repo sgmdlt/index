@@ -821,7 +821,7 @@ def parse_args(argv=None):
     p.add_argument(
         "--redownload",
         default=True,
-        action="store_true",
+        action=argparse.BooleanOptionalAction,
         help="In fs/folders modes, queue failed cases into Postgres redownload_queue instead of writing to --failed-log",
     )
     args = p.parse_args(argv)
