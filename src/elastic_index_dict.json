@@ -26,6 +26,15 @@
     ],
     "type": "boolean"
   },
+  "hidden_since": {
+    "locations": [
+      {
+        "format": "yyyy-MM-dd",
+        "key": "$.hidden_since"
+      }
+    ],
+    "type": "date"
+  },
   "case_number": {
     "locations": [
       "$.case_number"

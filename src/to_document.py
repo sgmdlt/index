@@ -7,7 +7,7 @@ import json
 import re
 from pathlib import Path
 
-from .utils.case_id import build_case_id
+from .utils.case_id import case_id_from_fields
 from .utils.dates import date_value_to_iso, get_files_version
 from .utils.paths import dir_of_rel, norm_path
 
@@ -44,13 +44,16 @@ def to_document(
 ) -> dict:
     """Build the ES document container from a parsed unit."""
     rel_dir = dir_of_rel(rel_from_root)
-    # Recompute the id from the manifest's component fields with the current
-    # (corrected) formula instead of trusting a possibly-stale meta["ID"]. This
-    # re-keys legacy wrong-parse ids and folds old/new collision scrapes onto one
+    # Recompute the id from the record's component fields with the current
+    # formula instead of trusting a possibly-stale meta["ID"] / JSONL
+    # id_final. This re-keys legacy ids and folds old/new scrapes onto one
     # _id. Fall back to the stored id only when recomputation can't run.
     try:
-        recomputed = build_case_id(
-            meta.get("case_number"), meta.get("date_reg"), meta.get("court_id")
+        recomputed = case_id_from_fields(
+            meta.get("case_number"),
+            meta.get("date_reg"),
+            meta.get("court_id") or meta.get("court_code"),
+            meta.get("link"),
         )
     except Exception:
         recomputed = None

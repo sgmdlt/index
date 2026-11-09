@@ -5,10 +5,12 @@ import logging
 import re
 import threading
 import time
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 from .text_filters import broken_text_message, fix_date_reg
+from .utils.case_id import case_id_from_fields
+from .uuid_group import in_group_scope, pick_group_id
 from .utils.dates import html_name_to_iso
 from .utils.paths import norm_path, dir_of_rel
 
@@ -57,7 +59,9 @@ def _merge_array(existing_arr: list, incoming_arr: list) -> list:
 
 
 def _doc_canon(text: str) -> str:
-    return " ".join(text.split()) if text else ""
+    # без единого пробела: экстракторы расходятся и внутри слов («2- 01/11»,
+    # «П Р И Г О В О Р»), а пробел — это вёрстка, не текст акта
+    return "".join(text.split()) if text else ""
 
 
 # Names that carry no information about the document type: "" and the JSONPath
@@ -323,23 +327,113 @@ def build_update_item(
 
 def mget(es_client, index: str, ids: list[str]) -> dict[str, dict]:
     """Fetch existing documents by ID. Returns {id: _source} for found docs."""
-    try:
-        resp = es_client.mget(index=index, ids=ids)
-        return {
-            doc["_id"]: doc["_source"]
-            for doc in resp.get("docs", [])
-            if doc.get("found")
-        }
-    except Exception as exc:
-        logger.warning("mget failed, treating all as new: %s", exc)
-        return {}
+    resp = es_client.mget(index=index, ids=ids)
+    return {
+        doc["_id"]: doc["_source"]
+        for doc in resp.get("docs", [])
+        if doc.get("found")
+    }
 
 
-def apply_merge(batch: list[dict], existing_by_id: dict[str, dict]) -> list[dict]:
+UUID_CHUNK = 1000  # terms по 1000 uuid и до 10000 хитов — в пределах max_result_window
+
+
+def uuid_twins(es_client, index: str, uuids: list[str]) -> dict[str, list[dict]]:
+    """Документы индекса с этими uuid: {uuid: [mget-документ с _seq_no, …]}.
+
+    search нужен только ради id: он near-real-time, а при refresh_interval=-1
+    его _source — копия до прогона, и слияние по ней стёрло бы записанное в
+    этом же прогоне. Сами документы и их версия — из mget (real-time).
+    """
+    ids: list[str] = []
+    for i in range(0, len(uuids), UUID_CHUNK):
+        resp = es_client.search(index=index, query={"terms": {"uuid": uuids[i:i + UUID_CHUNK]}},
+                                size=10000, source=False)
+        ids += [hit["_id"] for hit in resp["hits"]["hits"]]
+    out: dict[str, list[dict]] = {}
+    for doc in (es_client.mget(index=index, ids=ids).get("docs", []) if ids else []):
+        if doc.get("found"):
+            out.setdefault(doc["_source"].get("uuid"), []).append(doc)
+    return out
+
+
+def _group_key(doc: dict) -> str:
+    # кандидат группы — формульный id документа: старый id из прошлой
+    # формулы не должен стать целевым только потому, что он там уже лежит
+    src = doc["_source"]
+    return case_id_from_fields(src.get("case_number"), src.get("date_reg"),
+                               src.get("court_id") or src.get("court_code"),
+                               src.get("link")) or doc["_id"]
+
+
+def regroup(batch: list[dict], twins: dict[str, list[dict]]) -> tuple[list[dict], dict[str, list[dict]], dict]:
+    """Сводит документы одного uuid на id, выбранный правилом группы.
+
+    Возвращает пачку с переписанными _id (исходный — в _orig_id: вызывающий
+    ждёт вердикт по нему), {целевой id: _source близнецов} для слияния и
+    {id близнеца: (целевой id, _seq_no, _primary_term)} — кого удалить, когда
+    целевой документ запишется.
+    """
+    by_uuid: dict[str, list[dict]] = {}
+    for item in batch:
+        if in_group_scope(item["doc"]):
+            by_uuid.setdefault(item["doc"]["uuid"], []).append(item)
+
+    target_of = {
+        u: pick_group_id(
+            [(_group_key(t), t["_source"].get("version_ts") or "") for t in twins.get(u, [])]
+            + [(it["_id"], it.get("version_ts") or "") for it in items]
+        )
+        for u, items in by_uuid.items()
+    }
+
+    regrouped = []
+    for item in batch:
+        item = {**item, "_orig_id": item.get("_orig_id", item["_id"])}
+        target = target_of.get(item["doc"]["uuid"]) if in_group_scope(item["doc"]) else None
+        if target:
+            item = {**item, "_id": target, "doc": {**item["doc"], "id_final": target}}
+        regrouped.append(item)
+
+    twins_for: dict[str, list[dict]] = {}
+    delete_for: dict = {}
+    for u, target in target_of.items():
+        others = [t for t in twins.get(u, []) if t["_id"] != target]
+        if others:
+            twins_for[target] = [t["_source"] for t in others]
+        for t in others:
+            delete_for[t["_id"]] = (target, t["_seq_no"], t["_primary_term"])
+    return regrouped, twins_for, delete_for
+
+
+def with_group_created_at(merged: dict, docs: list[dict]) -> dict:
+    """created_at слитого дела — самый ранний из слитых документов; если хоть
+    один записан до created_at (легаси), его нет и у слитого: дело старое."""
+    stamps = [d.get("created_at") for d in docs]
+    merged = {k: v for k, v in merged.items() if k != "created_at"}
+    return merged if None in stamps else {**merged, "created_at": min(stamps)}
+
+
+def fold_group(docs: list[dict | None], target: str) -> dict:
+    """Скачивания одной карточки в один документ: по version_ts, свежее —
+    входящим, чтобы старый близнец не перетёр поля свежего."""
+    docs = [d for d in docs if d]
+    acc = None
+    for doc in sorted(docs, key=lambda d: d.get("version_ts") or ""):
+        acc = merge_docs(acc, doc)
+    return with_group_created_at({**acc, "id_final": target}, docs)
+
+
+def apply_merge(batch: list[dict], existing_by_id: dict[str, dict], now: str,
+                stamp_created_at: bool = True) -> list[dict]:
     """Merge batch items against each other and existing ES docs.
 
     Items sharing the same _id are folded together in order (batch is pre-sorted
     oldest-first) so that all HTML files for one case accumulate into a single doc.
+    Каждому результату ставится indexed_at = now; created_at = now только у
+    документов, которых ещё нет в ES (у существующих остаётся как есть; слитые
+    близнецы лежат в existing_by_id под целевым id — см. fold_group).
+    stamp_created_at=False — полная переиндексация: новых дел в ней нет.
     """
     # Accumulate within-batch merges per id, preserving insertion order
     acc: dict[str, dict] = {}
@@ -351,6 +445,9 @@ def apply_merge(batch: list[dict], existing_by_id: dict[str, dict]) -> list[dict
     result = []
     for doc_id, doc in acc.items():
         doc["_id"] = doc_id
+        doc["indexed_at"] = now
+        if stamp_created_at and doc_id not in existing_by_id:
+            doc["created_at"] = now
         result.append(doc)
     return result
 
@@ -384,6 +481,7 @@ class BulkIndexer:
         flush_interval: float = 15.0,
         failed_log: str = "failed_paths.log",
         on_result=None,
+        stamp_created_at: bool = True,
     ):
         self._es = es_client
         self._index = index
@@ -395,6 +493,9 @@ class BulkIndexer:
         # вызывающего узнать вердикт ES. Без него отказ виден только в файле, и
         # строка outbox остаётся в DONE на потерянном деле.
         self._on_result = on_result
+        # полная переиндексация (--warc) пишет в пустой индекс: всё — «легаси»,
+        # иначе любое старое дело ушло бы подписчикам как новое
+        self._stamp_created_at = stamp_created_at
 
         self._buffers: dict[str, list] = {}
         self._lock = threading.Lock()
@@ -467,8 +568,39 @@ class BulkIndexer:
         # Sort oldest-first so latest values win for non-array fields
         batch.sort(key=lambda x: x.get("version_ts") or "")
 
-        existing_by_id = mget(self._es, self._index, [item["_id"] for item in batch])
-        merged_items = apply_merge(batch, existing_by_id)
+        # Документы одного uuid — одно дело: без этого правка даты судом
+        # кладёт карточку под второй _id. Сбой поиска валит батч, как и mget.
+        uuids = sorted({item["doc"]["uuid"] for item in batch if in_group_scope(item["doc"])})
+        try:
+            twins = uuid_twins(self._es, self._index, uuids) if uuids else {}
+        except Exception as exc:
+            self._fail_batch(batch, bucket_key, f"uuid search failed: {exc}")
+            return
+        batch, twins_for, delete_for = regroup(batch, twins)
+        origin: dict[str, list[str]] = {}
+        for item in batch:
+            origin.setdefault(item["_id"], [])
+            if item["_orig_id"] not in origin[item["_id"]]:
+                origin[item["_id"]].append(item["_orig_id"])
+
+        def callers(ids: list) -> list:
+            # вызывающий ждёт вердикт по своим id, а не по переписанным
+            return [o for i in ids for o in origin.get(i, [i])]
+
+
+        try:
+            existing_by_id = mget(self._es, self._index, [item["_id"] for item in batch])
+        except Exception as exc:
+            # Раньше это считалось «все документы новые», и слияние становилось
+            # перезаписью: старые документы дела и история терялись, а частичная
+            # пометка (id_final + case_hidden) затирала дело целиком. Отказ по
+            # батчу — строки перезаявятся, jsonl останется на диске.
+            self._fail_batch(batch, bucket_key, f"mget failed: {exc}")
+            return
+        for target, sources in twins_for.items():
+            existing_by_id[target] = fold_group([existing_by_id.get(target), *sources], target)
+        now = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+        merged_items = apply_merge(batch, existing_by_id, now, self._stamp_created_at)
 
         # снимаем до build_bulk_index_ops: он вынимает _id из элементов
         doc_ids = [item["_id"] for item in merged_items if item.get("_id")]
@@ -504,7 +636,8 @@ class BulkIndexer:
                 if failed_ids:
                     logger.warning("Bucket %s: %d/%d docs failed",
                                    bucket_key, len(failed_ids), len(batch))
-                self._report(indexed_ids, failed_ids, "bulk item rejected")
+                self._report(callers(indexed_ids), callers(failed_ids), "bulk item rejected")
+                self._delete_twins(delete_for, set(indexed_ids))
                 return
 
             except Exception as exc:
@@ -532,8 +665,38 @@ class BulkIndexer:
                     if self._metrics:
                         self._metrics.inc("bulkFailedDocs", len(failed_ids))
                         self._metrics.inc("bulkCalls", 1)
-                    self._report([], failed_ids, f"bulk call failed: {exc}")
+                    self._report([], callers(failed_ids), f"bulk call failed: {exc}")
                     return
+
+    def _fail_batch(self, batch: list, bucket_key: str, reason: str) -> None:
+        failed_ids = [item.get("_orig_id") or item["_id"] for item in batch if item.get("_id")]
+        logger.error("%s bucket=%s, batch not written", reason, bucket_key)
+        for doc_id in failed_ids:
+            self._log_failure(doc_id, reason)
+        if self._metrics:
+            self._metrics.inc("bulkFailedDocs", len(failed_ids))
+        self._report([], failed_ids, reason)
+
+    def _delete_twins(self, delete_for: dict, written: set) -> None:
+        """Удаляет близнецов, чей целевой документ ES уже принял, — и только в
+        прочитанной версии: обновлённый после чтения близнец получит 409 и
+        останется. Оставшийся близнец — дубль, а не потеря: следующая запись
+        этого uuid сольёт его снова."""
+        ops = [{"delete": {"_index": self._index, "_id": twin, "if_seq_no": seq, "if_primary_term": term}}
+               for twin, (target, seq, term) in delete_for.items() if target in written]
+        ids = [op["delete"]["_id"] for op in ops]
+        if not ops:
+            return
+        try:
+            res = self._es.bulk(operations=ops, refresh=False)
+        except Exception as exc:
+            for i in ids:
+                self._log_failure(i, f"twin delete failed: {exc}")
+            return
+        for action in res.get("items", []):
+            status = action.get("delete") or {}
+            if status.get("error"):
+                self._log_failure(status.get("_id", ""), json.dumps(status["error"]))
 
     def _report(self, indexed_ids: list, failed_ids: list, reason: str) -> None:
         if self._on_result is None:

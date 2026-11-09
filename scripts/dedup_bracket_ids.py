@@ -29,7 +29,7 @@ import time
 import urllib.request
 from pathlib import Path
 
-from src.bulk_indexer import merge_docs
+from src.bulk_indexer import merge_docs, with_group_created_at
 from src.dump_none_ids import is_warc_locator
 from src.utils.case_id import build_case_id
 
@@ -54,7 +54,7 @@ def covered(bad_files: list[str], twin_files: list[str]) -> bool:
 def fold(bad: dict, twin: dict) -> dict:
     # близнец идёт входящим: его поля свежие (переиндексирован новым кодом),
     # а кривой докладывает старые скачивания, до которых WARC-локатора у нас нет
-    return merge_docs(bad, twin)
+    return with_group_created_at(merge_docs(bad, twin), [bad, twin])
 
 
 def api_key() -> str:

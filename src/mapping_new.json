@@ -175,6 +175,10 @@
       "case_hidden": {
         "type": "boolean"
       },
+      "hidden_since": {
+        "type": "date",
+        "ignore_malformed": true
+      },
       "case_number": {
         "type": "keyword"
       },

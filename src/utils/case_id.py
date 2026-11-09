@@ -15,7 +15,36 @@ import re
 from datetime import datetime
 
 
+def case_id_from_fields(case_number: str | None, date_reg: str | None,
+                        court: str | None, link: str | None) -> str | None:
+    """id из полей записи любого источника: манифест даёт дату «дд.мм.гггг»,
+    JSONL и ES — «гггг-мм-дд[T…]». МГС ключуется своим правилом
+    (parse_html_mgs.card_case_id) — для него None, берётся сохранённый id.
+    None и тогда, когда формула не нашла номер или дату не удалось разобрать."""
+    if "mos-gorsud" in (link or "") or not (case_number and date_reg and court):
+        return None
+    iso = re.match(r"(\d{4})-(\d{2})-(\d{2})", date_reg)
+    ru = f"{iso.group(3)}.{iso.group(2)}.{iso.group(1)}" if iso else date_reg
+    try:
+        case_id = build_case_id(case_number, ru, court)
+    except ValueError:  # дата не разобралась — пусть решает сохранённый id
+        return None
+    # «…_ID_NOT_PARSED» склеил бы все такие дела суда за день в один документ
+    return None if case_id is None or case_id.endswith("ID_NOT_PARSED") else case_id
+
+
+# "<number>/<year>" inside a case number string; the number may itself hold
+# "/" ("М-2/6/2025"), brackets ("1[2]-50/2022") or a court-panel digit in
+# round ones ("М(2)-32/2026" — without it М(2)-32 and М(3)-32 share an id)
+_NUMBER_UNIT = r"(?:[^\s~∼(){};,/\\|]|\(\d+\)(?=[^\s(){};,/\\|]))"
+_NUMBER_YEAR = re.compile(
+    rf"({_NUMBER_UNIT}+(?:/{_NUMBER_UNIT}+)*)\s?[/\\|]\s?((?:19|20)\d{{2}})(?!\d)"
+)
+
+
 def build_case_id(case_number: str, date_reg: str, court_id: str) -> str | None:
+    # the key is the first number the card was given, so every scrape of one
+    # card lands on one id however the number grows later
     if not date_reg:
         return None
     # "4У-0 [44У-113/2011]": the complaint number is a placeholder, so the case
@@ -27,29 +56,30 @@ def build_case_id(case_number: str, date_reg: str, court_id: str) -> str | None:
         date_reg = f"01.01.{placeholder.group(1)}"
     id_date = datetime.strptime(date_reg, "%d.%m.%Y").strftime("%Y-%m-%d")
     case_id = court_id + "_" + id_date + "_"
-    try:
-        normalized = case_number
-        if any(char in normalized for char in ["~", "∼"]):
-            normalized = re.split(r"[~∼]", normalized, maxsplit=1)[1].strip()
 
-        if " [" in normalized:
-            # "<complaint> [<proceeding>]": a card is scraped as "8Г-7981/2026"
-            # first and gets its proceeding later, so the complaint number is
-            # what stays put; complaints of one proceeding stay apart
-            head, proceeding = normalized.split(" [", 1)
-            number = proceeding if placeholder else head
-            case_id += number[: number.rfind("/")].replace("/", "-")
-        elif all(char not in normalized for char in ["(", "~", "∼"]):
-            case_id += normalized[: normalized.rfind("/")].replace("/", "-")
-        elif date_reg[-4:] in normalized:
-            case_id += re.findall(
-                r"([^ ~∼\(\{]+) ?[/\\\|] ?" + date_reg[-4:],
-                normalized,
-            )[-1].replace("/", "-")
-        else:
-            case_id += (
-                re.search(r"([^ ~∼\(]+)/20", normalized).group(1).replace("/", "-")
-            )
-    except Exception:
-        case_id += "ID_NOT_PARSED"
-    return case_id
+    # "2-408/2026 ~ М-196/2026": the материал М-196 came first; but
+    # "2-1043/2009 ~ Материалы дела" has no number after "~"
+    text = case_number or ""
+    parts = re.split(r"[~∼]", text, maxsplit=1)
+    text = parts[1] if len(parts) == 2 and _NUMBER_YEAR.search(parts[1]) else parts[0]
+
+    # "8Г-7981/2026 [88-8481/2026]": a card is scraped as "8Г-7981/2026"
+    # first and gets its proceeding later, so the complaint number is what
+    # stays put; complaints of one proceeding stay apart
+    if " [" in text:
+        head, proceeding = text.split(" [", 1)
+        text = proceeding if placeholder else head
+
+    pairs = _NUMBER_YEAR.findall(text)
+    if not pairs:
+        # "2-5/20": a two-digit year — the number is what precedes the last "/"
+        single = text.strip()
+        if "/" in single and not re.search(r"[\s~∼(){};,]", single):
+            return case_id + single[: single.rfind("/")].replace("/", "-")
+        return case_id + "ID_NOT_PARSED"
+    # "4У-47/2017 - (4У-2186/2016)", registered 2016: the number of the
+    # registration year; "2-1/2011 (2-2/2010;)", registered 2008, lost its
+    # first number — the earliest year left is the closest to it
+    same_year = [number for number, year in pairs if year == date_reg[-4:]]
+    number = same_year[-1] if same_year else min(reversed(pairs), key=lambda p: p[1])[0]
+    return case_id + number.replace("/", "-")

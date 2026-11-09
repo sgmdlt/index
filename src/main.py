@@ -51,6 +51,7 @@ from src.parse_html import fill_raw_tables
 from src.prepare_doc import prepare_doc
 from src.to_document import to_document
 from src.traverse import traverse_cases
+from src.utils.case_id import case_id_from_fields
 from src.utils.text import normalize_jsonl_text
 
 load_dotenv()
@@ -636,6 +637,13 @@ def _run_pipelined(
 # Source runners
 
 def _derive_id_final(data: dict) -> str:
+    # сохранённый id_final мог посчитать старой формулой — пересчитываем
+    recomputed = case_id_from_fields(
+        data.get("case_number"), data.get("date_reg"),
+        data.get("court_code"), data.get("link"),
+    )
+    if recomputed:
+        return recomputed
     if data.get("id_final"):
         return data["id_final"]
     case_number = data.get("case_number", "")
@@ -841,6 +849,15 @@ def parse_args(argv=None):
     return args
 
 
+def _exit_status(jsonl: bool, counters) -> int:
+    """A jsonl run with unwritten docs fails, so its caller keeps the file.
+
+    Other sources retry through the outbox; a jsonl file is deleted by its
+    caller on success, and that would lose the docs for good.
+    """
+    return 1 if jsonl and counters.get("bulkFailedDocs") else 0
+
+
 def main():
     args = parse_args()
 
@@ -874,6 +891,7 @@ def main():
         metrics=metrics,
         bulk_docs=bulk_docs,
         flush_interval=15.0,
+        stamp_created_at=not args.warc,
     )
 
     orig_settings = {} if args.priority_only else _fast_ingest_on(es, args.index)
@@ -942,6 +960,7 @@ def main():
                 f"elapsed={elapsed:.1f}s ===",
                 flush=True,
             )
+    sys.exit(_exit_status(bool(args.jsonl), metrics.counters))
 
 
 if __name__ == "__main__":

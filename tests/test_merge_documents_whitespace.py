@@ -61,3 +61,16 @@ def test_a_genuinely_different_act_is_still_appended():
     existing = [{"name": "Акт #1", "text": FLAT, "filename": "a.html"}]
     incoming = [{"name": "Акт #2", "text": "СОВСЕМ ДРУГОЙ ТЕКСТ", "filename": "b.html"}]
     assert len(_merge_documents(existing, incoming)) == 2
+
+
+def test_spacing_inside_words_is_still_the_same_act():
+    # старый импорт и WARC-скачивание одного приговора (78OS0000_2008-12-09_2-2):
+    # тексты совпадают без учёта пробелов, но «2- 01/11» против «2-01/11» —
+    # слияние дел клало приговор в документ дважды
+    legacy = [{"name": "Судебный акт #1 (Приговор)", "filename": "-",
+               "text": "Дело № 2- 01/11 П Р И Г О В О Р ИМЕНЕМ РОССИЙСКОЙ ФЕДЕРАЦИИ"}]
+    warc = [{"name": "Судебный акт #1 (Приговор)", "filename": "19-06-2026.10:57:05.html",
+             "text": "Дело № 2-01/11\nПРИГОВОР\nИМЕНЕМ РОССИЙСКОЙ ФЕДЕРАЦИИ"}]
+    result = _merge_documents(legacy, warc)
+    assert len(result) == 1
+    assert result[0]["text"] == warc[0]["text"]  # с переносами строк — лучше свёрстан
