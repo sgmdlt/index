@@ -20,11 +20,11 @@ import boto3
 from dotenv import load_dotenv
 from elasticsearch import Elasticsearch
 
-from src.bulk_indexer import BulkIndexer, build_update_item
+from src.bulk_indexer import BulkIndexer
 from src.metrics import Metrics
 from src.parse_html import fill_raw_tables
 from src.prepare_doc import prepare_doc
-from src.to_document import to_document
+from src.to_document import assemble_unit
 from src.traverse_s3 import traverse_cases_s3
 
 load_dotenv()
@@ -150,6 +150,12 @@ def _fast_ingest_off(es, index: str, orig: dict) -> None:
         logger.warning("Could not restore index settings: %s", exc)
 
 
+def _source_path_of(unit: dict):
+    """filename -> sourcePath for the item's debug metadata."""
+    prefix = f"s3://{S3_BUCKET}/{os.path.dirname(unit['manifest_path'])}"
+    return lambda filename: f"{prefix}/{filename}"
+
+
 def _run_pipelined(
     units_iter,
     pool: ProcessPoolExecutor,
@@ -232,31 +238,14 @@ def _run_pipelined(
             if not pairs:
                 continue
 
-            html_files_done = [p[0] for p in pairs]
-            parsed_files_done = [p[1] for p in pairs]
-
             t0 = metrics.now_ms()
-            doc = to_document(
-                manifest_path=unit["manifest_path"],
-                rel_from_root=unit["rel_from_root"],
-                meta=unit["meta"],
-                html_files=html_files_done,
-                parsed_files=parsed_files_done,
-            )
+            updates = assemble_unit(unit, pairs, _source_path_of(unit))
             metrics.add_time("toDocMs", metrics.now_ms() - t0)
 
             bkey = _bucket_key(unit)
-            for filename, parsed in zip(html_files_done, parsed_files_done):  # noqa: B905
-                update = build_update_item(
-                    doc=doc,
-                    doc_data=parsed,
-                    unit=unit,
-                    filename=filename,
-                    source_path=f"s3://{S3_BUCKET}/{os.path.dirname(unit['manifest_path'])}/{filename}",
-                )
-                if update:
-                    metrics.inc("docsPrepared")
-                    indexer.add(bkey, update)
+            for update in updates:
+                metrics.inc("docsPrepared")
+                indexer.add(bkey, update)
 
         metrics.log()
 
