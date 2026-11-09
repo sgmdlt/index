@@ -11,7 +11,6 @@ docsIndexed=200. Правду знал только failed_paths.log. То ес�
 
 Счётчик docsIndexed при этом рос на весь размер батча независимо от отказов.
 """
-import pytest
 
 from src.bulk_indexer import BulkIndexer
 from src.metrics import Metrics

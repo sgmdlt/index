@@ -13,8 +13,6 @@
 На карточках mos-gorsud строка «Осужденный (оправданный, обвиняемый)» есть у
 90% дел appeal-criminal и 64% criminal-materials.
 """
-import json
-from pathlib import Path
 
 from src.prepare_doc import RULES, _parse_segments, prepare_doc
 

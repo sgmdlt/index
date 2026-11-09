@@ -8,10 +8,10 @@ import json
 import sys
 from collections import Counter
 
+from src.bulk_indexer import build_update_item
 from src.main import _derive_id_final
 from src.prepare_doc import prepare_doc
 from src.to_document import to_document
-from src.bulk_indexer import build_update_item
 
 PATH = sys.argv[1] if len(sys.argv) > 1 else "/home/ltdmgs/MSUDRF-All-02.jsonl"
 N = int(sys.argv[2]) if len(sys.argv) > 2 else 10

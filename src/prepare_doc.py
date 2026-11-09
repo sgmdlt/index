@@ -5,8 +5,8 @@ Ports prepare_doc.js. Safe to import with no side effects.
 
 import json
 import re
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 _HERE = Path(__file__).parent  # project root (index/)
 

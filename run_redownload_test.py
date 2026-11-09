@@ -1,13 +1,22 @@
 """Throwaway: re-run redownload_queue rows (default reason=build_failed) through
 the real pipeline into a test index. Not wired into main.py."""
-import os, sys, time
+import os
+import sys
+import time
 from concurrent.futures import ProcessPoolExecutor
+
 from elasticsearch import Elasticsearch
 
-from src.load_from_db import rows_to_units, _fix_path
-from src.metrics import Metrics
 from src.bulk_indexer import BulkIndexer
-from src.main import _run_pipelined, _ensure_index, _fast_ingest_on, _fast_ingest_off, _open_pg
+from src.load_from_db import _fix_path, rows_to_units
+from src.main import (
+    _ensure_index,
+    _fast_ingest_off,
+    _fast_ingest_on,
+    _open_pg,
+    _run_pipelined,
+)
+from src.metrics import Metrics
 
 REASON = sys.argv[1] if len(sys.argv) > 1 else "build_failed"
 LIMIT = int(sys.argv[2]) if len(sys.argv) > 2 else 0

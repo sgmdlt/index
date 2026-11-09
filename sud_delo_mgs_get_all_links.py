@@ -1,15 +1,12 @@
-import aiohttp
 import asyncio
-import csv
-import json
 import os
 import random
 import re
-import requests
 import urllib.parse
-
-from bs4 import BeautifulSoup
 from datetime import datetime
+
+import aiohttp
+from bs4 import BeautifulSoup
 
 # Заголовки для запроса
 HEADERS = {
@@ -17,7 +14,7 @@ HEADERS = {
     "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) " +
     "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Mobile Safari/537.36"
 }
-setattr(asyncio.sslproto._SSLProtocolTransport, "_start_tls_compatible", True)
+asyncio.sslproto._SSLProtocolTransport._start_tls_compatible = True
 
 
 # Обработка ошибок при запросе

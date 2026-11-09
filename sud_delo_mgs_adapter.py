@@ -1,19 +1,18 @@
-import aiohttp
 import asyncio
-import docx2txt
 import gc
 import json
-import pdfplumber
 import random
 import re
 import subprocess
 import sys
 import tempfile
-
-from striprtf.striprtf import rtf_to_text
-
-from bs4 import BeautifulSoup
 from datetime import datetime
+
+import aiohttp
+import docx2txt
+import pdfplumber
+from bs4 import BeautifulSoup
+from striprtf.striprtf import rtf_to_text
 
 # Заголовки для запроса
 HEADERS = {
@@ -21,7 +20,7 @@ HEADERS = {
     "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) " +
     "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Mobile Safari/537.36"
 }
-setattr(asyncio.sslproto._SSLProtocolTransport, "_start_tls_compatible", True)
+asyncio.sslproto._SSLProtocolTransport._start_tls_compatible = True
 
 
 # Обработка ошибок при запросе
@@ -150,7 +149,7 @@ async def get_doc_text(url, task_number, session):
         if not output_string:
             try:
                 output_string = docx2txt.process(temp.name)
-            except Exception as e:
+            except Exception:
                 pass
 
         # Если он ничего не дал, пробуем .pdf
@@ -159,7 +158,7 @@ async def get_doc_text(url, task_number, session):
                 pdf = pdfplumber.open(temp.name)
                 for page in pdf.pages:
                     output_string += page.extract_text()
-            except Exception as e:
+            except Exception:
                 pass
 
         # Если он ничего не дал, пробуем RTF
@@ -167,7 +166,7 @@ async def get_doc_text(url, task_number, session):
             try:
                 output_string = rtf_to_text(resp_bytes.decode(),
                                             errors="ignore")
-            except Exception as e:
+            except Exception:
                 pass
 
         # В последнюю очередь пробуем TXT с двумя кодировками
@@ -175,7 +174,7 @@ async def get_doc_text(url, task_number, session):
             try:
                 output_string += resp_bytes.decode("1251", "ignore")
                 output_string += resp_bytes.decode("utf-8", "ignore")
-            except Exception as e:
+            except Exception:
                 pass
 
         # Если необычное расширение, сигналим
@@ -198,7 +197,7 @@ async def get_doc_text(url, task_number, session):
         if resp_ext not in [".png", ".jpg", ".jpeg", ".tiff"
                             ] and "/Image" not in output_string:
             # Очищаем от неразрывных пробелов
-            output_string = output_string.replace(u"\u00A0", " ")
+            output_string = output_string.replace("\u00A0", " ")
 
             result_str = output_string
 
@@ -492,7 +491,7 @@ async def get_acts(task_number, queue, input_filename):
                         2:4] + "/" + formatted_case["court_code"] + ".jsonl"
                 open(file_path, "a").write(
                     json.dumps(formatted_case, ensure_ascii=False).replace(
-                        u"\u00A0", " ") + "\n")
+                        "\u00A0", " ") + "\n")
 
             # Сигналим о выполнении задачи
             queue.task_done()
@@ -500,8 +499,7 @@ async def get_acts(task_number, queue, input_filename):
             # Отчитываемся каждые 100 решений
             if queue._unfinished_tasks % 100 == 0:
                 print(
-                    "Пройдено из партии", "{:>4.0%}".format(
-                        (10000 - queue._unfinished_tasks) / 10000))
+                    "Пройдено из партии", f"{(10000 - queue._unfinished_tasks) / 10000:>4.0%}")
 
 
 # Запуск параллельной обработки решений

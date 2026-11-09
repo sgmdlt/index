@@ -1,7 +1,7 @@
 """Date parsing utilities for court case HTML filenames, paths, and manifest fields."""
 
 import re
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 
 def html_name_to_iso(name: str) -> str | None:
@@ -14,7 +14,7 @@ def html_name_to_iso(name: str) -> str | None:
     dd, mm, yyyy, hh, mi, ss = m.groups()
     try:
         dt = datetime(
-            int(yyyy), int(mm), int(dd), int(hh), int(mi), int(ss), tzinfo=timezone.utc
+            int(yyyy), int(mm), int(dd), int(hh), int(mi), int(ss), tzinfo=UTC
         )
         return dt.isoformat().replace("+00:00", "Z")
     except ValueError:
@@ -28,7 +28,7 @@ def dir_to_iso(rel_dir: str) -> str | None:
         return None
     yyyy, mm, dd = m.group(2), m.group(3), m.group(4)
     try:
-        dt = datetime(int(yyyy), int(mm), int(dd), tzinfo=timezone.utc)
+        dt = datetime(int(yyyy), int(mm), int(dd), tzinfo=UTC)
         return dt.isoformat().replace("+00:00", "Z")
     except ValueError:
         return None
@@ -44,7 +44,7 @@ def manifest_to_iso(meta: dict) -> str | None:
         return None
     dd, mm, yyyy = m.groups()
     try:
-        dt = datetime(int(yyyy), int(mm), int(dd), tzinfo=timezone.utc)
+        dt = datetime(int(yyyy), int(mm), int(dd), tzinfo=UTC)
         return dt.isoformat().replace("+00:00", "Z")
     except ValueError:
         return None
@@ -60,7 +60,7 @@ def get_files_version(html_files: list[str], rel_dir: str, meta: dict) -> dict:
         from_names[-1]
         or dir_to_iso(rel_dir)
         or manifest_to_iso(meta or {})
-        or datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+        or datetime.now(UTC).isoformat().replace("+00:00", "Z")
     )
     return {
         "version_ts": version_ts,

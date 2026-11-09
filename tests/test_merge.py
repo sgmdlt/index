@@ -5,9 +5,6 @@ Fixtures in tests/merge_test/ are three HTML snapshots of the same court case
 HTML files for one unit.
 """
 
-import asyncio
-import sys
-import io
 from pathlib import Path
 
 from src.bulk_indexer import merge_docs

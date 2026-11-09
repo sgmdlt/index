@@ -13,11 +13,11 @@ import os
 import sys
 import threading
 import time
+from collections.abc import Iterable, Iterator
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from itertools import islice
 from pathlib import Path
-from typing import Iterable, Iterator
 
 import boto3
 from botocore.exceptions import ClientError

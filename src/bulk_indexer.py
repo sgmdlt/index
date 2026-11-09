@@ -10,9 +10,9 @@ from pathlib import Path
 
 from .text_filters import broken_text_message, fix_date_reg
 from .utils.case_id import case_id_from_fields
-from .uuid_group import in_group_scope, pick_group_id
 from .utils.dates import html_name_to_iso
-from .utils.paths import norm_path, dir_of_rel
+from .utils.paths import norm_path
+from .uuid_group import in_group_scope, pick_group_id
 
 logger = logging.getLogger(__name__)
 

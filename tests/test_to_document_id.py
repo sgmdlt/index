@@ -1,6 +1,6 @@
 from src.main import _derive_id_final
-from src.utils.case_id import case_id_from_fields
 from src.to_document import to_document
+from src.utils.case_id import case_id_from_fields
 
 _REL = "2016/03/30/RS/61RS0018/УК/61RS0018_2016-03-30_1-76/manifest.json"
 

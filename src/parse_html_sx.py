@@ -10,6 +10,7 @@ promote.
 
 import logging
 import re
+
 from selectolax.lexbor import LexborHTMLParser, LexborNode
 
 from src.parse_html_mgs import fill_raw_tables_mgs, is_mgs

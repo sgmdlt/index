@@ -47,6 +47,7 @@ from src.load_from_db import (
 )
 from src.metrics import Metrics
 from src.parse_html import fill_raw_tables
+
 #from src.parse_html_sx import fill_raw_tables as fill_raw_tables
 from src.prepare_doc import prepare_doc
 from src.to_document import to_document

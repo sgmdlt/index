@@ -6,6 +6,7 @@ Safe to import with no side effects (used in multiprocessing workers).
 
 import logging
 import re
+
 from bs4 import BeautifulSoup, Tag
 
 from src.parse_html_mgs import fill_raw_tables_mgs, is_mgs

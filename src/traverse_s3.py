@@ -10,7 +10,7 @@ LIST per directory if we walked with Delimiter='/'.
 import json
 import logging
 import time
-from typing import Callable, Generator
+from collections.abc import Callable, Generator
 
 from .traverse import _parse_html_timestamp
 
@@ -22,7 +22,7 @@ def traverse_cases_s3(
     bucket: str,
     prefix: str,
     on_manifest_ms: Callable[[float], None] | None = None,
-) -> Generator[dict, None, None]:
+) -> Generator[dict]:
     """Yield one unit per case dir found under s3://bucket/prefix.
 
     Unit shape matches `traverse_cases`: manifest_path (full key),

@@ -1,4 +1,9 @@
-from src.dedup_whitespace import build_broken_query, build_query, dedup_documents, fix_documents
+from src.dedup_whitespace import (
+    build_broken_query,
+    build_query,
+    dedup_documents,
+    fix_documents,
+)
 
 
 def test_fix_documents_replaces_broken_and_dedups():

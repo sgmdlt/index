@@ -7,7 +7,7 @@ import json
 import logging
 import os
 import time
-from typing import Callable, Generator
+from collections.abc import Callable, Generator
 
 from .utils.paths import norm_path
 
@@ -65,7 +65,7 @@ def traverse_cases(
     failed_log: str | None = None,
     on_manifest_ms: Callable[[float], None] | None = None,
     on_redownload: Callable[[str, str, str | None], None] | None = None,
-) -> Generator[dict, None, None]:
+) -> Generator[dict]:
     """Iterative DFS traversal yielding one unit dict per manifest.json found.
 
     Each yielded dict has:

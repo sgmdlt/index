@@ -13,7 +13,6 @@ import pytest
 from src.parse_html import fill_raw_tables as fill_bs
 from src.parse_html_sx import fill_raw_tables as fill_sx
 
-
 FIXTURE_ROOT = Path(__file__).parent
 HTML_FIXTURES = sorted(FIXTURE_ROOT.glob("*_test/*.html"))
 

@@ -1,7 +1,7 @@
+from pathlib import Path
+
 from src.parse_html import fill_raw_tables
 from src.prepare_doc import prepare_doc
-from pathlib import Path
-import pytest
 
 
 def _get_fixture_path(filename):
@@ -9,7 +9,7 @@ def _get_fixture_path(filename):
     return fixture_path
 
 def test_tabs():
-    with open(_get_fixture_path("html_tabs_fixture.html"), "r") as f:
+    with open(_get_fixture_path("html_tabs_fixture.html")) as f:
         html = f.read()
         filled = fill_raw_tables(html)
         doc = prepare_doc(filled)

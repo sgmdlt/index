@@ -1,9 +1,8 @@
+from pathlib import Path
+
+from src.bulk_indexer import merge_docs
 from src.parse_html import fill_raw_tables
 from src.prepare_doc import prepare_doc
-from pathlib import Path
-import pytest
-from src.bulk_indexer import merge_docs
-
 
 
 def _get_fixture_path(filename):

@@ -5,9 +5,9 @@ existing ES doc, so when two items share the same _id the second bulk index op
 would overwrite the first, losing the first file's text.
 """
 
-import asyncio
-import pytest
 from pathlib import Path
+
+import pytest
 
 from src.bulk_indexer import apply_merge, build_update_item
 from src.parse_html import fill_raw_tables

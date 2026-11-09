@@ -6,10 +6,10 @@ Ports loadFromDb.js. Implements lease-based polling with retry limits.
 import json
 import logging
 import os
+from collections.abc import Generator
 from datetime import datetime
 from io import BytesIO
 from itertools import groupby
-from typing import Generator
 
 from warcio.archiveiterator import ArchiveIterator
 
@@ -161,7 +161,7 @@ def queue_redownload(
 
 def rows_to_units(
     rows: list[dict],
-) -> Generator[tuple[dict | None, dict, str | None], None, None]:
+) -> Generator[tuple[dict | None, dict, str | None]]:
     """Convert DB rows to (unit, row, reason) tuples for the main pipeline.
 
     reason is None on success; otherwise one of VALID_REASONS describing why
@@ -288,7 +288,7 @@ def _group_to_unit(locator: str, meta, html, warc_date) -> dict:
     }
 
 
-def units_from_warc(path: str) -> Generator[dict, None, None]:
+def units_from_warc(path: str) -> Generator[dict]:
     """Stream .warc.gz shards start-to-end for a full reindex, no DB.
 
     `path` is one shard or a directory of shards. Records are paired into
