@@ -7,8 +7,6 @@ would overwrite the first, losing the first file's text.
 
 from pathlib import Path
 
-import pytest
-
 from src.bulk_indexer import apply_merge, build_update_item
 from src.parse_html import fill_raw_tables
 from src.prepare_doc import prepare_doc
@@ -30,12 +28,9 @@ def _make_item(doc_data: dict, filename: str) -> dict:
         "html_files": ["01-01-2010.03:00:01.html", "02-01-2010.03:00:01.html"],
         "meta": {"ID": "test-case-id"},
     }
-    return build_update_item(doc, doc_data, unit, filename, tag=None)  # ty: ignore[invalid-return-type, unknown-argument]
+    return build_update_item(doc, doc_data, unit, filename)  # ty: ignore[invalid-return-type]
 
 
-@pytest.mark.xfail(
-    strict=True, reason="courts-0rnf: build_update_item() lost its tag= argument"
-)
 def test_documents_accumulate_across_html_files():
     """Both HTML files' texts must appear in the merged documents list."""
     doc_data1 = _parse("01-01-2010.03:00:01.html")
