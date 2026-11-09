@@ -439,69 +439,6 @@ def _refresh_index(es, index: str) -> None:
 # Unit processing
 
 
-def _process_unit(
-    unit: dict,
-    pool: ProcessPoolExecutor,
-    indexer: BulkIndexer,
-    metrics: Metrics,
-    failed_log: str | None = None,
-) -> bool:
-    """Parse + index a single unit. Returns True if at least one doc was indexed."""
-    metrics.inc("unitsSeen")
-    html_files = unit.get("html_files", [])
-    metrics.inc("htmlFilesSeen", len(html_files))
-
-    manifest_dir = os.path.dirname(unit["manifest_path"])
-    html_paths = [(os.path.join(manifest_dir, f), manifest_dir) for f in html_files]
-
-    t0 = metrics.now_ms()
-    ordered_futures = [pool.submit(_parse_html_file, args) for args in html_paths]
-    pairs: list[tuple[str, dict]] = []
-    for future, fname in zip(ordered_futures, html_files):  # noqa: B905
-        try:
-            prepared, read_ms, n_bytes = future.result()
-            metrics.add_time("readHtmlMs", read_ms)
-            metrics.inc("htmlBytes", n_bytes)
-            pairs.append((fname, prepared))
-        except Exception as exc:
-            logger.error(
-                "Parse error in %s/%s: %s", unit.get("rel_from_root"), fname, exc
-            )
-            metrics.inc("parseErrors")
-            # Drop the failed file — do not emit an empty document entry
-    html_files = [p[0] for p in pairs]
-    parsed_files = [p[1] for p in pairs]
-    metrics.add_time("parseMs", metrics.now_ms() - t0)
-
-    t0 = metrics.now_ms()
-    doc = to_document(
-        manifest_path=unit["manifest_path"],
-        rel_from_root=unit["rel_from_root"],
-        meta=unit["meta"],
-        html_files=html_files,
-        parsed_files=parsed_files,
-    )
-    metrics.add_time("toDocMs", metrics.now_ms() - t0)
-
-    bkey = _bucket_key(unit)
-    indexed_any = False
-    for filename, parsed in zip(html_files, parsed_files):  # noqa: B905
-        update = build_update_item(
-            doc=doc,
-            doc_data=parsed,
-            unit=unit,
-            filename=filename,
-            source_path=os.path.join(os.path.dirname(unit["rel_from_root"]), filename),
-        )
-        if update:
-            metrics.inc("docsPrepared")
-            indexer.add(bkey, update)
-            indexed_any = True
-        else:
-            _append_failed_unit(unit["rel_from_root"], failed_log)
-    return indexed_any
-
-
 def _run_pipelined(
     units_iter,
     pool: ProcessPoolExecutor,
@@ -884,7 +821,7 @@ def parse_args(argv=None):
     p.add_argument(
         "--redownload",
         default=True,
-        action="store_true",
+        action=argparse.BooleanOptionalAction,
         help="In fs/folders modes, queue failed cases into Postgres redownload_queue instead of writing to --failed-log",
     )
     args = p.parse_args(argv)
