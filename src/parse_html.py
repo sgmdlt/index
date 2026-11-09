@@ -226,9 +226,9 @@ def fill_raw_tables(html: bytes | str, documents: dict | None = None) -> dict:
                             continue
                         for meta in doc_div.find_all("meta"):
                             meta.decompose()
-                        docs.append({
-                            doc_label_el.get_text(" ", strip=True): doc_div.get_text()
-                        })
+                        docs.append(
+                            {doc_label_el.get_text(" ", strip=True): doc_div.get_text()}
+                        )
                     formatted_case["raw_tables"][tab_name] = docs
                     continue
 
@@ -261,7 +261,7 @@ def fill_raw_tables(html: bytes | str, documents: dict | None = None) -> dict:
                         for doc_name, doc in zip(
                             tab.select("li[id^=tab], li[id^=doctab]"),
                             tab.select("div[id^=cont_doc], div[id^=doctab_content]"),
-                                    ):
+                        ):
                             for meta in doc.find_all("meta"):
                                 meta.decompose()
                             formatted_case["raw_tables"][tab_name].append(
@@ -287,10 +287,12 @@ def fill_raw_tables(html: bytes | str, documents: dict | None = None) -> dict:
                         for table_name, table in zip(
                             tab.select(":scope > table tr:first-child [colspan]"),
                             tab.select(":scope > table"),
-                                    ):
+                        ):
                             formatted_case["raw_tables"][tab_name].append(
                                 {
-                                    table_name.get_text(" ", strip=True): tab_to_dict(table)
+                                    table_name.get_text(" ", strip=True): tab_to_dict(
+                                        table
+                                    )
                                 }
                             )
     except Exception as e:
@@ -361,7 +363,7 @@ def tab_to_dict(tab):
                                 "td"
                             ),
                             row.select("td"),
-                                    ):
+                        ):
                             row_dict[key.get_text(" ", strip=True)] = value.get_text(
                                 " ", strip=True
                             )
@@ -401,13 +403,15 @@ def tab_to_dict(tab):
         # Если в таблице только другая таблица с шапкой, сохраняем её
         elif len(tab.select(":scope > tr")) == 2 and tab.select(":scope table"):
             parsed_tab = {}
-            parsed_tab[
-                tab.select_one(":scope [colspan]").get_text(" ", strip=True)
-            ] = tab_to_dict(tab.select_one(":scope table"))
+            parsed_tab[tab.select_one(":scope [colspan]").get_text(" ", strip=True)] = (
+                tab_to_dict(tab.select_one(":scope table"))
+            )
 
         # Если ничего не подошло — ошибка
         elif len(tab.select("tr")) > 0:
-            logger.debug("tab_to_dict: unrecognized table structure: %s", str(tab)[:200])
+            logger.debug(
+                "tab_to_dict: unrecognized table structure: %s", str(tab)[:200]
+            )
             raise ValueError
 
     return parsed_tab

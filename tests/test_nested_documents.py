@@ -26,11 +26,16 @@ def _parse(filename: str) -> dict:
 
 def _make_item(doc_data: dict, filename: str) -> dict:
     doc = {"id_final": "test-nested-case"}
-    unit = {"html_files": ["01-01-2010.03:00:01.html", "02-01-2010.03:00:01.html"], "meta": {"ID": "test-case-id"}}
+    unit = {
+        "html_files": ["01-01-2010.03:00:01.html", "02-01-2010.03:00:01.html"],
+        "meta": {"ID": "test-case-id"},
+    }
     return build_update_item(doc, doc_data, unit, filename, tag=None)
 
 
-@pytest.mark.xfail(strict=True, reason="courts-0rnf: build_update_item() lost its tag= argument")
+@pytest.mark.xfail(
+    strict=True, reason="courts-0rnf: build_update_item() lost its tag= argument"
+)
 def test_documents_accumulate_across_html_files():
     """Both HTML files' texts must appear in the merged documents list."""
     doc_data1 = _parse("01-01-2010.03:00:01.html")
@@ -57,10 +62,14 @@ def test_documents_accumulate_across_html_files():
     docs = merged_items[0].get("documents", [])
     filenames = [d["filename"] for d in docs]
 
-    assert "01-01-2010.03:00:01.html" in filenames, f"fixture1 text missing. documents: {filenames}"
+    assert "01-01-2010.03:00:01.html" in filenames, (
+        f"fixture1 text missing. documents: {filenames}"
+    )
     assert "ПЕРВОЕ РЕШЕНИЕ" in docs[0].get("text", ""), "fixture1 text content missing"
 
-    assert "02-01-2010.03:00:01.html" in filenames, f"fixture2 text missing. documents: {filenames}"
+    assert "02-01-2010.03:00:01.html" in filenames, (
+        f"fixture2 text missing. documents: {filenames}"
+    )
     assert "ВТОРОЕ РЕШЕНИЕ" in docs[1].get("text", ""), "fixture2 text content missing"
 
     assert len(docs) == 2, f"Expected 2 documents entries, got {len(docs)}"

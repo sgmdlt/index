@@ -63,7 +63,11 @@ def date_value_to_iso(value) -> str | None:
     if m:
         dd, mm, yyyy = m.groups()
         try:
-            return datetime(int(yyyy), int(mm), int(dd), tzinfo=UTC).isoformat().replace("+00:00", "Z")
+            return (
+                datetime(int(yyyy), int(mm), int(dd), tzinfo=UTC)
+                .isoformat()
+                .replace("+00:00", "Z")
+            )
         except ValueError:
             return None
 
@@ -72,7 +76,11 @@ def date_value_to_iso(value) -> str | None:
     if m:
         yyyy, mm, dd = m.groups()
         try:
-            return datetime(int(yyyy), int(mm), int(dd), tzinfo=UTC).isoformat().replace("+00:00", "Z")
+            return (
+                datetime(int(yyyy), int(mm), int(dd), tzinfo=UTC)
+                .isoformat()
+                .replace("+00:00", "Z")
+            )
         except ValueError:
             return None
 

@@ -36,8 +36,13 @@ def make_shard(path, cases):
 
 
 def row(i, locator):
-    return {"id": i, "filename": locator, "manifest": locator,
-            "attempts": 0, "warc_locator": locator}
+    return {
+        "id": i,
+        "filename": locator,
+        "manifest": locator,
+        "attempts": 0,
+        "warc_locator": locator,
+    }
 
 
 def test_warc_rows_yield_units_without_fs_tree(tmp_path):
@@ -63,8 +68,14 @@ def test_warc_batch_two_shards_shuffled_order(tmp_path):
     locs_a = make_shard(tmp_path / "a.warc.gz", cases_a)
     locs_b = make_shard(tmp_path / "b.warc.gz", cases_b)
 
-    shuffled = [row(1, locs_a[2]), row(2, locs_b[1]), row(3, locs_a[0]),
-                row(4, locs_b[2]), row(5, locs_a[1]), row(6, locs_b[0])]
+    shuffled = [
+        row(1, locs_a[2]),
+        row(2, locs_b[1]),
+        row(3, locs_a[0]),
+        row(4, locs_b[2]),
+        row(5, locs_a[1]),
+        row(6, locs_b[0]),
+    ]
     results = list(rows_to_units(shuffled))
 
     assert len(results) == 6
@@ -74,8 +85,10 @@ def test_warc_batch_two_shards_shuffled_order(tmp_path):
     assert by_id[4]["meta"] == {"ID": "b2"}
     got_ids = [u["meta"]["ID"] for u, _, _ in results]
     # grouped per shard, ascending offsets within each shard
-    assert got_ids in (["a0", "a1", "a2", "b0", "b1", "b2"],
-                       ["b0", "b1", "b2", "a0", "a1", "a2"])
+    assert got_ids in (
+        ["a0", "a1", "a2", "b0", "b1", "b2"],
+        ["b0", "b1", "b2", "a0", "a1", "a2"],
+    )
 
 
 def test_warc_missing_shard_yields_path_missing(tmp_path):
@@ -90,9 +103,13 @@ def test_legacy_row_without_locator_uses_fs(tmp_path):
     case_dir.mkdir()
     (case_dir / "manifest.json").write_text('{"ID": "legacy"}')
     (case_dir / "1.html").write_text("<html>legacy</html>")
-    legacy = {"id": 9, "filename": str(case_dir / "1.html"),
-              "manifest": str(case_dir / "manifest.json"),
-              "attempts": 0, "warc_locator": None}
+    legacy = {
+        "id": 9,
+        "filename": str(case_dir / "1.html"),
+        "manifest": str(case_dir / "manifest.json"),
+        "attempts": 0,
+        "warc_locator": None,
+    }
 
     [(unit, _, reason)] = list(rows_to_units([legacy]))
 

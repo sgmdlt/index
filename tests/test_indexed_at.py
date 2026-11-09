@@ -12,18 +12,27 @@ def test_new_doc_gets_created_and_indexed_at():
 
 
 def test_existing_doc_keeps_created_at():
-    old = {"case_number": "1", "created_at": "2026-01-01T00:00:00Z", "indexed_at": "2026-01-01T00:00:00Z"}
+    old = {
+        "case_number": "1",
+        "created_at": "2026-01-01T00:00:00Z",
+        "indexed_at": "2026-01-01T00:00:00Z",
+    }
     [doc] = apply_merge([{"_id": "a", "doc": {"case_number": "2"}}], {"a": old}, NOW)
     assert doc["created_at"] == "2026-01-01T00:00:00Z" and doc["indexed_at"] == NOW
 
 
 def test_legacy_doc_stays_without_created_at():
-    [doc] = apply_merge([{"_id": "a", "doc": {"case_number": "2"}}], {"a": {"case_number": "1"}}, NOW)
+    [doc] = apply_merge(
+        [{"_id": "a", "doc": {"case_number": "2"}}], {"a": {"case_number": "1"}}, NOW
+    )
     assert "created_at" not in doc and doc["indexed_at"] == NOW
 
 
 def test_two_files_of_one_new_case_in_one_batch():
-    batch = [{"_id": "a", "doc": {"case_number": "1"}}, {"_id": "a", "doc": {"judge": ["J"]}}]
+    batch = [
+        {"_id": "a", "doc": {"case_number": "1"}},
+        {"_id": "a", "doc": {"judge": ["J"]}},
+    ]
     [doc] = apply_merge(batch, {}, NOW)
     assert doc["created_at"] == NOW
 
@@ -43,16 +52,20 @@ def _written(store, tmp_path, incoming=TWIN):
 
 
 def test_regrouped_target_with_a_legacy_twin_has_no_created_at(tmp_path):
-    store = {TARGET: {**_doc(TARGET, "a.html", "2026-06-25"), "created_at": A},
-             TWIN: _doc(TWIN, "b.html", "2026-06-26")}
+    store = {
+        TARGET: {**_doc(TARGET, "a.html", "2026-06-25"), "created_at": A},
+        TWIN: _doc(TWIN, "b.html", "2026-06-26"),
+    }
     source = _written(store, tmp_path)
     assert "created_at" not in source and source["indexed_at"]
 
 
 def test_regrouped_twins_keep_the_oldest_created_at(tmp_path):
     # свежее скачивание несёт поздний created_at — дело всё равно старое
-    store = {TARGET: {**_doc(TARGET, "a.html", "2026-06-25"), "created_at": A},
-             TWIN: {**_doc(TWIN, "b.html", "2026-06-26"), "created_at": B}}
+    store = {
+        TARGET: {**_doc(TARGET, "a.html", "2026-06-25"), "created_at": A},
+        TWIN: {**_doc(TWIN, "b.html", "2026-06-26"), "created_at": B},
+    }
     assert _written(store, tmp_path)["created_at"] == A
 
 
@@ -85,13 +98,22 @@ def test_dedup_fold_keeps_the_oldest_created_at():
 def test_rekey_move_carries_created_and_indexed_at(monkeypatch, tmp_path):
     src = {"uuid": "u", "created_at": A, "indexed_at": B}
     writes = []
-    monkeypatch.setattr(rekey_case_ids, "sources", lambda key, ids: {
-        "old": {"_source": src, "_seq_no": 1, "_primary_term": 1}})
+    monkeypatch.setattr(
+        rekey_case_ids,
+        "sources",
+        lambda key, ids: {"old": {"_source": src, "_seq_no": 1, "_primary_term": 1}},
+    )
 
     def bulk(key, ops):
         writes.extend(ops)
-        return [{next(iter(op)): {"status": 201 if "create" in op else 200}} for op in ops[::2]] \
-            if "create" in ops[0] else [{"delete": {"status": 200}} for _ in ops]
+        return (
+            [
+                {next(iter(op)): {"status": 201 if "create" in op else 200}}
+                for op in ops[::2]
+            ]
+            if "create" in ops[0]
+            else [{"delete": {"status": 200}} for _ in ops]
+        )
 
     monkeypatch.setattr(rekey_case_ids, "bulk", bulk)
     ops = tmp_path / "ops.jsonl"
@@ -103,8 +125,14 @@ def test_rekey_move_carries_created_and_indexed_at(monkeypatch, tmp_path):
 def test_full_reindex_leaves_created_at_unset(tmp_path):
     # --warc в пустой индекс: все дела старые, created_at=now разослал бы их подписчикам
     es = FakeES()
-    indexer = BulkIndexer(es_client=es, index="t", bulk_docs=1000, flush_interval=3600,
-                          failed_log=str(tmp_path / "failed.log"), stamp_created_at=False)
+    indexer = BulkIndexer(
+        es_client=es,
+        index="t",
+        bulk_docs=1000,
+        flush_interval=3600,
+        failed_log=str(tmp_path / "failed.log"),
+        stamp_created_at=False,
+    )
     indexer._do_bulk([_item(TARGET, "a.html", "2026-09-28")], "k")
     [(_, source)] = _index_ops(es.bulk_calls[0])
     assert "created_at" not in source and source["indexed_at"]

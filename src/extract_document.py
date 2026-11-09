@@ -11,6 +11,7 @@ results are recomputed rather than cached.
 `.doc` needs the `antiword` binary on PATH; without it those documents fall
 through to the remaining extractors and usually come back empty.
 """
+
 from dataclasses import dataclass
 
 
@@ -27,7 +28,7 @@ def sniff_ext(body: bytes) -> str | None:
         return "docx"
     if body.startswith(b"{\\rtf"):
         return "rtf"
-    if body.startswith(b"\xD0\xCF\x11\xE0"):
+    if body.startswith(b"\xd0\xcf\x11\xe0"):
         return "doc"
     return None
 
@@ -79,11 +80,13 @@ def _txt(body: bytes) -> str:
 
 def _rtf(body: bytes) -> str:
     from striprtf.striprtf import rtf_to_text
+
     return rtf_to_text(body.decode("cp1251", "ignore"), errors="ignore")
 
 
 def _docx(body: bytes) -> str:
     import docx2txt
+
     with tempfile.NamedTemporaryFile(suffix=".docx") as tmp:
         tmp.write(body)
         tmp.flush()
@@ -103,6 +106,7 @@ def _antiword(body: bytes) -> str:
 
 def _pdf(body: bytes) -> str:
     import fitz
+
     parts = []
     with fitz.open(stream=body, filetype="pdf") as doc:
         for page in doc:
@@ -113,11 +117,13 @@ def _pdf(body: bytes) -> str:
 def _pdf_ocr(body: bytes) -> str:
     """OCR a scanned PDF (no text layer) via pymupdf's built-in Tesseract."""
     import fitz
+
     parts = []
     with fitz.open(stream=body, filetype="pdf") as doc:
         for page in doc:
             tp = page.get_textpage_ocr(
-                language=_OCR_LANG, dpi=_OCR_DPI, full=True, tessdata=_OCR_TESSDATA)
+                language=_OCR_LANG, dpi=_OCR_DPI, full=True, tessdata=_OCR_TESSDATA
+            )
             parts.append(page.get_text(textpage=tp))
     return "\n".join(parts)
 
@@ -125,17 +131,24 @@ def _pdf_ocr(body: bytes) -> str:
 def _img_ocr(body: bytes, ext: str) -> str:
     """OCR a raw image attachment (jpg/png/tiff…) — open as 1-page doc, OCR it."""
     import fitz
+
     with fitz.open(stream=body, filetype=ext) as doc:
         page = doc[0]
         tp = page.get_textpage_ocr(
-            language=_OCR_LANG, dpi=_OCR_DPI, full=True, tessdata=_OCR_TESSDATA)
+            language=_OCR_LANG, dpi=_OCR_DPI, full=True, tessdata=_OCR_TESSDATA
+        )
         return page.get_text(textpage=tp)
 
 
 # ext → extractor function name (resolved via globals() so monkeypatch on the
 # module attribute is honored)
-_EXTRACTORS = {"txt": "_txt", "rtf": "_rtf", "docx": "_docx",
-               "doc": "_antiword", "pdf": "_pdf"}
+_EXTRACTORS = {
+    "txt": "_txt",
+    "rtf": "_rtf",
+    "docx": "_docx",
+    "doc": "_antiword",
+    "pdf": "_pdf",
+}
 
 
 def to_text(body: bytes, ext: str | None) -> ExtractResult:

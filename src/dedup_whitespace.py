@@ -62,7 +62,9 @@ def build_broken_query() -> dict:
                 {
                     "nested": {
                         "path": "documents",
-                        "query": {"bool": {"should": should, "minimum_should_match": 1}},
+                        "query": {
+                            "bool": {"should": should, "minimum_should_match": 1}
+                        },
                     }
                 }
             ]
@@ -83,7 +85,12 @@ def build_query(
         if date_to:
             rng["lte"] = date_to
         filters.append(
-            {"nested": {"path": "documents", "query": {"range": {"documents.date": rng}}}}
+            {
+                "nested": {
+                    "path": "documents",
+                    "query": {"range": {"documents.date": rng}},
+                }
+            }
         )
     return {"bool": {"filter": filters}}
 
@@ -104,10 +111,14 @@ def run(es: Elasticsearch, index: str, apply: bool, query: dict) -> None:
                 fixed += 1
                 n_broken = sum(1 for d in new_docs if d.get("is_broken"))
                 id_uid = hit["_source"].get("id_uid") or "-"
-                print(f"{hit['_id']} id_uid={id_uid}: {len(docs)} -> {len(new_docs)} broken={n_broken}")
+                print(
+                    f"{hit['_id']} id_uid={id_uid}: {len(docs)} -> {len(new_docs)} broken={n_broken}"
+                )
                 if apply:
                     ops.append({"update": {"_index": index, "_id": hit["_id"]}})
-                    ops.append({"doc": {"documents": new_docs, "doc_count": len(new_docs)}})
+                    ops.append(
+                        {"doc": {"documents": new_docs, "doc_count": len(new_docs)}}
+                    )
         if ops:
             res = es.bulk(operations=ops, refresh=False)
             if res.get("errors"):
@@ -117,7 +128,9 @@ def run(es: Elasticsearch, index: str, apply: bool, query: dict) -> None:
                         print(f"ERROR {item['update'].get('_id')}: {err}")
         resp = es.scroll(scroll_id=scroll_id, scroll="5m")
     es.clear_scroll(scroll_id=scroll_id)
-    print(f"scanned={scanned} with_dupes={fixed} mode={'APPLY' if apply else 'dry-run'}")
+    print(
+        f"scanned={scanned} with_dupes={fixed} mode={'APPLY' if apply else 'dry-run'}"
+    )
 
 
 def main() -> None:
@@ -128,11 +141,17 @@ def main() -> None:
     p.add_argument("--password")
     p.add_argument("--api-key", dest="api_key", default=None)
     p.add_argument("--insecure", action="store_true")
-    p.add_argument("--apply", action="store_true", help="write fixes (default: dry-run)")
-    p.add_argument("--id", action="append", dest="ids", help="limit to specific _id (repeatable)")
+    p.add_argument(
+        "--apply", action="store_true", help="write fixes (default: dry-run)"
+    )
+    p.add_argument(
+        "--id", action="append", dest="ids", help="limit to specific _id (repeatable)"
+    )
     p.add_argument("--date-from", help="documents.date lower bound, e.g. 2026-05-16")
     p.add_argument("--date-to", help="documents.date upper bound, e.g. 2026-05-20")
-    p.add_argument("--broken", action="store_true", help="target docs with broken-text markers")
+    p.add_argument(
+        "--broken", action="store_true", help="target docs with broken-text markers"
+    )
     args = p.parse_args()
 
     es_opts: dict = {"request_timeout": 120}
@@ -143,7 +162,10 @@ def main() -> None:
     elif os.environ.get("ES_API_KEY"):
         es_opts["api_key"] = os.environ["ES_API_KEY"]
     elif os.environ.get("ES_USER"):
-        es_opts["basic_auth"] = (os.environ["ES_USER"], os.environ.get("SGMDLT_PASSWORD", ""))
+        es_opts["basic_auth"] = (
+            os.environ["ES_USER"],
+            os.environ.get("SGMDLT_PASSWORD", ""),
+        )
     if args.insecure and args.es.startswith("https://"):
         es_opts["verify_certs"] = False
     es = Elasticsearch(args.es, **es_opts)

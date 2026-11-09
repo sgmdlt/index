@@ -31,7 +31,7 @@ VALID_REASONS = {
     "bad_manifest_json",
     "build_failed",
     "bad_jsonl_record",
-    "sql_error",   # court DB error page stored instead of case HTML
+    "sql_error",  # court DB error page stored instead of case HTML
     "empty_html",  # placeholder/banner page with no extractable fields
 }
 
@@ -53,7 +53,8 @@ def _loc_parts(locator: str) -> tuple[str, int, int]:
     return path.replace(DOCKER_WARC_ROOT, WARC_FS_ROOT), int(off), int(length)
 
 
-def poll_batch(conn, worker_id: str, batch_size: int = 5000, priority_only: bool = False
+def poll_batch(
+    conn, worker_id: str, batch_size: int = 5000, priority_only: bool = False
 ) -> list[dict]:
     """Lease a batch of NEW/FAILED rows, priority rows first, and return them."""
     with conn.cursor() as cur:
@@ -344,10 +345,15 @@ def _warc_row_to_unit(fh, row: dict) -> tuple[dict | None, dict, str | None]:
                 body = rec.content_stream().read()
                 # an MGS group carries the card plus its documents; courts
                 # groups carry the page alone, so the html branch still wins
-                if documents is not None and html is not None and \
-                        not ctype.startswith("text/html"):
+                if (
+                    documents is not None
+                    and html is not None
+                    and not ctype.startswith("text/html")
+                ):
                     documents[rec.rec_headers.get_header("WARC-Target-URI")] = (
-                        body, rec.rec_headers.get_header("X-Document-Ext"))
+                        body,
+                        rec.rec_headers.get_header("X-Document-Ext"),
+                    )
                     continue
                 html = body
                 warc_date = rec.rec_headers.get_header("WARC-Date")

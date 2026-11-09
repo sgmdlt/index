@@ -31,7 +31,9 @@ def _normalize(x):
     return x
 
 
-@pytest.mark.parametrize("fixture", HTML_FIXTURES, ids=lambda p: f"{p.parent.name}/{p.name}")
+@pytest.mark.parametrize(
+    "fixture", HTML_FIXTURES, ids=lambda p: f"{p.parent.name}/{p.name}"
+)
 def test_parity(fixture: Path):
     html = fixture.read_text(encoding="utf-8")
     bs_out = _normalize(fill_bs(html))
@@ -65,5 +67,5 @@ def test_speed_summary(capsys):
     with capsys.disabled():
         print(
             f"\n[parity-bench] fixtures={len(htmls)} runs=5 "
-            f"bs={bs_ms:.1f}ms sx={sx_ms:.1f}ms speedup={bs_ms/sx_ms:.2f}x"
+            f"bs={bs_ms:.1f}ms sx={sx_ms:.1f}ms speedup={bs_ms / sx_ms:.2f}x"
         )

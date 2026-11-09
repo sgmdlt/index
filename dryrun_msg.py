@@ -18,7 +18,7 @@ N = int(sys.argv[2]) if len(sys.argv) > 2 else 10
 SUMMARY_N = int(sys.argv[3]) if len(sys.argv) > 3 else 5000
 
 src_keys = Counter()
-out_keys = Counter()    # non-empty fields in assembled doc
+out_keys = Counter()  # non-empty fields in assembled doc
 empty_keys = Counter()  # present but empty
 dropped_doc_link = 0
 none_id = 0
@@ -49,8 +49,11 @@ with open(PATH, encoding="utf-8") as fh:
             parsed_files=[prepared],
         )
         item = build_update_item(
-            doc=doc, doc_data=prepared, unit={"rel_from_root": data["id_final"]},
-            filename="msg.jsonl", source_path=f"jsonl:{data['id_final']}",
+            doc=doc,
+            doc_data=prepared,
+            unit={"rel_from_root": data["id_final"]},
+            filename="msg.jsonl",
+            source_path=f"jsonl:{data['id_final']}",
         )
         if item is None:
             none_id += 1

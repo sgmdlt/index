@@ -15,10 +15,20 @@ def _legacy(decisions: list[dict]) -> dict:
 
 
 def test_converter_builds_akty_from_filenames_and_keeps_court_decisions():
-    data = _legacy([
-        {"filename": "Постановление.doc", "created_date": "03.12.2012", "text": "\n\nПОСТАНОВЛЕНИЕ текст"},
-        {"filename": "Решение.rtf", "created_date": "10.12.2012", "text": "РЕШЕНИЕ текст"},
-    ])
+    data = _legacy(
+        [
+            {
+                "filename": "Постановление.doc",
+                "created_date": "03.12.2012",
+                "text": "\n\nПОСТАНОВЛЕНИЕ текст",
+            },
+            {
+                "filename": "Решение.rtf",
+                "created_date": "10.12.2012",
+                "text": "РЕШЕНИЕ текст",
+            },
+        ]
+    )
     _court_decisions_to_raw_tables(data)
     assert data["raw_tables"]["СУДЕБНЫЕ АКТЫ"] == [
         {"Судебный акт #1 (Постановление)": "\n\nПОСТАНОВЛЕНИЕ текст"},
@@ -29,12 +39,16 @@ def test_converter_builds_akty_from_filenames_and_keeps_court_decisions():
 
 
 def test_converter_skips_empty_text_and_missing_filename():
-    data = _legacy([
-        {"filename": "", "text": ""},                      # empty text → dropped
-        {"filename": None, "text": "ТЕКСТ без имени"},      # no filename → no parens
-    ])
+    data = _legacy(
+        [
+            {"filename": "", "text": ""},  # empty text → dropped
+            {"filename": None, "text": "ТЕКСТ без имени"},  # no filename → no parens
+        ]
+    )
     _court_decisions_to_raw_tables(data)
-    assert data["raw_tables"]["СУДЕБНЫЕ АКТЫ"] == [{"Судебный акт #1": "ТЕКСТ без имени"}]
+    assert data["raw_tables"]["СУДЕБНЫЕ АКТЫ"] == [
+        {"Судебный акт #1": "ТЕКСТ без имени"}
+    ]
 
 
 def test_converter_idempotent_when_akty_already_present():
@@ -47,9 +61,15 @@ def test_converter_idempotent_when_akty_already_present():
 def test_prepare_doc_prefers_real_name_over_raw_json_placeholder():
     """Even though court_decisions[*].text is a later _document_text location,
     its 'raw_json' name must not clobber the real СУДЕБНЫЕ АКТЫ name."""
-    data = _legacy([
-        {"filename": "Постановление.doc", "created_date": "03.12.2012", "text": "ПОСТАНОВЛЕНИЕ о прекращении"},
-    ])
+    data = _legacy(
+        [
+            {
+                "filename": "Постановление.doc",
+                "created_date": "03.12.2012",
+                "text": "ПОСТАНОВЛЕНИЕ о прекращении",
+            },
+        ]
+    )
     _court_decisions_to_raw_tables(data)
     doc = prepare_doc(data)
     names = [d["name"] for d in doc["_document_text"]]

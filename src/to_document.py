@@ -15,8 +15,7 @@ _UUID_RE = re.compile(r"_uid=([0-9a-f-]+)")
 # court_list.csv used to name the 86RS courts differently from 86OS0000; the
 # scraper is fixed, but archived manifests still carry the old spelling
 _REGION_ALIASES = {
-    "Ханты-Мансийский автономный округ - Югра (Тюменская область)":
-        "Ханты-Мансийский автономный округ - Югра",
+    "Ханты-Мансийский автономный округ - Югра (Тюменская область)": "Ханты-Мансийский автономный округ - Югра",
 }
 _NUMBER_YEAR_RE = re.compile(r"/\s*((?:19|20)\d{2})")
 
@@ -28,6 +27,7 @@ def fix_none_id(id_final: str | None, case_number) -> str | None:
         return id_final
     m = _NUMBER_YEAR_RE.search(str(case_number or ""))
     return id_final.replace("_NONE_", f"_{m.group(1)}_") if m else id_final
+
 
 _HERE = Path(__file__).parent.parent  # project root (index/)
 
@@ -88,7 +88,11 @@ def to_document(
         "date_reg": date_value_to_iso(meta.get("date_reg")),
     }
     new_meta = (
-        {**base_meta, "case_type": instance_info["case_type"], "instance": instance_info["instance"]}
+        {
+            **base_meta,
+            "case_type": instance_info["case_type"],
+            "instance": instance_info["instance"],
+        }
         if instance_info
         else base_meta
     )

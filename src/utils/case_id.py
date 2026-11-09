@@ -15,8 +15,9 @@ import re
 from datetime import datetime
 
 
-def case_id_from_fields(case_number: str | None, date_reg: str | None,
-                        court: str | None, link: str | None) -> str | None:
+def case_id_from_fields(
+    case_number: str | None, date_reg: str | None, court: str | None, link: str | None
+) -> str | None:
     """id из полей записи любого источника: манифест даёт дату «дд.мм.гггг»,
     JSONL и ES — «гггг-мм-дд[T…]». МГС ключуется своим правилом
     (parse_html_mgs.card_case_id) — для него None, берётся сохранённый id.
@@ -51,7 +52,9 @@ def build_case_id(case_number: str, date_reg: str, court_id: str) -> str | None:
     # keys on the proceeding in brackets — and if the date is the 01.01.1900
     # placeholder too, on that proceeding's year, else every such case of a
     # court shares one id
-    placeholder = re.match(r"[^\[]*-0\s*/[^\[]* \[[^\]]*/\s*((?:19|20)\d{2})\s*\]", case_number or "")
+    placeholder = re.match(
+        r"[^\[]*-0\s*/[^\[]* \[[^\]]*/\s*((?:19|20)\d{2})\s*\]", case_number or ""
+    )
     if date_reg == "01.01.1900" and placeholder:
         date_reg = f"01.01.{placeholder.group(1)}"
     id_date = datetime.strptime(date_reg, "%d.%m.%Y").strftime("%Y-%m-%d")

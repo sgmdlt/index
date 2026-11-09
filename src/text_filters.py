@@ -43,7 +43,9 @@ def _case_number_year(case_number: str | None) -> str | None:
     return min(years) if years else None
 
 
-def recover_malformed_date(date_str: str | None, today: str | None = None) -> str | None:
+def recover_malformed_date(
+    date_str: str | None, today: str | None = None
+) -> str | None:
     """Fix a date whose year lost its century: take the last two year digits as
     a 20xx year, keep month/day. "217-08-28" -> "2017-08-28", "15-02-23" ->
     "2015-02-23". Returns None if unparseable or the result is out of range."""

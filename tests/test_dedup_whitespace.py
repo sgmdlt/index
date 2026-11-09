@@ -8,7 +8,11 @@ from src.dedup_whitespace import (
 
 def test_fix_documents_replaces_broken_and_dedups():
     docs = [
-        {"name": "Акт #1", "text": "PK\x03\x04 docProps/core.xml junk", "filename": "a.html"},
+        {
+            "name": "Акт #1",
+            "text": "PK\x03\x04 docProps/core.xml junk",
+            "filename": "a.html",
+        },
         {"name": "Акт #2", "text": "ПРИГОВОР  Судья Петров", "filename": "a.html"},
         {"name": "Акт #2", "text": "ПРИГОВОР Судья Петров", "filename": "b.html"},
     ]
@@ -33,8 +37,16 @@ def test_build_broken_query_is_nested_match():
 
 def test_collapses_whitespace_variants_keeping_longest():
     docs = [
-        {"name": "Судебный акт #1 (Приговор)", "text": "ПРИГОВОР Именем Российской Федерации", "filename": "a.html"},
-        {"name": "Судебный акт #1 (Приговор)", "text": "ПРИГОВОР\nИменем Российской Федерации\n", "filename": "b.html"},
+        {
+            "name": "Судебный акт #1 (Приговор)",
+            "text": "ПРИГОВОР Именем Российской Федерации",
+            "filename": "a.html",
+        },
+        {
+            "name": "Судебный акт #1 (Приговор)",
+            "text": "ПРИГОВОР\nИменем Российской Федерации\n",
+            "filename": "b.html",
+        },
         {"name": "Постановление", "text": "Постановление суда", "filename": "a.html"},
     ]
     result = dedup_documents(docs)
@@ -54,7 +66,10 @@ def test_build_query_date_range_is_nested():
                         "path": "documents",
                         "query": {
                             "range": {
-                                "documents.date": {"gte": "2026-05-16", "lte": "2026-05-20"}
+                                "documents.date": {
+                                    "gte": "2026-05-16",
+                                    "lte": "2026-05-20",
+                                }
                             }
                         },
                     }

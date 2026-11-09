@@ -1,5 +1,6 @@
 """Throwaway: re-run redownload_queue rows (default reason=build_failed) through
 the real pipeline into a test index. Not wired into main.py."""
+
 import os
 import sys
 import time
@@ -28,13 +29,17 @@ USER, PASS = os.environ["ES_USER"], os.environ["ES_PASS"]
 def fetch_rows():
     conn = _open_pg()
     with conn.cursor() as cur:
-        q = ("SELECT id, manifest_path, filename FROM redownload_queue "
-             "WHERE reason=%s ORDER BY id")
+        q = (
+            "SELECT id, manifest_path, filename FROM redownload_queue "
+            "WHERE reason=%s ORDER BY id"
+        )
         if LIMIT:
             q += f" LIMIT {LIMIT}"
         cur.execute(q, (REASON,))
-        rows = [{"id": r[0], "manifest": r[1], "filename": r[2], "attempts": 0}
-                for r in cur.fetchall()]
+        rows = [
+            {"id": r[0], "manifest": r[1], "filename": r[2], "attempts": 0}
+            for r in cur.fetchall()
+        ]
     conn.close()
     # only rows whose html file actually exists on disk
     rows = [r for r in rows if os.path.exists(_fix_path(r["filename"]))]
@@ -53,18 +58,20 @@ def main():
     es = Elasticsearch(ES_URL, basic_auth=(USER, PASS), request_timeout=120)
     metrics = Metrics(log_every_sec=5.0)
     _ensure_index(es, INDEX)
-    indexer = BulkIndexer(es_client=es, index=INDEX, metrics=metrics,
-                          bulk_docs=500, flush_interval=15.0)
+    indexer = BulkIndexer(
+        es_client=es, index=INDEX, metrics=metrics, bulk_docs=500, flush_interval=15.0
+    )
     orig = _fast_ingest_on(es, INDEX)
     t0 = time.perf_counter()
     with ProcessPoolExecutor(max_workers=int(os.environ.get("WORKERS", "4"))) as pool:
         try:
-            _run_pipelined(units(), pool, indexer, metrics,
-                           int(os.environ.get("WORKERS", "4")))
+            _run_pipelined(
+                units(), pool, indexer, metrics, int(os.environ.get("WORKERS", "4"))
+            )
         finally:
             indexer.drain()
             _fast_ingest_off(es, INDEX, orig)
-    print(f"elapsed={time.perf_counter()-t0:.1f}s")
+    print(f"elapsed={time.perf_counter() - t0:.1f}s")
     metrics.log()
 
 

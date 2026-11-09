@@ -1,4 +1,5 @@
 """mos-gorsud card parsing at index time."""
+
 from pathlib import Path
 
 from src.parse_html import fill_raw_tables
@@ -21,12 +22,16 @@ def test_raw_tables_carry_the_head_and_every_tab():
 
 def test_movement_keeps_the_section_nesting_prepare_doc_expects():
     raw = fill_raw_tables_mgs(CARD)["raw_tables"]
-    assert [next(iter(t)) for t in raw["Движение дела"]] == \
-        ["История состояний", "История местонахождения"]
+    assert [next(iter(t)) for t in raw["Движение дела"]] == [
+        "История состояний",
+        "История местонахождения",
+    ]
     rows = raw["Движение дела"][0]["История состояний"]
-    assert rows[0] == {"Дата": "29.10.2019",
-                       "Состояние": "Регистрация поступившего заявления",
-                       "Документ-основание": ""}
+    assert rows[0] == {
+        "Дата": "29.10.2019",
+        "Состояние": "Регистрация поступившего заявления",
+        "Документ-основание": "",
+    }
 
 
 def test_fill_raw_tables_dispatches_moscow_pages():
@@ -48,5 +53,7 @@ def test_identity_follows_the_case_not_the_material():
 
 def test_identity_uses_the_url_for_appeals():
     """A Мосгорсуд appeal must key to 77OS0000, not the first-instance court."""
-    ident = mgs_identity(CARD, "https://mos-gorsud.ru/mgs/services/cases/appeal-civil/details/y")
+    ident = mgs_identity(
+        CARD, "https://mos-gorsud.ru/mgs/services/cases/appeal-civil/details/y"
+    )
     assert ident["court_code"] == "77OS0000"

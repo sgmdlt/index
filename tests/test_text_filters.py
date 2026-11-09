@@ -34,29 +34,46 @@ def test_judicial_web_with_judge_is_fine():
 
 
 def test_sql_error_detected():
-    assert broken_text_message("QUERY: SELECT * FROM x") == "Вместо текста отображается ошибка SQL"
-    assert broken_text_message("FATAL: server closed the connection") == "Вместо текста отображается ошибка SQL"
+    assert (
+        broken_text_message("QUERY: SELECT * FROM x")
+        == "Вместо текста отображается ошибка SQL"
+    )
+    assert (
+        broken_text_message("FATAL: server closed the connection")
+        == "Вместо текста отображается ошибка SQL"
+    )
 
 
 def test_clean_text_passes():
-    assert broken_text_message("ПРИГОВОР Именем Российской Федерации. Судья Петров") is None
+    assert (
+        broken_text_message("ПРИГОВОР Именем Российской Федерации. Судья Петров")
+        is None
+    )
 
 
 TODAY = "2026-06-11T00:00:00Z"
 
 
 def test_valid_date_reg_kept():
-    assert fix_date_reg("2025-04-30T00:00:00Z", [], today=TODAY) == "2025-04-30T00:00:00Z"
+    assert (
+        fix_date_reg("2025-04-30T00:00:00Z", [], today=TODAY) == "2025-04-30T00:00:00Z"
+    )
 
 
 def test_too_old_date_reg_replaced_from_progress():
     progress = [{"date": "15.03.1985"}, {"date": "20.05.2025"}, {"date": "10.04.2025"}]
-    assert fix_date_reg("1970-01-01T00:00:00Z", progress, today=TODAY) == "2025-04-10T00:00:00Z"
+    assert (
+        fix_date_reg("1970-01-01T00:00:00Z", progress, today=TODAY)
+        == "2025-04-10T00:00:00Z"
+    )
 
 
 def test_future_date_reg_replaced_from_progress():
     progress = [{"date": "20.05.2025"}]
-    assert fix_date_reg("2027-09-01T00:00:00Z", progress, today=TODAY) == "2025-05-20T00:00:00Z"
+    assert (
+        fix_date_reg("2027-09-01T00:00:00Z", progress, today=TODAY)
+        == "2025-05-20T00:00:00Z"
+    )
 
 
 def test_no_valid_progress_keeps_original():
@@ -103,7 +120,10 @@ def test_invalid_date_result_keeps_original():
 
 
 def test_date_ge_1990_now_valid():
-    assert fix_date_reg("1990-08-01", [], case_number="1-3/2024", today=TODAY) == "1990-08-01"
+    assert (
+        fix_date_reg("1990-08-01", [], case_number="1-3/2024", today=TODAY)
+        == "1990-08-01"
+    )
 
 
 def test_malformed_year_fixed_from_case_number_keeps_month_day():
@@ -123,7 +143,10 @@ def test_placeholder_uses_case_year_jan_first():
 def test_case_number_year_is_earliest_in_chain():
     assert (
         fix_date_reg(
-            "1888-05-10", [], case_number="1-3/2024 (1-3/2023; 1-357/2002;)", today=TODAY
+            "1888-05-10",
+            [],
+            case_number="1-3/2024 (1-3/2023; 1-357/2002;)",
+            today=TODAY,
         )
         == "2002-05-10"
     )

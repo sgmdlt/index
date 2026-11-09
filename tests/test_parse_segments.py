@@ -35,26 +35,38 @@ def test_commas_between_quoted_keys_still_separate_them():
 def test_both_kinds_of_comma_in_one_segment():
     path = "$.raw_tables['Дело']['Осужденный (оправданный, обвиняемый)', 'Лицо']"
     assert _parse_segments(path)[-1] == (
-        "keys", ["Осужденный (оправданный, обвиняемый)", "Лицо"])
+        "keys",
+        ["Осужденный (оправданный, обвиняемый)", "Лицо"],
+    )
 
 
 def test_wildcards_and_bare_keys_are_untouched():
     assert _parse_segments("$.raw_tables['Лица'][*][*]") == [
-        ("keys", ["raw_tables"]), ("keys", ["Лица"]), ("wildcard",), ("wildcard",)]
+        ("keys", ["raw_tables"]),
+        ("keys", ["Лица"]),
+        ("wildcard",),
+        ("wildcard",),
+    ]
     assert _parse_segments("$.id_final") == [("keys", ["id_final"])]
 
 
 def test_the_convict_row_reaches_defendants_and_participants():
-    raw = {"raw_tables": {"Дело": {
-        "Осужденный (оправданный, обвиняемый)": "Иванов И.И."}}}
+    raw = {
+        "raw_tables": {"Дело": {"Осужденный (оправданный, обвиняемый)": "Иванов И.И."}}
+    }
     doc = prepare_doc(raw)
     assert doc["defendants"] == "Иванов И.И."
     assert doc["participants"] == "Иванов И.И."
 
 
 def test_the_first_instance_row_reaches_court_and_judge():
-    raw = {"raw_tables": {"Дело": {
-        "Суд первой инстанции, судья": "Черемушкинский районный суд, Ганин А.В."}}}
+    raw = {
+        "raw_tables": {
+            "Дело": {
+                "Суд первой инстанции, судья": "Черемушкинский районный суд, Ганин А.В."
+            }
+        }
+    }
     doc = prepare_doc(raw)
     assert doc["first_court_name"] == "Черемушкинский районный суд, Ганин А.В."
     assert doc["first_judge"] == "Черемушкинский районный суд, Ганин А.В."

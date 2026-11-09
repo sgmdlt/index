@@ -54,33 +54,57 @@ def test_merge_replaces_placeholder_named_document():
     existing = {
         "id_final": "77RS0012_2025-11-21_01-1118",
         "documents": [
-            {"filename": "-", "date": "2025-11-21T00:00:00Z", "name": "raw_json",
-             "text": "ПОСТАНОВЛЕНИЕ  о прекращении\nуголовного дела"},
+            {
+                "filename": "-",
+                "date": "2025-11-21T00:00:00Z",
+                "name": "raw_json",
+                "text": "ПОСТАНОВЛЕНИЕ  о прекращении\nуголовного дела",
+            },
         ],
         "version": 1,
     }
     incoming = {
         "id_final": "77RS0012_2025-11-21_01-1118",
         "documents": [
-            {"filename": "77RS0012.jsonl", "date": "2025-12-11",
-             "name": "Судебный акт #1 (Приговор)",
-             "text": "ПОСТАНОВЛЕНИЕ о прекращении уголовного дела"},
+            {
+                "filename": "77RS0012.jsonl",
+                "date": "2025-12-11",
+                "name": "Судебный акт #1 (Приговор)",
+                "text": "ПОСТАНОВЛЕНИЕ о прекращении уголовного дела",
+            },
         ],
     }
     merged = merge_docs(existing, incoming)
     docs = merged["documents"]
-    assert len(docs) == 1                      # replaced, not appended
+    assert len(docs) == 1  # replaced, not appended
     assert docs[0]["name"] == "Судебный акт #1 (Приговор)"
     assert merged["doc_count"] == 1
 
 
 def test_merge_keeps_real_name_on_duplicate_text():
     """A properly-named existing entry must NOT be clobbered by a duplicate."""
-    existing = {"id_final": "x", "documents": [
-        {"filename": "a.html", "date": "d", "name": "Приговор", "text": "ТЕКСТ АКТА"}],
-        "version": 1}
-    incoming = {"id_final": "x", "documents": [
-        {"filename": "b.jsonl", "date": "d2", "name": "Судебный акт #1 (Решение)",
-         "text": "ТЕКСТ  АКТА"}]}
+    existing = {
+        "id_final": "x",
+        "documents": [
+            {
+                "filename": "a.html",
+                "date": "d",
+                "name": "Приговор",
+                "text": "ТЕКСТ АКТА",
+            }
+        ],
+        "version": 1,
+    }
+    incoming = {
+        "id_final": "x",
+        "documents": [
+            {
+                "filename": "b.jsonl",
+                "date": "d2",
+                "name": "Судебный акт #1 (Решение)",
+                "text": "ТЕКСТ  АКТА",
+            }
+        ],
+    }
     merged = merge_docs(existing, incoming)
     assert merged["documents"] == existing["documents"]

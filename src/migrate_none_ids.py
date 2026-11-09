@@ -72,7 +72,9 @@ def run(es: Elasticsearch, index: str, apply: bool, out_prefix: str) -> None:
                     for item in res["items"]:
                         for action, body in item.items():
                             if body.get("error"):
-                                print(f"ERROR {action} {body.get('_id')}: {body['error']}")
+                                print(
+                                    f"ERROR {action} {body.get('_id')}: {body['error']}"
+                                )
             resp = es.scroll(scroll_id=scroll_id, scroll="10m")
     es.clear_scroll(scroll_id=scroll_id)
     print(
@@ -89,7 +91,9 @@ def main() -> None:
     p.add_argument("--password")
     p.add_argument("--api-key", dest="api_key", default=None)
     p.add_argument("--insecure", action="store_true")
-    p.add_argument("--apply", action="store_true", help="write changes (default: dry-run)")
+    p.add_argument(
+        "--apply", action="store_true", help="write changes (default: dry-run)"
+    )
     p.add_argument("--out", default="none_migration", help="output file prefix")
     args = p.parse_args()
 
@@ -101,7 +105,10 @@ def main() -> None:
     elif os.environ.get("ES_API_KEY"):
         es_opts["api_key"] = os.environ["ES_API_KEY"]
     elif os.environ.get("ES_USER"):
-        es_opts["basic_auth"] = (os.environ["ES_USER"], os.environ.get("SGMDLT_PASSWORD", ""))
+        es_opts["basic_auth"] = (
+            os.environ["ES_USER"],
+            os.environ.get("SGMDLT_PASSWORD", ""),
+        )
     if args.insecure and args.es.startswith("https://"):
         es_opts["verify_certs"] = False
     es = Elasticsearch(args.es, **es_opts)

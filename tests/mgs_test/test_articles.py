@@ -11,6 +11,7 @@
 Формат приводится к тому, в котором статья уже лежит в индексе от sudrf:
 «ст.158 ч.2 п.в УК РФ».
 """
+
 from pathlib import Path
 
 from src.parse_html_mgs import card_articles, fill_raw_tables_mgs
@@ -21,8 +22,10 @@ CIVIL = (Path(__file__).parent / "card_civil.html").read_text(encoding="utf-8")
 
 
 def test_the_article_is_read_out_of_the_defendant_row():
-    assert card_articles({"Подсудимый": "Галчабеков М.А. (Ст. 228.1, Ч. 3, п. б)"}) \
+    assert (
+        card_articles({"Подсудимый": "Галчабеков М.А. (Ст. 228.1, Ч. 3, п. б)"})
         == "ст.228.1 ч.3 п.б УК РФ"
+    )
 
 
 def test_a_convict_row_counts_too():
@@ -43,8 +46,9 @@ def test_several_articles_against_one_person_stay_separate():
 
 def test_a_named_codex_is_kept_as_stated():
     """Never overwrite a codex the card spells out."""
-    assert card_articles({"Подсудимый": "Петров П.П. (Ст. 125 УПК РФ)"}) \
-        == "ст.125 УПК РФ"
+    assert (
+        card_articles({"Подсудимый": "Петров П.П. (Ст. 125 УПК РФ)"}) == "ст.125 УПК РФ"
+    )
 
 
 def test_a_civil_card_yields_nothing():

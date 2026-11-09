@@ -18,8 +18,12 @@ with open(_HERE / "elastic_type_instance_dict.json", encoding="utf-8") as _f:
 
 _PROGRESS_DATE_KEYS = ("Дата", "Дата события", "Дата и время")
 _PROGRESS_EVENT_KEYS = (
-    "Наименование события", "Тип события", "Вид события", "Событие",
-    "Состояние", "Стадия",
+    "Наименование события",
+    "Тип события",
+    "Вид события",
+    "Событие",
+    "Состояние",
+    "Стадия",
 )
 # Moscow (mos-gorsud/mos-sud) cards nest movement as {section: [rows]} inside
 # `Движение дела`/`Судебные заседания`. Expand only these sections into progress
@@ -217,7 +221,9 @@ def _get_string(values: list) -> str:
 # исхода. Поле keyword, поэтому такая дата плодит новое значение на каждое дело
 # и «Удовлетворено» перестаёт собираться в одну корзину; сама дата к этому
 # моменту уже лежит в date_result.
-_TRAILING_DATE = re.compile(r",\s*\d{2}\.\d{2}\.\d{4}(?:\s+\d{2}:\d{2}(?::\d{2})?)?\s*$")
+_TRAILING_DATE = re.compile(
+    r",\s*\d{2}\.\d{2}\.\d{4}(?:\s+\d{2}:\d{2}(?::\d{2})?)?\s*$"
+)
 
 
 def _get_outcome(values: list) -> str:
@@ -301,8 +307,12 @@ def _get_progress_rows(values: list) -> list[dict]:
         for r in inner_rows:
             if long_key in r:
                 r["Дата размещения"] = r.pop(long_key)
-            date = next((str(r[k]).strip() for k in _PROGRESS_DATE_KEYS if r.get(k)), "")
-            name = next((str(r[k]).strip() for k in _PROGRESS_EVENT_KEYS if r.get(k)), "")
+            date = next(
+                (str(r[k]).strip() for k in _PROGRESS_DATE_KEYS if r.get(k)), ""
+            )
+            name = next(
+                (str(r[k]).strip() for k in _PROGRESS_EVENT_KEYS if r.get(k)), ""
+            )
             entry = {"date": date, "event": name}
             for k, v in r.items():
                 if v and k not in _PROGRESS_DATE_KEYS and k not in _PROGRESS_EVENT_KEYS:

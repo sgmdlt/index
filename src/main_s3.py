@@ -85,6 +85,7 @@ def _bucket_key(unit: dict) -> str:
 
 def _ensure_index(es, index: str) -> None:
     import json as _json
+
     try:
         if es.indices.exists(index=index):
             logger.info("Index %r already exists; skipping creation.", index)
@@ -101,7 +102,9 @@ def _ensure_index(es, index: str) -> None:
         if status == 400:
             return
         if status == 403:
-            logger.warning("No permission to create index %r; assuming it exists.", index)
+            logger.warning(
+                "No permission to create index %r; assuming it exists.", index
+            )
             return
         logger.error("Index creation error: %s", exc)
 
@@ -121,7 +124,9 @@ def _fast_ingest_on(es, index: str) -> dict:
     except Exception as exc:
         status = getattr(getattr(exc, "meta", None), "status", None)
         if status == 403:
-            logger.info("Fast ingest unsupported (insufficient privileges); continuing without it.")
+            logger.info(
+                "Fast ingest unsupported (insufficient privileges); continuing without it."
+            )
         else:
             logger.warning("Could not set fast ingest settings: %s", exc)
         return {}

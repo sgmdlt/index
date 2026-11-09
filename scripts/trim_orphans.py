@@ -27,8 +27,12 @@ logger = logging.getLogger(__name__)
 
 
 def parse_args():
-    p = argparse.ArgumentParser(description="Trim outbox rows pointing at missing manifests")
-    p.add_argument("--dry-run", action="store_true", help="Report counts, do not delete")
+    p = argparse.ArgumentParser(
+        description="Trim outbox rows pointing at missing manifests"
+    )
+    p.add_argument(
+        "--dry-run", action="store_true", help="Report counts, do not delete"
+    )
     p.add_argument("--batch", type=int, default=10000, help="Scan batch size")
     p.add_argument("--workers", type=int, default=64, help="Parallel stat threads")
     return p.parse_args()
@@ -64,6 +68,7 @@ def main():
         user=os.environ.get("PGUSER", "postgres"),
         password=os.environ.get("PGPASSWORD", ""),
     )
+
     def check(row):
         row_id, manifest = row
         abs_path = _fix_path(manifest)
@@ -73,14 +78,20 @@ def main():
         scanned = 0
         orphan_ids: list[int] = []
         with ThreadPoolExecutor(max_workers=args.workers) as pool:
-            for result in pool.map(check, iter_candidates(conn, args.batch), chunksize=256):
+            for result in pool.map(
+                check, iter_candidates(conn, args.batch), chunksize=256
+            ):
                 scanned += 1
                 if result is not None:
                     orphan_ids.append(result)
                 if scanned % 50000 == 0:
-                    logger.info("Scanned %d, orphans so far %d", scanned, len(orphan_ids))
+                    logger.info(
+                        "Scanned %d, orphans so far %d", scanned, len(orphan_ids)
+                    )
 
-        logger.info("Scan complete: %d rows checked, %d orphans", scanned, len(orphan_ids))
+        logger.info(
+            "Scan complete: %d rows checked, %d orphans", scanned, len(orphan_ids)
+        )
         if not orphan_ids:
             return
         if args.dry_run:

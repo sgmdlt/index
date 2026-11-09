@@ -52,13 +52,16 @@ def test_stream_finds_shards_nested_one_level_down(tmp_path):
     below the directory being listed. Those trees still hold live data."""
     (tmp_path / "2c06d9e460a7").mkdir()
     (tmp_path / "b3a8d1d7cad1").mkdir()
-    make_shard(tmp_path / "2c06d9e460a7" / "a.warc.gz",
-               [({"ID": "nested-a"}, b"<html>a</html>")])
-    make_shard(tmp_path / "b3a8d1d7cad1" / "b.warc.gz",
-               [({"ID": "nested-b"}, b"<html>b</html>")])
+    make_shard(
+        tmp_path / "2c06d9e460a7" / "a.warc.gz",
+        [({"ID": "nested-a"}, b"<html>a</html>")],
+    )
+    make_shard(
+        tmp_path / "b3a8d1d7cad1" / "b.warc.gz",
+        [({"ID": "nested-b"}, b"<html>b</html>")],
+    )
     make_shard(tmp_path / "flat.warc.gz", [({"ID": "flat"}, b"<html>f</html>")])
 
     units = list(units_from_warc(str(tmp_path)))
 
-    assert sorted(u["meta"]["ID"] for u in units) == [
-        "flat", "nested-a", "nested-b"]
+    assert sorted(u["meta"]["ID"] for u in units) == ["flat", "nested-a", "nested-b"]

@@ -10,8 +10,15 @@ def test_heals_none_id_source():
 
 
 def test_stuck_none_returns_none():
-    assert heal_source({"id_final": "73RS0013_NONE_5-151", "case_number": "5-151"}) is None
+    assert (
+        heal_source({"id_final": "73RS0013_NONE_5-151", "case_number": "5-151"}) is None
+    )
 
 
 def test_normal_id_returns_none():
-    assert heal_source({"id_final": "73RS0013_2026-05-12_5-151", "case_number": "5-151/2026"}) is None
+    assert (
+        heal_source(
+            {"id_final": "73RS0013_2026-05-12_5-151", "case_number": "5-151/2026"}
+        )
+        is None
+    )

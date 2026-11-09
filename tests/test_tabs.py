@@ -8,6 +8,7 @@ def _get_fixture_path(filename):
     fixture_path = Path(__file__).parent / "tabs_test" / filename
     return fixture_path
 
+
 def test_tabs():
     with open(_get_fixture_path("html_tabs_fixture.html")) as f:
         html = f.read()
@@ -16,4 +17,3 @@ def test_tabs():
 
         assert doc["_document_text"][0]["name"] == "Судебный акт #1 (Решение)"
         assert doc["_document_text"][1]["name"] == "Судебный акт #2 (Решение)"
-

@@ -10,9 +10,8 @@ from bs4 import BeautifulSoup
 
 # Заголовки для запроса
 HEADERS = {
-    "User-Agent":
-    "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) " +
-    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Mobile Safari/537.36"
+    "User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) "
+    + "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Mobile Safari/537.36"
 }
 asyncio.sslproto._SSLProtocolTransport._start_tls_compatible = True
 
@@ -21,8 +20,7 @@ asyncio.sslproto._SSLProtocolTransport._start_tls_compatible = True
 async def send_request(url, task_number, session):
     # Распределяем по всем прокси
     global PROXIES_LIST
-    proxy_config = "http://" + PROXIES_LIST[(task_number - 1) %
-                                            len(PROXIES_LIST)]
+    proxy_config = "http://" + PROXIES_LIST[(task_number - 1) % len(PROXIES_LIST)]
 
     # print(url)
 
@@ -34,10 +32,8 @@ async def send_request(url, task_number, session):
     verify_cert = False
     while not got_resp:
         try:
-
             # Отправляем запрос без проверки сертификата (прокси при необходимости)
-            async with session.get(url, proxy=proxy_config,
-                                   ssl=verify_cert) as resp:
+            async with session.get(url, proxy=proxy_config, ssl=verify_cert) as resp:
                 final_resp = await resp.text()
                 if resp.ok:
                     got_resp = True
@@ -69,61 +65,65 @@ async def get_cases(task_number, courts, query_list, output_filename):
     # Проверяем суды по списку
     total_count = 0
     for court in courts:
-
         # Формируем ссылку
         for query_set in query_list:
-
             # Запускаем сессию заново для каждого запроса
             async with aiohttp.ClientSession(headers=HEADERS) as session:
-
-                url = "https://mos-gorsud.ru/search?courtAlias=" + court + "&caseDateFrom=" + query_set[
-                    "entry_date_from"] + "&caseDateTo=" + query_set[
-                        "entry_date_to"] + "&instance=" + query_set[
-                            "instance"] + "&processType=" + query_set[
-                                "type"] + "&codex=" + urllib.parse.quote_plus(
-                                    query_set["article"], encoding="utf-8"
-                                ) + "&category=" + query_set["mat_category"]
+                url = (
+                    "https://mos-gorsud.ru/search?courtAlias="
+                    + court
+                    + "&caseDateFrom="
+                    + query_set["entry_date_from"]
+                    + "&caseDateTo="
+                    + query_set["entry_date_to"]
+                    + "&instance="
+                    + query_set["instance"]
+                    + "&processType="
+                    + query_set["type"]
+                    + "&codex="
+                    + urllib.parse.quote_plus(query_set["article"], encoding="utf-8")
+                    + "&category="
+                    + query_set["mat_category"]
+                )
 
                 # Цикл для нескольких страниц
                 next_page = True
                 card_count = 0
                 target_count = 0
                 while next_page:
-
                     # Отправляем запрос
                     response = await send_request(url, task_number, session)
-                    soup = BeautifulSoup(response.replace("</br>", "<br>"),
-                                         "html.parser")
+                    soup = BeautifulSoup(
+                        response.replace("</br>", "<br>"), "html.parser"
+                    )
 
                     # Один раз записываем, сколько надо скачать
                     if target_count == 0:
                         if soup.select("div.resultsearch_text"):
                             if target_str := re.search(
-                                    r"По вашему запросу найдено записей: (\d+)",
-                                    soup.select_one(
-                                        "div.resultsearch_text").get_text()):
+                                r"По вашему запросу найдено записей: (\d+)",
+                                soup.select_one("div.resultsearch_text").get_text(),
+                            ):
                                 target_count = int(target_str.group(1))
 
                     # Перебор рядов
                     for row in soup.select(
-                            "div.wrapper-search-tables > table > tbody tr"):
-
+                        "div.wrapper-search-tables > table > tbody tr"
+                    ):
                         # Записываем в файл
                         if row.select("td")[0].select_one("a.detailsLink"):
-                            link = row.select("td")[0].select_one(
-                                "a.detailsLink")["href"]
-                            link = "https://mos-gorsud.ru" + link[:link.
-                                                                  find("?")]
-                            open(output_filename + ".txt",
-                                 "a").write(link + "\n")
+                            link = row.select("td")[0].select_one("a.detailsLink")[
+                                "href"
+                            ]
+                            link = "https://mos-gorsud.ru" + link[: link.find("?")]
+                            open(output_filename + ".txt", "a").write(link + "\n")
 
                             card_count += 1
                             total_count += 1
 
                     # Перебор страниц
                     next_page = False
-                    for link in soup.select(
-                            "div.paginationContainer a.next[href]"):
+                    for link in soup.select("div.paginationContainer a.next[href]"):
                         url = "https://mos-gorsud.ru" + link["href"]
                         next_page = True
                         break
@@ -134,14 +134,16 @@ async def get_cases(task_number, courts, query_list, output_filename):
                             f"🤖 {task_number:>2d} | {COURT_COLLECTION[court]:<40s} 📇 {card_count / target_count:>4.0%} карточек"
                         )
 
-                print(f"🤖 {task_number:>2d}",
-                      f"{COURT_COLLECTION[court]:<40s}",
-                      query_set["entry_date_from"],
-                      query_set["entry_date_to"],
-                      query_set["instance"],
-                      TYPE_COLLECTION[query_set["type"]],
-                      end=" | ",
-                      sep=" | ")
+                print(
+                    f"🤖 {task_number:>2d}",
+                    f"{COURT_COLLECTION[court]:<40s}",
+                    query_set["entry_date_from"],
+                    query_set["entry_date_to"],
+                    query_set["instance"],
+                    TYPE_COLLECTION[query_set["type"]],
+                    end=" | ",
+                    sep=" | ",
+                )
 
                 # Проверка результата
                 if card_count > 0 and card_count >= target_count:
@@ -149,7 +151,7 @@ async def get_cases(task_number, courts, query_list, output_filename):
 
                 # Если ничего не нашли, ставим ноль
                 elif soup.select(
-                        "div.resultsearch_text:-soup-contains('По вашему запросу ничего не найдено')"
+                    "div.resultsearch_text:-soup-contains('По вашему запросу ничего не найдено')"
                 ):
                     print("🫙")
 
@@ -158,9 +160,7 @@ async def get_cases(task_number, courts, query_list, output_filename):
                     print("🟥🟥🟥🟥")
                     print(url)
 
-    print(
-        f"🤖 {task_number:>2d} | {'🟢 ЗАКОНЧИЛ':>30s}: {total_count:>4d} карточек"
-    )
+    print(f"🤖 {task_number:>2d} | {'🟢 ЗАКОНЧИЛ':>30s}: {total_count:>4d} карточек")
     return total_count
 
 
@@ -197,12 +197,10 @@ async def court_runner(output_filename, court_codes, query_set, tasks):
     print("Судов на один процесс:", batch_size, "\n\n")
     for i in range(tasks):
         if i < tasks - 1:
-            courts_batch = court_codes[i * batch_size:i * batch_size +
-                                       batch_size]
+            courts_batch = court_codes[i * batch_size : i * batch_size + batch_size]
         else:
-            courts_batch = court_codes[i * batch_size:]
-        coro_list.append(
-            get_cases(i + 1, courts_batch, query_set, output_filename))
+            courts_batch = court_codes[i * batch_size :]
+        coro_list.append(get_cases(i + 1, courts_batch, query_set, output_filename))
 
     # Запускаем все процессы
     gather_start = datetime.now()
@@ -218,8 +216,9 @@ async def court_runner(output_filename, court_codes, query_set, tasks):
     # Удаление дубликатов
     remove_duplicates(output_filename)
 
-    print("Прошло", int(
-        (datetime.now() - gather_start).total_seconds() / 3600), "час(ов)")
+    print(
+        "Прошло", int((datetime.now() - gather_start).total_seconds() / 3600), "час(ов)"
+    )
 
 
 # ГЛАВНЫЙ ЗАПУСК
@@ -234,7 +233,7 @@ QUERY_SET = {
     "instance": "",
     "type": "",
     "article": "",
-    "mat_category": ""
+    "mat_category": "",
 }
 
 COURT_COLLECTION = {
@@ -273,7 +272,7 @@ COURT_COLLECTION = {
     "horoshevskij": "Хорошёвский районный суд",
     "cheryomushkinskij": "Черёмушкинский районный суд",
     "chertanovskij": "Чертановский районный суд",
-    "shcherbinskij": "Щербинский районный суд"
+    "shcherbinskij": "Щербинский районный суд",
 }
 
 TYPE_COLLECTION = {
@@ -326,5 +325,7 @@ for instance in [1]:
 # Запуск сбора
 # Имя файла для результата, набор судов, список (!) поисковых запросов, количество процессов
 asyncio.run(
-    court_runner("MGS-Missing-Update-Links", list(COURT_COLLECTION.keys()),
-                 query_list, 36))
+    court_runner(
+        "MGS-Missing-Update-Links", list(COURT_COLLECTION.keys()), query_list, 36
+    )
+)

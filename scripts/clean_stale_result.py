@@ -20,6 +20,7 @@ case_state замапился динамически и хранит значе�
     python scripts/clean_stale_result.py --dry-run   # только посчитать
     python scripts/clean_stale_result.py             # выполнить
 """
+
 import argparse
 import json
 import time
@@ -33,11 +34,17 @@ ENV = Path(__file__).resolve().parent.parent / ".env"
 STALE = {
     "bool": {
         "filter": [{"exists": {"field": "case_state"}}],
-        "must": [{"script": {"script": {"source":
-            'if (doc["result"].size()==0 || doc["case_state.keyword"].size()==0)'
-            ' { return false; }'
-            ' return doc["result"].value == doc["case_state.keyword"].value.toLowerCase();'
-        }}}],
+        "must": [
+            {
+                "script": {
+                    "script": {
+                        "source": 'if (doc["result"].size()==0 || doc["case_state.keyword"].size()==0)'
+                        " { return false; }"
+                        ' return doc["result"].value == doc["case_state.keyword"].value.toLowerCase();'
+                    }
+                }
+            }
+        ],
     }
 }
 
@@ -52,8 +59,11 @@ def api_key() -> str:
 def call(key: str, path: str, body=None, timeout=900):
     data = json.dumps(body).encode() if body is not None else None
     req = urllib.request.Request(
-        f"{ES}/{path}", data=data, method="POST" if data else "GET",
-        headers={"Content-Type": "application/json", "Authorization": "ApiKey " + key})
+        f"{ES}/{path}",
+        data=data,
+        method="POST" if data else "GET",
+        headers={"Content-Type": "application/json", "Authorization": "ApiKey " + key},
+    )
     with urllib.request.urlopen(req, timeout=timeout) as r:
         return json.loads(r.read().decode("utf-8"), strict=False)
 
@@ -61,7 +71,9 @@ def call(key: str, path: str, body=None, timeout=900):
 def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--dry-run", action="store_true")
-    p.add_argument("--rps", type=int, default=3000, help="троттлинг, чтобы не душить прод")
+    p.add_argument(
+        "--rps", type=int, default=3000, help="троттлинг, чтобы не душить прод"
+    )
     args = p.parse_args()
 
     key = api_key()
@@ -70,9 +82,12 @@ def main() -> None:
     if args.dry_run or before == 0:
         return
 
-    task = call(key, f"{INDEX}/_update_by_query?conflicts=proceed"
-                     f"&wait_for_completion=false&requests_per_second={args.rps}",
-                {"query": STALE, "script": {"source": 'ctx._source.remove("result")'}})["task"]
+    task = call(
+        key,
+        f"{INDEX}/_update_by_query?conflicts=proceed"
+        f"&wait_for_completion=false&requests_per_second={args.rps}",
+        {"query": STALE, "script": {"source": 'ctx._source.remove("result")'}},
+    )["task"]
     print(f"задача: {task}")
 
     # Следим счётчиком совпадений, а не через _tasks: у ключа нет прав на
@@ -81,8 +96,10 @@ def main() -> None:
     remaining, stalled = before, 0
     while True:
         time.sleep(20)
-        previous, remaining = remaining, call(
-            key, f"{INDEX}/_count", {"query": STALE})["count"]
+        previous, remaining = (
+            remaining,
+            call(key, f"{INDEX}/_count", {"query": STALE})["count"],
+        )
         print(f"  осталось {remaining}  (-{previous - remaining})")
         if remaining == 0:
             print("готово")
@@ -91,9 +108,11 @@ def main() -> None:
         if stalled >= 3:
             # Задача либо кончилась, не добив остаток, либо не движется.
             # Остаток — и есть перечень того, что не поддалось.
-            print(f"счётчик стоит третью проверку подряд; осталось {remaining}. "
-                  f"Задача {task} могла завершиться с отказами — "
-                  f"перезапустите скрипт, чтобы добрать остаток.")
+            print(
+                f"счётчик стоит третью проверку подряд; осталось {remaining}. "
+                f"Задача {task} могла завершиться с отказами — "
+                f"перезапустите скрипт, чтобы добрать остаток."
+            )
             break
 
     print(f"итог: {remaining} совпадений осталось (было {before})")

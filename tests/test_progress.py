@@ -9,10 +9,12 @@ def _get_fixture_path(filename):
     fixture_path = Path(__file__).parent / "progress_test" / filename
     return fixture_path
 
+
 def _parse(filename: str) -> dict:
     html = _get_fixture_path(filename).read_text(errors="replace")
     raw = fill_raw_tables(html)
     return prepare_doc(raw)
+
 
 def test_progress():
     doc1 = _parse("progress_fixture.html")
@@ -26,6 +28,7 @@ def test_progress():
     # Updating progress
     assert len(merged["progress"]) == len(doc2["progress"])
 
+
 def test_retrochange_progress():
     doc1 = _parse("progress_fixture_2.html")
     # print("DOC1 PROGRESS:", doc1.get("progress"))
@@ -38,4 +41,3 @@ def test_retrochange_progress():
     # print("MERGED PROGRESS:", merged.get("progress"))
     # Retrochange 1 progress
     assert len(merged["progress"]) == len(doc1["progress"]) + 1
-
