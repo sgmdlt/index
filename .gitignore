@@ -2,3 +2,12 @@
 **/node_modules
 **/court_cases
 .env
+__pycache__/
+.venv/
+.pytest_cache/
+.ruff_cache/
+.import_linter_cache/
+# Run outputs: logs and data dumps stay local
+logs*/
+/*.log
+/rk.*
