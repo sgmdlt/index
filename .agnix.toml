@@ -1,6 +1,9 @@
 # agnix lints the agent instruction files; `--strict` makes warnings fail.
 # Each override is one path and the rules it cannot satisfy, with the reason.
 
+# Claude Code worktrees are full checkouts of other branches, not this tree's files.
+exclude = [".claude/worktrees/**"]
+
 [[overrides]]
 # The data lives on this one machine; CLAUDE.md names its real paths on purpose.
 paths = ["CLAUDE.md"]
