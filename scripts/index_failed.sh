@@ -20,8 +20,8 @@ run_log="$LOG_DIR/_run.log"
 while IFS= read -r f; do
   [ -z "$f" ] && continue
   case "$f" in
-    *.jsonl.gz) name=$(basename "$f" .jsonl.gz); reader="sudo zcat" ;;
-    *.jsonl)    name=$(basename "$f" .jsonl);    reader="sudo find $f -maxdepth 0 -exec cat {} +" ;;
+    *.jsonl.gz) name=$(basename "$f" .jsonl.gz) ;;
+    *.jsonl)    name=$(basename "$f" .jsonl) ;;
     *) echo "[$(date -Is)] skip unknown ext: $f" | tee -a "$run_log"; continue ;;
   esac
   log="$LOG_DIR/$name.log"
