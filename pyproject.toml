@@ -22,6 +22,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "deptry==0.25.1",
+    "import-linter==2.16",
     "pytest==9.0.3",
     "pytest-asyncio==1.3.0",
     "ruff==0.17.4",
@@ -53,3 +54,13 @@ DEP002 = ["lxml"]
 DEP003 = ["botocore"]
 # Only the root sud_delo_mgs_*.py scrapers import these; they are not part of the indexer.
 DEP001 = ["aiohttp", "pdfplumber"]
+
+[tool.importlinter]
+root_package = "src"
+
+[[tool.importlinter.contracts]]
+# CLAUDE.md: the FS and S3 entry points are siblings by design; neither may
+# reach the other, directly or through a shared module.
+name = "main and main_s3 stay independent"
+type = "independence"
+modules = ["src.main", "src.main_s3"]
