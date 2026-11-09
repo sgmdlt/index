@@ -1,0 +1,39 @@
+amends "package://github.com/jdx/hk/releases/download/v2.11.1/hk@2.11.1#/Config.pkl"
+
+// Three tiers: commit checks the staged files fast, push runs every check
+// (`mise run check`), CI runs the same `mise run check`. Hooks can be skipped
+// with --no-verify; CI cannot. Install once per clone: `hk install`.
+hooks {
+  ["pre-commit"] {
+    fix = true
+    stage = true
+    stash = "git"
+    steps {
+      ["ruff"] {
+        glob = List("**/*.py")
+        check = "uv run --locked ruff check --force-exclude {{files}}"
+        fix = "uv run --locked ruff check --fix --force-exclude {{files}}"
+      }
+      ["ruff-format"] {
+        glob = List("**/*.py")
+        depends = List("ruff")
+        check = "uv run --locked ruff format --check --force-exclude {{files}}"
+        fix = "uv run --locked ruff format --force-exclude {{files}}"
+      }
+      ["shellcheck"] {
+        glob = List("**/*.sh")
+        check = "shellcheck {{files}}"
+      }
+      ["betterleaks"] {
+        check = "betterleaks dir -c .betterleaks.toml --no-banner --redact -l warn {{files}}"
+      }
+    }
+  }
+  ["pre-push"] {
+    steps {
+      ["check"] {
+        check = "mise run check"
+      }
+    }
+  }
+}

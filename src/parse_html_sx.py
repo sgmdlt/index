@@ -10,6 +10,7 @@ promote.
 
 import logging
 import re
+
 from selectolax.lexbor import LexborHTMLParser, LexborNode
 
 from src.parse_html_mgs import fill_raw_tables_mgs, is_mgs
@@ -19,10 +20,13 @@ logger = logging.getLogger(__name__)
 
 # ---------- helpers ----------
 
+
 def _text(el: LexborNode | None) -> str:
     if el is None:
         return ""
-    return re.sub(r"\s+", " ", el.text(deep=True, separator=" ", strip=False) or "").strip()
+    return re.sub(
+        r"\s+", " ", el.text(deep=True, separator=" ", strip=False) or ""
+    ).strip()
 
 
 def _direct_children(node: LexborNode, tag: str | None = None) -> list[LexborNode]:
@@ -98,6 +102,7 @@ def _descendants(node: LexborNode, sel: str) -> list[LexborNode]:
 
 # ---------- table parsing (Format 2) ----------
 
+
 def _table_rows(table: LexborNode) -> list[LexborNode]:
     rows: list[LexborNode] = []
     for child in _direct_children(table):
@@ -149,7 +154,7 @@ def _parse_table(table: LexborNode):
                 continue
             if _has_nested_table(v_cell):
                 nested = _first_descendant(v_cell, "table")
-                result[key] = _parse_table(nested)
+                result[key] = _parse_table(nested)  # ty: ignore[invalid-argument-type]
             else:
                 result[key] = _text(v_cell)
         return result
@@ -188,7 +193,7 @@ def _parse_table(table: LexborNode):
             cell = tds[i]
             if _has_nested_table(cell):
                 nested = _first_descendant(cell, "table")
-                row[key] = _parse_table(nested)
+                row[key] = _parse_table(nested)  # ty: ignore[invalid-argument-type]
             else:
                 row[key] = _text(cell)
         if row:
@@ -198,6 +203,7 @@ def _parse_table(table: LexborNode):
 
 
 # ---------- tab_to_dict (Format 1) ----------
+
 
 def _direct_trs(tab: LexborNode) -> list[LexborNode]:
     """Return logical direct <tr> children of a <table>, descending through
@@ -242,7 +248,7 @@ def tab_to_dict(tab: LexborNode):
                 row_dict[_text(key)] = _text(value)
             parsed_tab.append(row_dict)
 
-            if "table>" in row.html:
+            if "table>" in row.html:  # ty: ignore[unsupported-operator]
                 raise ValueError
 
     else:
@@ -277,7 +283,7 @@ def tab_to_dict(tab: LexborNode):
                         for key, value in zip(header_tds, row_tds, strict=True):
                             row_dict[_text(key)] = _text(value)
                         parsed_tab.append(row_dict)
-                        if "table>" in row.html:
+                        if "table>" in row.html:  # ty: ignore[unsupported-operator]
                             raise ValueError
 
                 else:
@@ -296,7 +302,7 @@ def tab_to_dict(tab: LexborNode):
                                     parsed_tab.append({label: col_text})
                                 else:
                                     parsed_tab[index][label] = col_text
-                            if "table>" in row.html:
+                            if "table>" in row.html:  # ty: ignore[unsupported-operator]
                                 raise ValueError
 
             else:
@@ -310,13 +316,17 @@ def tab_to_dict(tab: LexborNode):
                 parsed_tab[_text(colspan_node)] = tab_to_dict(nested_tbl)
 
         elif tab.css("tr"):
-            logger.debug("tab_to_dict: unrecognized table structure: %s", tab.html[:200])
+            logger.debug(
+                "tab_to_dict: unrecognized table structure: %s",
+                tab.html[:200],  # ty: ignore[not-subscriptable]
+            )
             raise ValueError
 
     return parsed_tab
 
 
 # ---------- public entry point ----------
+
 
 def fill_raw_tables(html: bytes | str, documents: dict | None = None) -> dict:
     if isinstance(html, bytes):
@@ -383,14 +393,19 @@ def fill_raw_tables(html: bytes | str, documents: dict | None = None) -> dict:
                 if tab.css_first("table") is None:
                     inner_li = tab.css("li[id^=tab], li[id^=doctab]")
                     if inner_li:
-                        inner_div = tab.css("div[id^=cont_doc], div[id^=doctab_content]")
+                        inner_div = tab.css(
+                            "div[id^=cont_doc], div[id^=doctab_content]"
+                        )
                         for doc_name, doc in zip(inner_li, inner_div, strict=True):
                             for meta in doc.css("meta"):
                                 meta.decompose(recursive=True)
-                            formatted_case["raw_tables"][tab_name].append({
-                                _text(doc_name):
-                                    doc.text(deep=True, separator="", strip=False)
-                            })
+                            formatted_case["raw_tables"][tab_name].append(
+                                {
+                                    _text(doc_name): doc.text(
+                                        deep=True, separator="", strip=False
+                                    )
+                                }
+                            )
                     else:
                         for meta in tab.css("meta"):
                             meta.decompose(recursive=True)
@@ -400,11 +415,15 @@ def fill_raw_tables(html: bytes | str, documents: dict | None = None) -> dict:
                 else:
                     direct_tables = _direct_children(tab, "table")
                     direct_tables_none_mobile = [
-                        t for t in direct_tables
-                        if "none-mobile" in ((t.attributes or {}).get("class") or "").split()
+                        t
+                        for t in direct_tables
+                        if "none-mobile"
+                        in ((t.attributes or {}).get("class") or "").split()
                     ]
                     if len(direct_tables) == 1 or len(direct_tables_none_mobile) == 1:
-                        formatted_case["raw_tables"][tab_name] = tab_to_dict(direct_tables[0])
+                        formatted_case["raw_tables"][tab_name] = tab_to_dict(
+                            direct_tables[0]
+                        )
                     else:
                         # Multiple tables: name from each table's first-tr [colspan] node
                         names = []
@@ -418,10 +437,9 @@ def fill_raw_tables(html: bytes | str, documents: dict | None = None) -> dict:
                         if len(names) != len(direct_tables):
                             raise ValueError("table-name/table count mismatch")
                         for table_name, table in zip(names, direct_tables, strict=True):
-                            formatted_case["raw_tables"][tab_name].append({
-                                _text(table_name):
-                                    tab_to_dict(table)
-                            })
+                            formatted_case["raw_tables"][tab_name].append(
+                                {_text(table_name): tab_to_dict(table)}
+                            )
     except Exception as e:
         logger.warning("Error parsing HTML: %s", e)
 

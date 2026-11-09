@@ -22,6 +22,7 @@
 Удаляется только тот кривой документ, у которого правильный близнец уже есть в
 индексе. Что не переиндексировалось — остаётся и видно в выводе.
 """
+
 import argparse
 import json
 import re
@@ -67,16 +68,25 @@ def api_key() -> str:
 def call(key: str, path: str, body=None, timeout=900):
     data = json.dumps(body, ensure_ascii=False).encode() if body is not None else None
     req = urllib.request.Request(
-        f"{ES}/{path}", data=data, method="POST" if data else "GET",
-        headers={"Content-Type": "application/json", "Authorization": "ApiKey " + key})
+        f"{ES}/{path}",
+        data=data,
+        method="POST" if data else "GET",
+        headers={"Content-Type": "application/json", "Authorization": "ApiKey " + key},
+    )
     with urllib.request.urlopen(req, timeout=timeout) as r:
         return json.loads(r.read().decode("utf-8"), strict=False)
 
 
 def scan_bracket(key: str, pattern: str):
-    resp = call(key, f"{INDEX}/_search?scroll=5m", {
-        "query": {"wildcard": {"id_final": {"value": pattern}}}, "size": PAGE,
-        "_source": ["case_number", "path_manifest", "html_files"]})
+    resp = call(
+        key,
+        f"{INDEX}/_search?scroll=5m",
+        {
+            "query": {"wildcard": {"id_final": {"value": pattern}}},
+            "size": PAGE,
+            "_source": ["case_number", "path_manifest", "html_files"],
+        },
+    )
     print(f"найдено {resp['hits']['total']['value']}", flush=True)
     while hits := resp["hits"]["hits"]:
         yield from hits
@@ -85,14 +95,19 @@ def scan_bracket(key: str, pattern: str):
         if len(hits) < PAGE:
             return
         print(f"  {time.strftime('%H:%M:%S')} страница из {len(hits)}", flush=True)
-        resp = call(key, "_search/scroll", {"scroll": "5m", "scroll_id": resp["_scroll_id"]})
+        resp = call(
+            key, "_search/scroll", {"scroll": "5m", "scroll_id": resp["_scroll_id"]}
+        )
 
 
 def fetch_by_ids(key: str, ids: list[str]):
     # без перебора словаря: id уже известны из прошлой выгрузки, _mget по _id дешёвый
     for i in range(0, len(ids), 1000):
-        resp = call(key, f"{INDEX}/_mget?_source_includes=case_number,path_manifest,html_files",
-                    {"ids": ids[i:i + 1000]})
+        resp = call(
+            key,
+            f"{INDEX}/_mget?_source_includes=case_number,path_manifest,html_files",
+            {"ids": ids[i : i + 1000]},
+        )
         yield from (d for d in resp["docs"] if d.get("found"))
         print(f"  {time.strftime('%H:%M:%S')} {i + 1000} из {len(ids)}", flush=True)
 
@@ -110,9 +125,14 @@ def moved(bad: dict, new_id: str) -> dict:
 
 def move_ids(rows: list[dict]) -> list[str]:
     # близнеца нет — сливать не с чем, документ просто переезжает на свой id
-    return [r["_id"] for r in rows
-            if not r["twin"] and r["new_id"] and r["new_id"] != r["_id"]
-            and "ID_NOT_PARSED" not in r["new_id"]]
+    return [
+        r["_id"]
+        for r in rows
+        if not r["twin"]
+        and r["new_id"]
+        and r["new_id"] != r["_id"]
+        and "ID_NOT_PARSED" not in r["new_id"]
+    ]
 
 
 def unmerge_groups(rows: list[dict]) -> dict[str, list[dict]]:
@@ -161,45 +181,75 @@ def rekey_candidates(rows: list[dict]) -> list[str]:
 def rekey_all(key: str, ids: list[str], batch: int = 200) -> None:
     rekeyed = deleted = 0
     for i in range(0, len(ids), batch):
-        docs = sources(key, ids[i:i + batch])
+        docs = sources(key, ids[i : i + batch])
         new_id = {d: source_id(x["_source"]) for d, x in docs.items()}
-        new_id = {d: n for d, n in new_id.items() if n and n != d and "ID_NOT_PARSED" not in n}
+        new_id = {
+            d: n for d, n in new_id.items() if n and n != d and "ID_NOT_PARSED" not in n
+        }
         targets = sources(key, list(set(new_id.values())))
         # под новым id уже лежит ранняя версия карточки (без номера
         # производства) — сливаем, поздняя идёт входящей; нет — переезд
-        ops = [op for d, n in new_id.items() for op in (
-            ({"index": {"_id": n, "if_seq_no": targets[n]["_seq_no"],
-                        "if_primary_term": targets[n]["_primary_term"]}},
-             fold(targets[n]["_source"], moved(docs[d]["_source"], n)))
-            if n in targets else
-            ({"create": {"_id": n}}, moved(docs[d]["_source"], n)))]
+        ops = [
+            op
+            for d, n in new_id.items()
+            for op in (
+                (
+                    {
+                        "index": {
+                            "_id": n,
+                            "if_seq_no": targets[n]["_seq_no"],
+                            "if_primary_term": targets[n]["_primary_term"],
+                        }
+                    },
+                    fold(targets[n]["_source"], moved(docs[d]["_source"], n)),
+                )
+                if n in targets
+                else ({"create": {"_id": n}}, moved(docs[d]["_source"], n))
+            )
+        ]
         items = bulk(key, ops) if ops else []
-        ok = [d for d, it in zip(new_id, items) if next(iter(it.values())).get("status") in (200, 201)]
+        ok = [
+            d
+            for d, it in zip(new_id, items)  # noqa: B905
+            if next(iter(it.values())).get("status") in (200, 201)
+        ]
         rekeyed += len(ok)
         deleted += delete_ids(key, ok)
-        print(f"  {time.strftime('%H:%M:%S')} {i + batch} из {len(ids)}: найдено {len(docs)}, "
-              f"к переносу {len(new_id)}, перенесено {rekeyed}, удалено {deleted}{first_error(items)}",
-              flush=True)
+        print(
+            f"  {time.strftime('%H:%M:%S')} {i + batch} из {len(ids)}: найдено {len(docs)}, "
+            f"к переносу {len(new_id)}, перенесено {rekeyed}, удалено {deleted}{first_error(items)}",
+            flush=True,
+        )
     print(f"итог: перенесено {rekeyed}, удалено старых {deleted} из {len(ids)}")
 
 
 def unmerge(key: str, groups: dict[str, list[dict]], out: str, delete: bool) -> None:
     targets = list(groups)
-    found = {k: v for i in range(0, len(targets), 1000)
-             for k, v in existing(key, targets[i:i + 1000]).items()}
+    found = {
+        k: v
+        for i in range(0, len(targets), 1000)
+        for k, v in existing(key, targets[i : i + 1000]).items()
+    }
     # удаляем только документ, собранный целиком из наших дел; если в нём есть
     # чужие скачивания — это уже не наш мусор, его разбирать руками
-    ours = [t for t, files in found.items()
-            if covered(files, [f for r in groups[t] for f in r["html_files"]])]
+    ours = [
+        t
+        for t, files in found.items()
+        if covered(files, [f for r in groups[t] for f in r["html_files"]])
+    ]
     foreign = [t for t in found if t not in set(ours)]
     with open(f"{out}_requeue.txt", "w", encoding="utf-8") as f:
         f.writelines(r["path_manifest"] + "\n" for rs in groups.values() for r in rs)
     with open(f"{out}_foreign.txt", "w", encoding="utf-8") as f:
         f.writelines(t + "\n" for t in foreign)
-    print(f"неверных id: {len(targets)}, есть в индексе: {len(found)}, "
-          f"только из наших дел: {len(ours)}, с чужими скачиваниями: {len(foreign)}")
-    print(f"дел на переиндексацию: {sum(map(len, groups.values()))} -> {out}_requeue.txt; "
-          f"чужие -> {out}_foreign.txt")
+    print(
+        f"неверных id: {len(targets)}, есть в индексе: {len(found)}, "
+        f"только из наших дел: {len(ours)}, с чужими скачиваниями: {len(foreign)}"
+    )
+    print(
+        f"дел на переиндексацию: {sum(map(len, groups.values()))} -> {out}_requeue.txt; "
+        f"чужие -> {out}_foreign.txt"
+    )
     if delete:
         print(f"удалено: {delete_ids(key, ours)} из {len(ours)}")
 
@@ -215,102 +265,191 @@ def sources(key: str, ids: list[str]) -> dict[str, dict]:
 def bulk(key: str, ops: list[dict]) -> list[dict]:
     body = "".join(json.dumps(op, ensure_ascii=False) + "\n" for op in ops).encode()
     req = urllib.request.Request(
-        f"{ES}/{INDEX}/_bulk", data=body, method="POST",
-        headers={"Content-Type": "application/x-ndjson", "Authorization": "ApiKey " + key})
+        f"{ES}/{INDEX}/_bulk",
+        data=body,
+        method="POST",
+        headers={
+            "Content-Type": "application/x-ndjson",
+            "Authorization": "ApiKey " + key,
+        },
+    )
     with urllib.request.urlopen(req, timeout=900) as r:
         return json.loads(r.read().decode("utf-8"))["items"]
 
 
 def first_error(items: list[dict]) -> str:
     errs = [v for it in items for v in it.values() if v.get("status") not in (200, 201)]
-    return f"; отказов {len(errs)}, первый: {errs[0].get('status')} {errs[0].get('error')}" if errs else ""
+    return (
+        f"; отказов {len(errs)}, первый: {errs[0].get('status')} {errs[0].get('error')}"
+        if errs
+        else ""
+    )
 
 
 def fold_all(key: str, bad_ids: list[str], batch: int = 200) -> None:
     folded = deleted = found = 0
     for i in range(0, len(bad_ids), batch):
-        bads = sources(key, bad_ids[i:i + batch])
+        bads = sources(key, bad_ids[i : i + batch])
         found += len(bads)
         new_id = {b: fixed_id(b, d["_source"]["case_number"]) for b, d in bads.items()}
         twins = sources(key, [n for n in new_id.values() if n])
         pairs = {b: n for b, n in new_id.items() if n in twins and n != b}
         # if_seq_no: если cron успел обновить близнеца после нашего чтения, ES
         # ответит 409, кривой останется и доберётся повторным запуском
-        items = bulk(key, [op for b, n in pairs.items() for op in (
-            {"index": {"_id": n, "if_seq_no": twins[n]["_seq_no"],
-                       "if_primary_term": twins[n]["_primary_term"]}},
-            fold(bads[b]["_source"], twins[n]["_source"]))]) if pairs else []
+        items = (
+            bulk(
+                key,
+                [
+                    op
+                    for b, n in pairs.items()
+                    for op in (
+                        {
+                            "index": {
+                                "_id": n,
+                                "if_seq_no": twins[n]["_seq_no"],
+                                "if_primary_term": twins[n]["_primary_term"],
+                            }
+                        },
+                        fold(bads[b]["_source"], twins[n]["_source"]),
+                    )
+                ],
+            )
+            if pairs
+            else []
+        )
         # кривой удаляем, только если запись слитого документа ES принял
-        ok = [b for b, it in zip(pairs, items) if it["index"].get("status") in (200, 201)]
+        ok = [
+            b
+            for b, it in zip(pairs, items)  # noqa: B905
+            if it["index"].get("status") in (200, 201)
+        ]
         folded += len(ok)
         deleted += delete_ids(key, ok)
-        print(f"  {time.strftime('%H:%M:%S')} {i + batch} из {len(bad_ids)}: "
-              f"найдено кривых {len(bads)}, пар {len(pairs)}, слито {folded}, удалено {deleted}"
-              f"{first_error(items)}", flush=True)
-    print(f"итог: найдено кривых {found}, слито {folded}, удалено {deleted} из {len(bad_ids)}")
+        print(
+            f"  {time.strftime('%H:%M:%S')} {i + batch} из {len(bad_ids)}: "
+            f"найдено кривых {len(bads)}, пар {len(pairs)}, слито {folded}, удалено {deleted}"
+            f"{first_error(items)}",
+            flush=True,
+        )
+    print(
+        f"итог: найдено кривых {found}, слито {folded}, удалено {deleted} из {len(bad_ids)}"
+    )
 
 
 def move_all(key: str, bad_ids: list[str], batch: int = 200) -> None:
     created = deleted = 0
     for i in range(0, len(bad_ids), batch):
-        bads = sources(key, bad_ids[i:i + batch])
+        bads = sources(key, bad_ids[i : i + batch])
         new_id = {b: fixed_id(b, d["_source"]["case_number"]) for b, d in bads.items()}
         # create, а не index: если под новым id документ уже появился (два
         # кривых id на одно дело, или cron успел), ES ответит 409 и ничего не
         # перезапишет — такой кривой останется для --fold
-        items = bulk(key, [op for b, n in new_id.items() for op in (
-            {"create": {"_id": n}}, moved(bads[b]["_source"], n))]) if new_id else []
-        ok = [b for b, it in zip(new_id, items) if it["create"].get("status") == 201]
+        items = (
+            bulk(
+                key,
+                [
+                    op
+                    for b, n in new_id.items()
+                    for op in ({"create": {"_id": n}}, moved(bads[b]["_source"], n))  # ty: ignore[invalid-argument-type]
+                ],
+            )
+            if new_id
+            else []
+        )
+        ok = [b for b, it in zip(new_id, items) if it["create"].get("status") == 201]  # noqa: B905
         created += len(ok)
         deleted += delete_ids(key, ok)
-        print(f"  {time.strftime('%H:%M:%S')} {i + batch} из {len(bad_ids)}: "
-              f"перенесено {created}, удалено {deleted}{first_error(items)}", flush=True)
+        print(
+            f"  {time.strftime('%H:%M:%S')} {i + batch} из {len(bad_ids)}: "
+            f"перенесено {created}, удалено {deleted}{first_error(items)}",
+            flush=True,
+        )
     print(f"итог: перенесено {created}, удалено кривых {deleted} из {len(bad_ids)}")
 
 
 def delete_ids(key: str, ids: list[str]) -> int:
     if not ids:
         return 0
-    return sum(it["delete"]["result"] == "deleted"
-               for it in bulk(key, [{"delete": {"_id": i}} for i in ids]))
+    return sum(
+        it["delete"]["result"] == "deleted"
+        for it in bulk(key, [{"delete": {"_id": i}} for i in ids])
+    )
 
 
 def existing(key: str, ids: list[str]) -> dict[str, list[str]]:
     resp = call(key, f"{INDEX}/_mget?_source_includes=html_files", {"ids": ids})
-    return {d["_id"]: d["_source"].get("html_files") or [] for d in resp["docs"] if d.get("found")}
+    return {
+        d["_id"]: d["_source"].get("html_files") or []
+        for d in resp["docs"]
+        if d.get("found")
+    }
 
 
 def main() -> None:
     p = argparse.ArgumentParser()
-    p.add_argument("--delete", action="store_true",
-                   help="удалить кривые документы, у которых есть правильный близнец")
+    p.add_argument(
+        "--delete",
+        action="store_true",
+        help="удалить кривые документы, у которых есть правильный близнец",
+    )
     p.add_argument("--out", default="bracket_ids", help="префикс выходных файлов")
-    p.add_argument("--ids", help="взять кривые id из прошлого .jsonl вместо поиска по индексу")
-    p.add_argument("--pattern", default="* [*",
-                   help="шаблон wildcard по id_final; '*]-*' — оренбургские «2]-50» при «1[2]-50»")
-    p.add_argument("--move", action="store_true",
-                   help="перенести кривые без близнеца (из --ids) на правильный id")
-    p.add_argument("--rekey", action="store_true",
-                   help="перенести документы (из --ids) с номера производства на номер жалобы")
-    p.add_argument("--split", action="store_true",
-                   help="склеенные жалобы одного производства (из --ids): план; с --delete удалить")
-    p.add_argument("--unmerge", action="store_true",
-                   help="дела с датой 1900 (из --ids): план разборки склеенных; с --delete удалить их")
-    p.add_argument("--fold", action="store_true",
-                   help="слить оставшиеся кривые (из --ids) в близнеца из ES и удалить их")
+    p.add_argument(
+        "--ids", help="взять кривые id из прошлого .jsonl вместо поиска по индексу"
+    )
+    p.add_argument(
+        "--pattern",
+        default="* [*",
+        help="шаблон wildcard по id_final; '*]-*' — оренбургские «2]-50» при «1[2]-50»",
+    )
+    p.add_argument(
+        "--move",
+        action="store_true",
+        help="перенести кривые без близнеца (из --ids) на правильный id",
+    )
+    p.add_argument(
+        "--rekey",
+        action="store_true",
+        help="перенести документы (из --ids) с номера производства на номер жалобы",
+    )
+    p.add_argument(
+        "--split",
+        action="store_true",
+        help="склеенные жалобы одного производства (из --ids): план; с --delete удалить",
+    )
+    p.add_argument(
+        "--unmerge",
+        action="store_true",
+        help="дела с датой 1900 (из --ids): план разборки склеенных; с --delete удалить их",
+    )
+    p.add_argument(
+        "--fold",
+        action="store_true",
+        help="слить оставшиеся кривые (из --ids) в близнеца из ES и удалить их",
+    )
     args = p.parse_args()
 
     key = api_key()
     if args.rekey:
-        rekey_all(key, rekey_candidates(list(map(json.loads, open(args.ids, encoding="utf-8")))))
+        rekey_all(
+            key,
+            rekey_candidates(list(map(json.loads, open(args.ids, encoding="utf-8")))),
+        )
         return
     if args.split:
-        unmerge(key, collision_groups(list(map(json.loads, open(args.ids, encoding="utf-8")))),
-                args.out, args.delete)
+        unmerge(
+            key,
+            collision_groups(list(map(json.loads, open(args.ids, encoding="utf-8")))),
+            args.out,
+            args.delete,
+        )
         return
     if args.unmerge:
-        unmerge(key, unmerge_groups(list(map(json.loads, open(args.ids, encoding="utf-8")))),
-                args.out, args.delete)
+        unmerge(
+            key,
+            unmerge_groups(list(map(json.loads, open(args.ids, encoding="utf-8")))),
+            args.out,
+            args.delete,
+        )
         return
     if args.move:
         move_all(key, move_ids(list(map(json.loads, open(args.ids, encoding="utf-8")))))
@@ -319,37 +458,65 @@ def main() -> None:
         fold_all(key, fold_ids(list(map(json.loads, open(args.ids, encoding="utf-8")))))
         return
     rows = [
-        {"_id": h["_id"], "new_id": fixed_id(h["_id"], h["_source"]["case_number"]),
-         "path_manifest": h["_source"].get("path_manifest") or "",
-         "html_files": h["_source"].get("html_files") or []}
-        for h in (fetch_by_ids(key, [r["_id"] for r in map(json.loads, open(args.ids, encoding="utf-8"))
-                                     if " [" in r["_id"]])
-                  if args.ids else scan_bracket(key, args.pattern))
+        {
+            "_id": h["_id"],
+            "new_id": fixed_id(h["_id"], h["_source"]["case_number"]),
+            "path_manifest": h["_source"].get("path_manifest") or "",
+            "html_files": h["_source"].get("html_files") or [],
+        }
+        for h in (
+            fetch_by_ids(
+                key,
+                [
+                    r["_id"]
+                    for r in map(json.loads, open(args.ids, encoding="utf-8"))
+                    if " [" in r["_id"]
+                ],
+            )
+            if args.ids
+            else scan_bracket(key, args.pattern)
+        )
     ]
     # new_id == _id значит формула номер не починила — такой документ близнецом
     # сам себе не считается, иначе --delete удалил бы единственную копию
     new_ids = [r["new_id"] for r in rows if r["new_id"] and r["new_id"] != r["_id"]]
-    found = {k: v for i in range(0, len(new_ids), 1000)
-             for k, v in existing(key, new_ids[i:i + 1000]).items()}
-    rows = [{**r, "twin": r["new_id"] in found and r["new_id"] != r["_id"],
-             "covered": r["new_id"] in found and r["new_id"] != r["_id"]
-                        and covered(r["html_files"], found[r["new_id"]])} for r in rows]
+    found = {
+        k: v
+        for i in range(0, len(new_ids), 1000)
+        for k, v in existing(key, new_ids[i : i + 1000]).items()  # ty: ignore[invalid-argument-type]
+    }
+    rows = [
+        {
+            **r,
+            "twin": r["new_id"] in found and r["new_id"] != r["_id"],
+            "covered": r["new_id"] in found
+            and r["new_id"] != r["_id"]
+            and covered(r["html_files"], found[r["new_id"]]),  # ty: ignore[invalid-argument-type]
+        }
+        for r in rows
+    ]
 
-    with (open(f"{args.out}.jsonl", "w", encoding="utf-8") as jl,
-          open(f"{args.out}_fs.txt", "w", encoding="utf-8") as fs,
-          open(f"{args.out}_warc.txt", "w", encoding="utf-8") as warc):
+    with (
+        open(f"{args.out}.jsonl", "w", encoding="utf-8") as jl,
+        open(f"{args.out}_fs.txt", "w", encoding="utf-8") as fs,
+        open(f"{args.out}_warc.txt", "w", encoding="utf-8") as warc,
+    ):
         for r in rows:
             jl.write(json.dumps(r, ensure_ascii=False) + "\n")
-            (warc if is_warc_locator(r["path_manifest"]) else fs).write(r["path_manifest"] + "\n")
+            (warc if is_warc_locator(r["path_manifest"]) else fs).write(  # ty: ignore[invalid-argument-type]
+                r["path_manifest"] + "\n"  # ty: ignore[unsupported-operator]
+            )
 
     twins = [r["_id"] for r in rows if r["covered"]]
-    print(f"кривых id: {len(rows)}, с правильным близнецом: {sum(r['twin'] for r in rows)}, "
-          f"из них близнец держит все версии (будут удалены): {len(twins)}")
+    print(
+        f"кривых id: {len(rows)}, с правильным близнецом: {sum(r['twin'] for r in rows)}, "  # ty: ignore[no-matching-overload]
+        f"из них близнец держит все версии (будут удалены): {len(twins)}"
+    )
     print(f"записано {args.out}.jsonl, {args.out}_fs.txt, {args.out}_warc.txt")
     if not args.delete or not twins:
         return
 
-    deleted = delete_ids(key, twins)
+    deleted = delete_ids(key, twins)  # ty: ignore[invalid-argument-type]
     print(f"удалено {deleted} из {len(twins)}; осталось кривых {len(rows) - deleted}")
 
 

@@ -33,7 +33,14 @@ def run(es: Elasticsearch, index: str, out_prefix: str) -> None:
         query={"wildcard": {"id_final": {"value": "*_NONE_*"}}},
         size=500,
         scroll="5m",
-        _source=["id_final", "id_uid", "case_number", "court_code", "path_manifest", "html_files"],
+        _source=[
+            "id_final",
+            "id_uid",
+            "case_number",
+            "court_code",
+            "path_manifest",
+            "html_files",
+        ],  # ty: ignore[unknown-argument]
     )
     scroll_id = resp["_scroll_id"]
     with (
@@ -81,7 +88,10 @@ def main() -> None:
     elif os.environ.get("ES_API_KEY"):
         es_opts["api_key"] = os.environ["ES_API_KEY"]
     elif os.environ.get("ES_USER"):
-        es_opts["basic_auth"] = (os.environ["ES_USER"], os.environ.get("SGMDLT_PASSWORD", ""))
+        es_opts["basic_auth"] = (
+            os.environ["ES_USER"],
+            os.environ.get("SGMDLT_PASSWORD", ""),
+        )
     if args.insecure and args.es.startswith("https://"):
         es_opts["verify_certs"] = False
     es = Elasticsearch(args.es, **es_opts)

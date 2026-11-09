@@ -6,7 +6,10 @@ def test_none_id_healed_from_case_number_year():
 
 
 def test_normal_id_untouched():
-    assert fix_none_id("73RS0013_2026-05-12_5-151", "5-151/2026") == "73RS0013_2026-05-12_5-151"
+    assert (
+        fix_none_id("73RS0013_2026-05-12_5-151", "5-151/2026")
+        == "73RS0013_2026-05-12_5-151"
+    )
 
 
 def test_none_id_without_year_in_number_kept():

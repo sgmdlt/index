@@ -1,5 +1,6 @@
 """The crawler cannot supply case_number/date_reg/id_final — it does not parse.
 The indexer derives them when it reads the archived card back."""
+
 from pathlib import Path
 
 from src.load_from_db import enrich_mgs_meta
@@ -13,7 +14,7 @@ def test_meta_gains_identity_from_the_archived_card():
     assert meta["id_final"] == "77RS0031_2019-12-23_02-0681"
     assert meta["case_number"] == "02-0681/2020"
     assert meta["date_reg"] == "2019-12-23"
-    assert meta["url"] == URL          # original keys survive
+    assert meta["url"] == URL  # original keys survive
 
 
 def test_a_seeded_id_is_never_overwritten():

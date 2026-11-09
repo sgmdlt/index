@@ -6,10 +6,10 @@ Ports loadFromDb.js. Implements lease-based polling with retry limits.
 import json
 import logging
 import os
+from collections.abc import Generator
 from datetime import datetime
 from io import BytesIO
 from itertools import groupby
-from typing import Generator
 
 from warcio.archiveiterator import ArchiveIterator
 
@@ -31,7 +31,7 @@ VALID_REASONS = {
     "bad_manifest_json",
     "build_failed",
     "bad_jsonl_record",
-    "sql_error",   # court DB error page stored instead of case HTML
+    "sql_error",  # court DB error page stored instead of case HTML
     "empty_html",  # placeholder/banner page with no extractable fields
 }
 
@@ -53,7 +53,8 @@ def _loc_parts(locator: str) -> tuple[str, int, int]:
     return path.replace(DOCKER_WARC_ROOT, WARC_FS_ROOT), int(off), int(length)
 
 
-def poll_batch(conn, worker_id: str, batch_size: int = 5000, priority_only: bool = False
+def poll_batch(
+    conn, worker_id: str, batch_size: int = 5000, priority_only: bool = False
 ) -> list[dict]:
     """Lease a batch of NEW/FAILED rows, priority rows first, and return them."""
     with conn.cursor() as cur:
@@ -161,7 +162,7 @@ def queue_redownload(
 
 def rows_to_units(
     rows: list[dict],
-) -> Generator[tuple[dict | None, dict, str | None], None, None]:
+) -> Generator[tuple[dict | None, dict, str | None]]:
     """Convert DB rows to (unit, row, reason) tuples for the main pipeline.
 
     reason is None on success; otherwise one of VALID_REASONS describing why
@@ -288,7 +289,7 @@ def _group_to_unit(locator: str, meta, html, warc_date) -> dict:
     }
 
 
-def units_from_warc(path: str) -> Generator[dict, None, None]:
+def units_from_warc(path: str) -> Generator[dict]:
     """Stream .warc.gz shards start-to-end for a full reindex, no DB.
 
     `path` is one shard or a directory of shards. Records are paired into
@@ -344,10 +345,15 @@ def _warc_row_to_unit(fh, row: dict) -> tuple[dict | None, dict, str | None]:
                 body = rec.content_stream().read()
                 # an MGS group carries the card plus its documents; courts
                 # groups carry the page alone, so the html branch still wins
-                if documents is not None and html is not None and \
-                        not ctype.startswith("text/html"):
+                if (
+                    documents is not None
+                    and html is not None
+                    and not ctype.startswith("text/html")
+                ):
                     documents[rec.rec_headers.get_header("WARC-Target-URI")] = (
-                        body, rec.rec_headers.get_header("X-Document-Ext"))
+                        body,
+                        rec.rec_headers.get_header("X-Document-Ext"),
+                    )
                     continue
                 html = body
                 warc_date = rec.rec_headers.get_header("WARC-Date")

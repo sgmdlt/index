@@ -9,6 +9,7 @@ bytes are parsed again in the worker, so the card was souped twice.
 Courts never noticed: `is_mgs` is false for sudrf pages, so the call returned
 immediately and courts ran ~102 units/s.
 """
+
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
@@ -41,12 +42,19 @@ def test_unit_assembly_does_not_parse_the_card():
 def test_the_worker_still_delivers_the_enriched_identity(tmp_path):
     """Moving the work must not lose it: the four provenance fields and the
     resolved case type still have to reach the indexed document."""
-    unit = _group_to_unit(LOCATOR, {"url": URL, "court_code": "77RS0031"},
-                          CARD, WARC_DATE)
+    unit = _group_to_unit(
+        LOCATOR, {"url": URL, "court_code": "77RS0031"}, CARD, WARC_DATE
+    )
     indexer = FakeIndexer()
     with ProcessPoolExecutor(max_workers=1) as pool:
-        _run_pipelined([unit], pool, indexer, Metrics(), max_workers=1,
-                       failed_log=str(tmp_path / "failed.log"))
+        _run_pipelined(
+            [unit],
+            pool,
+            indexer,  # ty: ignore[invalid-argument-type]
+            Metrics(),
+            max_workers=1,
+            failed_log=str(tmp_path / "failed.log"),
+        )
 
     [(_, update)] = indexer.items
     doc = update["doc"]
@@ -60,13 +68,22 @@ def test_the_worker_still_delivers_the_enriched_identity(tmp_path):
 def test_a_seeded_id_still_beats_the_parsed_one(tmp_path):
     """The merge rule has to survive the move: an id already in Elasticsearch
     wins, or a case renumbered since the dump lands as a second document."""
-    unit = _group_to_unit(LOCATOR, {"url": URL, "court_code": "77RS0031",
-                                    "ID": "77RS0031_2026-01-01_seeded"},
-                          CARD, WARC_DATE)
+    unit = _group_to_unit(
+        LOCATOR,
+        {"url": URL, "court_code": "77RS0031", "ID": "77RS0031_2026-01-01_seeded"},
+        CARD,
+        WARC_DATE,
+    )
     indexer = FakeIndexer()
     with ProcessPoolExecutor(max_workers=1) as pool:
-        _run_pipelined([unit], pool, indexer, Metrics(), max_workers=1,
-                       failed_log=str(tmp_path / "failed.log"))
+        _run_pipelined(
+            [unit],
+            pool,
+            indexer,  # ty: ignore[invalid-argument-type]
+            Metrics(),
+            max_workers=1,
+            failed_log=str(tmp_path / "failed.log"),
+        )
 
     [(_, update)] = indexer.items
     assert update["doc"]["id_final"] == "77RS0031_2026-01-01_seeded"

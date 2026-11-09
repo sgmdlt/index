@@ -47,7 +47,8 @@ from src.load_from_db import (
 )
 from src.metrics import Metrics
 from src.parse_html import fill_raw_tables
-#from src.parse_html_sx import fill_raw_tables as fill_raw_tables
+
+# from src.parse_html_sx import fill_raw_tables as fill_raw_tables
 from src.prepare_doc import prepare_doc
 from src.to_document import to_document
 from src.traverse import traverse_cases
@@ -62,8 +63,10 @@ logging.getLogger("elastic_transport.transport").setLevel(logging.ERROR)
 
 _HERE = Path(__file__).parent  # project root (index/)
 
-def _parse_html_bytes(html_bytes: bytes, origin: str,
-                      documents: dict | None = None) -> dict:
+
+def _parse_html_bytes(
+    html_bytes: bytes, origin: str, documents: dict | None = None
+) -> dict:
     """Parse raw case HTML into a prepared doc; origin is for error messages.
 
     `documents` are the raw files an MGS crawler archived beside the card;
@@ -74,7 +77,14 @@ def _parse_html_bytes(html_bytes: bytes, origin: str,
     # No-progress docs are fine; skip only docs with no extracted field at all
     # (Postgres outage dumps and truncated pages).
     if not any(v for k, v in prepared.items() if k != "_document_text"):
-        kind = "sql_error" if (b"<b>QUERY:</b>" in html_bytes or b"server closed the connection" in html_bytes) else "empty_html"
+        kind = (
+            "sql_error"
+            if (
+                b"<b>QUERY:</b>" in html_bytes
+                or b"server closed the connection" in html_bytes
+            )
+            else "empty_html"
+        )
         raise ValueError(f"{kind}: {origin}")
     return prepared
 
@@ -102,8 +112,12 @@ def _parse_warc_payload(args: tuple) -> tuple:
     whole pipeline to ~23 units/s while the pool idled.
     """
     html_bytes, origin, documents, url = args
-    return (_parse_html_bytes(html_bytes, origin, documents), 0.0,
-            len(html_bytes), mgs_identity_of(html_bytes, url))
+    return (
+        _parse_html_bytes(html_bytes, origin, documents),
+        0.0,
+        len(html_bytes),
+        mgs_identity_of(html_bytes, url),
+    )
 
 
 def _normalize_strings(node):
@@ -213,7 +227,10 @@ def _units_from_jsonl(jsonl_path: str):
         try:
             pg_conn = _open_pg()
         except Exception as exc:
-            logger.warning("Could not open PG for redownload_queue: %s — falling back to .bad only", exc)
+            logger.warning(
+                "Could not open PG for redownload_queue: %s — falling back to .bad only",
+                exc,
+            )
             pg_conn = None
         return pg_conn
 
@@ -245,7 +262,12 @@ def _units_from_jsonl(jsonl_path: str):
                 data = json.loads(line)
             except json.JSONDecodeError as exc:
                 if len(buf_parts) >= MAX_BUFFER_LINES:
-                    logger.error("JSONL giving up on record at line %d after %d buffered lines -> %s", buf_start_lineno, len(buf_parts), bad_path)
+                    logger.error(
+                        "JSONL giving up on record at line %d after %d buffered lines -> %s",
+                        buf_start_lineno,
+                        len(buf_parts),
+                        bad_path,
+                    )
                     _dump_bad(buf, buf_start_lineno, f"max_buffer:{exc}")
                     buf_parts = []
                 continue
@@ -260,7 +282,12 @@ def _units_from_jsonl(jsonl_path: str):
             }
         if buf_parts:
             buf = b"\n".join(buf_parts)
-            logger.error("JSONL trailing unparsed record at line %d (%d lines) -> %s", buf_start_lineno, len(buf_parts), bad_path)
+            logger.error(
+                "JSONL trailing unparsed record at line %d (%d lines) -> %s",
+                buf_start_lineno,
+                len(buf_parts),
+                bad_path,
+            )
             _dump_bad(buf, buf_start_lineno, "trailing_eof")
 
 
@@ -354,7 +381,9 @@ def _ensure_index(es, index: str) -> None:
         if status == 400:
             return  # already exists
         if status == 403:
-            logger.warning("No permission to create index %r; assuming it exists.", index)
+            logger.warning(
+                "No permission to create index %r; assuming it exists.", index
+            )
             return
         logger.error("Index creation error: %s", exc)
 
@@ -374,7 +403,9 @@ def _fast_ingest_on(es, index: str) -> dict:
     except Exception as exc:
         status = getattr(getattr(exc, "meta", None), "status", None)
         if status == 403:
-            logger.info("Fast ingest unsupported (insufficient privileges); continuing without it.")
+            logger.info(
+                "Fast ingest unsupported (insufficient privileges); continuing without it."
+            )
         else:
             logger.warning("Could not set fast ingest settings: %s", exc)
         return {}
@@ -407,6 +438,7 @@ def _refresh_index(es, index: str) -> None:
 
 # Unit processing
 
+
 def _process_unit(
     unit: dict,
     pool: ProcessPoolExecutor,
@@ -425,14 +457,16 @@ def _process_unit(
     t0 = metrics.now_ms()
     ordered_futures = [pool.submit(_parse_html_file, args) for args in html_paths]
     pairs: list[tuple[str, dict]] = []
-    for future, fname in zip(ordered_futures, html_files):
+    for future, fname in zip(ordered_futures, html_files):  # noqa: B905
         try:
             prepared, read_ms, n_bytes = future.result()
             metrics.add_time("readHtmlMs", read_ms)
             metrics.inc("htmlBytes", n_bytes)
             pairs.append((fname, prepared))
         except Exception as exc:
-            logger.error("Parse error in %s/%s: %s", unit.get("rel_from_root"), fname, exc)
+            logger.error(
+                "Parse error in %s/%s: %s", unit.get("rel_from_root"), fname, exc
+            )
             metrics.inc("parseErrors")
             # Drop the failed file — do not emit an empty document entry
     html_files = [p[0] for p in pairs]
@@ -451,15 +485,13 @@ def _process_unit(
 
     bkey = _bucket_key(unit)
     indexed_any = False
-    for filename, parsed in zip(html_files, parsed_files):
+    for filename, parsed in zip(html_files, parsed_files):  # noqa: B905
         update = build_update_item(
             doc=doc,
             doc_data=parsed,
             unit=unit,
             filename=filename,
-            source_path=os.path.join(
-                os.path.dirname(unit["rel_from_root"]), filename
-            ),
+            source_path=os.path.join(os.path.dirname(unit["rel_from_root"]), filename),
         )
         if update:
             metrics.inc("docsPrepared")
@@ -483,8 +515,8 @@ def _run_pipelined(
 
     MAX_INFLIGHT = max_workers * 8
 
-    pending: dict = {}    # future -> (uid, fname)
-    unit_state: dict = {} # uid -> {unit, total, order, results, t0}
+    pending: dict = {}  # future -> (uid, fname)
+    unit_state: dict = {}  # uid -> {unit, total, order, results, t0}
     units_iter = iter(units_iter)
     units_exhausted = False
     next_uid = 0
@@ -513,8 +545,8 @@ def _run_pipelined(
                 "unit": unit,
                 "total": len(html_files),
                 "order": list(html_files),  # preserve original sort order
-                "results": {},              # fname -> parsed dict | None (failed)
-                "completed": 0,             # count of futures resolved (handles dup fnames)
+                "results": {},  # fname -> parsed dict | None (failed)
+                "completed": 0,  # count of futures resolved (handles dup fnames)
                 "t0": metrics.now_ms(),
                 "had_error": False,
             }
@@ -525,9 +557,12 @@ def _run_pipelined(
                     # manifest_path is a locator, not a directory
                     fut = pool.submit(
                         _parse_warc_payload,
-                        (bytes_map[fname], unit["manifest_path"],
-                         unit.get("documents"),
-                         (unit.get("meta") or {}).get("url", "")),
+                        (
+                            bytes_map[fname],
+                            unit["manifest_path"],
+                            unit.get("documents"),
+                            (unit.get("meta") or {}).get("url", ""),
+                        ),
                     )
                 else:
                     manifest_dir = os.path.dirname(unit["manifest_path"])
@@ -554,9 +589,15 @@ def _run_pipelined(
                 state["results"][fname] = prepared
                 if identity:
                     state["unit"]["meta"] = apply_mgs_identity(
-                        state["unit"].get("meta") or {}, identity)
+                        state["unit"].get("meta") or {}, identity
+                    )
             except Exception as exc:
-                logger.error("Parse error in %s/%s: %s", state["unit"].get("rel_from_root"), fname, exc)
+                logger.error(
+                    "Parse error in %s/%s: %s",
+                    state["unit"].get("rel_from_root"),
+                    fname,
+                    exc,
+                )
                 metrics.inc("parseErrors")
                 state["results"][fname] = None  # drop file, don't emit empty doc
                 state["had_error"] = True
@@ -607,7 +648,7 @@ def _run_pipelined(
             indexed_any = False
             doc_ids: list[str] = []
             is_warc = unit.get("html_bytes_by_name") is not None
-            for filename, parsed in zip(html_files_done, parsed_files_done):
+            for filename, parsed in zip(html_files_done, parsed_files_done):  # noqa: B905
                 update = build_update_item(
                     doc=doc,
                     doc_data=parsed,
@@ -616,9 +657,7 @@ def _run_pipelined(
                     # WARC: rel_from_root is a locator, dirname is meaningless
                     source_path=unit["manifest_path"]
                     if is_warc
-                    else os.path.join(
-                        os.path.dirname(unit["rel_from_root"]), filename
-                    ),
+                    else os.path.join(os.path.dirname(unit["rel_from_root"]), filename),
                 )
                 if update:
                     metrics.inc("docsPrepared")
@@ -636,11 +675,14 @@ def _run_pipelined(
 
 # Source runners
 
+
 def _derive_id_final(data: dict) -> str:
     # сохранённый id_final мог посчитать старой формулой — пересчитываем
     recomputed = case_id_from_fields(
-        data.get("case_number"), data.get("date_reg"),
-        data.get("court_code"), data.get("link"),
+        data.get("case_number"),
+        data.get("date_reg"),
+        data.get("court_code"),
+        data.get("link"),
     )
     if recomputed:
         return recomputed
@@ -740,8 +782,7 @@ def _run_db(
             done_buf.extend(r["id"] for r in done_rows)
             flush_done(force=False)
             for row in bad_rows:
-                mark_failed(conn, row["id"], row.get("attempts") or 0,
-                            reason[:500])
+                mark_failed(conn, row["id"], row.get("attempts") or 0, reason[:500])
 
     def units_gen():
         while True:
@@ -758,7 +799,7 @@ def _run_db(
                         outbox_row=row,
                     )
                     continue
-                unit["_row"] = row
+                unit["_row"] = row  # ty: ignore[invalid-assignment]
                 yield unit
 
     def on_complete(unit: dict, indexed: bool, doc_ids: list) -> None:
@@ -799,12 +840,15 @@ def _run_db(
         with lock:
             stranded = sum(len(rows) for rows in awaiting.values())
         if stranded:
-            logger.error("%d outbox rows never got a verdict from ES; "
-                         "they stay leasable", stranded)
+            logger.error(
+                "%d outbox rows never got a verdict from ES; they stay leasable",
+                stranded,
+            )
         conn.close()
 
 
 # CLI
+
 
 def parse_args(argv=None):
     p = argparse.ArgumentParser(description="Court case ES indexer")
@@ -899,6 +943,7 @@ def main():
     pg_conn = _open_pg() if args.redownload and not args.db and not args.warc else None
     on_redownload = None
     if pg_conn is not None:
+
         def on_redownload(reason: str, manifest_path: str, filename: str | None = None):
             queue_redownload(
                 pg_conn, reason, manifest_path=manifest_path, filename=filename
@@ -911,7 +956,10 @@ def main():
             elif args.warc:
                 _run_pipelined(
                     units_from_warc(args.warc),
-                    pool, indexer, metrics, args.workers,
+                    pool,
+                    indexer,
+                    metrics,
+                    args.workers,
                     failed_log=args.failed_log,
                 )
             elif args.db:
@@ -919,11 +967,15 @@ def main():
             elif args.folders:
                 _run_pipelined(
                     _units_from_folders(
-                        args.folders, root,
+                        args.folders,
+                        root,
                         failed_log=args.failed_log,
                         on_redownload=on_redownload,
                     ),
-                    pool, indexer, metrics, args.workers,
+                    pool,
+                    indexer,
+                    metrics,
+                    args.workers,
                     failed_log=args.failed_log,
                 )
             else:
@@ -932,15 +984,22 @@ def main():
                         root,
                         filter_str=args.filter_str,
                         failed_log=args.failed_log,
-                        on_manifest_ms=lambda ms: metrics.add_time("manifestFetchMs", ms),
+                        on_manifest_ms=lambda ms: metrics.add_time(
+                            "manifestFetchMs", ms
+                        ),
                         on_redownload=on_redownload,
                     ),
-                    pool, indexer, metrics, args.workers,
+                    pool,
+                    indexer,
+                    metrics,
+                    args.workers,
                     failed_log=args.failed_log,
                 )
         finally:
             indexer.drain()
-            logger.info("Indexing complete, flushing remaining buffers and restoring index settings")
+            logger.info(
+                "Indexing complete, flushing remaining buffers and restoring index settings"
+            )
             _fast_ingest_off(es, args.index, orig_settings)
             if args.priority_only:
                 # Must run even if nothing was indexed: sudata has refresh_interval=-1

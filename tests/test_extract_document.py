@@ -4,7 +4,9 @@ from src.extract_document import _norm, to_text
 def test_keeps_indentation_and_line_breaks():
     """Indentation is the formatting: a flattened act is unreadable."""
     raw = "      ПОСТАНОВЛЕНИЕ\n\n      г. Москва          30 июля 2026 г.\n"
-    assert _norm(raw) == "      ПОСТАНОВЛЕНИЕ\n\n      г. Москва          30 июля 2026 г."
+    assert (
+        _norm(raw) == "      ПОСТАНОВЛЕНИЕ\n\n      г. Москва          30 июля 2026 г."
+    )
 
 
 def test_normalises_line_endings():
@@ -41,12 +43,18 @@ def test_extracted_text_keeps_its_layout():
 def test_prepare_doc_keeps_the_first_line_indent():
     """The whole-text strip cut the opening indent back off downstream."""
     from src.prepare_doc import prepare_doc
+
     act = "      ПРИГОВОР\n\n      Именем Российской Федерации"
-    doc = prepare_doc({"raw_tables": {"СУДЕБНЫЕ АКТЫ": [{"Судебный акт #1 (Приговор)": act}]}})
+    doc = prepare_doc(
+        {"raw_tables": {"СУДЕБНЫЕ АКТЫ": [{"Судебный акт #1 (Приговор)": act}]}}
+    )
     assert doc["_document_text"][0]["text"] == act
 
 
 def test_prepare_doc_still_drops_a_blank_act():
     from src.prepare_doc import prepare_doc
-    doc = prepare_doc({"raw_tables": {"СУДЕБНЫЕ АКТЫ": [{"Судебный акт #1 (Приговор)": "  \n \n"}]}})
+
+    doc = prepare_doc(
+        {"raw_tables": {"СУДЕБНЫЕ АКТЫ": [{"Судебный акт #1 (Приговор)": "  \n \n"}]}}
+    )
     assert not doc.get("_document_text")

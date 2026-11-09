@@ -35,7 +35,9 @@ def test_moscow_progress_flattens_states_and_hearings():
 def test_merge_drops_stale_empty_head_row():
     # A degenerate row (empty date+event) left in ES by the old parser must be
     # purged on re-index, not preserved forever by the merge.
-    stale = [{"date": "", "event": "", "История местонахождения": [{"Дата": "08.08.2025"}]}]
+    stale = [
+        {"date": "", "event": "", "История местонахождения": [{"Дата": "08.08.2025"}]}
+    ]
     incoming = [
         {"date": "08.08.2025", "event": "Зарегистрировано"},
         {"date": "20.08.2025", "event": "Завершено"},

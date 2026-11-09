@@ -1,7 +1,7 @@
 """Filters for broken case texts and invalid date_reg values."""
 
 import re
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from .utils.dates import date_value_to_iso
 
@@ -43,14 +43,16 @@ def _case_number_year(case_number: str | None) -> str | None:
     return min(years) if years else None
 
 
-def recover_malformed_date(date_str: str | None, today: str | None = None) -> str | None:
+def recover_malformed_date(
+    date_str: str | None, today: str | None = None
+) -> str | None:
     """Fix a date whose year lost its century: take the last two year digits as
     a 20xx year, keep month/day. "217-08-28" -> "2017-08-28", "15-02-23" ->
     "2015-02-23". Returns None if unparseable or the result is out of range."""
     m = _MANGLED_DATE_RE.match(date_str or "")
     if not m:
         return None
-    today = today or datetime.now(timezone.utc).isoformat()
+    today = today or datetime.now(UTC).isoformat()
     cand = f"20{m.group(1)[-2:]:0>2}-{m.group(2)}-{m.group(3)}"
     return cand if _is_valid(cand, today) else None
 
@@ -68,7 +70,7 @@ def fix_date_reg(
     year from case number with date_reg's month-day (or Jan 1) -> original
     value. A coarse-but-right-year date beats a hole or a mangled year.
     """
-    today = today or datetime.now(timezone.utc).isoformat()
+    today = today or datetime.now(UTC).isoformat()
     if _is_valid(date_reg, today):
         return date_reg
     candidates = [
@@ -79,7 +81,7 @@ def fix_date_reg(
         if _is_valid(iso, today)
     ]
     if candidates:
-        return min(candidates)
+        return min(candidates)  # ty: ignore[invalid-argument-type]
     if _is_valid(date_result, today):
         return date_result
     # Mangled year (e.g. 0217-08-28) — but not the no-info placeholder, whose

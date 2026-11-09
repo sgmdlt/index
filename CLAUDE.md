@@ -148,6 +148,15 @@ matching `test_<area>.py`. Fixtures are real court page snippets, often with
 non-ASCII content; tests assert on Russian strings directly. Keep that —
 don't rewrite assertions to use fixture-derived constants.
 
+## Checks
+
+`mise run check` is the done-gate: a change is finished when it exits 0, and
+CI runs the same command (`mise run fix` applies the safe autofixes). A check
+that cannot be satisfied gets a narrow exception (one line or path, one rule,
+the reason beside it) and a human approves each one. The existing `# noqa`,
+`# ty: ignore` and config allowlists are the adoption baseline, not a pattern
+to extend. `uv.lock` changes only through `uv` commands.
+
 ## Tooling conventions
 
 `rtk` (Rust Token Killer) prefix is set in the user's global `~/.claude/CLAUDE.md` — apply globally, no need to re-document here.

@@ -11,7 +11,6 @@ docsIndexed=200. Правду знал только failed_paths.log. То ес�
 
 Счётчик docsIndexed при этом рос на весь размер батча независимо от отказов.
 """
-import pytest
 
 from src.bulk_indexer import BulkIndexer
 from src.metrics import Metrics
@@ -45,22 +44,32 @@ def _ok(*ids) -> dict:
 
 def _mixed(ok_ids, bad_ids) -> dict:
     items = [{"index": {"_id": i}} for i in ok_ids]
-    items += [{"index": {"_id": i, "error": {"type": "mapper_parsing_exception"}}}
-              for i in bad_ids]
+    items += [
+        {"index": {"_id": i, "error": {"type": "mapper_parsing_exception"}}}
+        for i in bad_ids
+    ]
     return {"items": items}
 
 
 def _indexer(es, tmp_path, on_result=None, metrics=None):
-    return BulkIndexer(es_client=es, index="t", metrics=metrics,
-                       bulk_docs=1000, flush_interval=3600,
-                       failed_log=str(tmp_path / "failed.log"),
-                       on_result=on_result)
+    return BulkIndexer(
+        es_client=es,
+        index="t",
+        metrics=metrics,
+        bulk_docs=1000,
+        flush_interval=3600,
+        failed_log=str(tmp_path / "failed.log"),
+        on_result=on_result,
+    )
 
 
 def test_a_rejected_item_is_reported_to_the_caller(tmp_path):
     seen = []
-    idx = _indexer(FakeES(_mixed(["a"], ["b"])), tmp_path,
-                   on_result=lambda ok, bad, reason: seen.append((ok, bad)))
+    idx = _indexer(
+        FakeES(_mixed(["a"], ["b"])),
+        tmp_path,
+        on_result=lambda ok, bad, reason: seen.append((ok, bad)),
+    )
     idx.add("k", _item("a"))
     idx.add("k", _item("b"))
     idx.drain()
@@ -70,8 +79,11 @@ def test_a_rejected_item_is_reported_to_the_caller(tmp_path):
 def test_a_rejected_batch_reports_every_document(tmp_path):
     """Отказ всего вызова — тот самый security_exception на 200 документов."""
     seen = []
-    idx = _indexer(FakeES(RuntimeError("security_exception")), tmp_path,
-                   on_result=lambda ok, bad, reason: seen.append((ok, bad, reason)))
+    idx = _indexer(
+        FakeES(RuntimeError("security_exception")),
+        tmp_path,
+        on_result=lambda ok, bad, reason: seen.append((ok, bad, reason)),
+    )
     idx.add("k", _item("a"))
     idx.add("k", _item("b"))
     idx.drain()
@@ -110,8 +122,11 @@ def test_nothing_indexed_when_the_whole_batch_is_rejected(tmp_path):
 
 def test_a_clean_batch_reports_success(tmp_path):
     seen = []
-    idx = _indexer(FakeES(_ok("a", "b")), tmp_path,
-                   on_result=lambda ok, bad, reason: seen.append((ok, bad)))
+    idx = _indexer(
+        FakeES(_ok("a", "b")),
+        tmp_path,
+        on_result=lambda ok, bad, reason: seen.append((ok, bad)),
+    )
     idx.add("k", _item("a"))
     idx.add("k", _item("b"))
     idx.drain()
@@ -129,8 +144,12 @@ def test_a_failed_mget_writes_nothing_and_reports_the_batch(tmp_path):
     es = FailingMgetES(_ok("a", "b"))
     reported = []
     metrics = Metrics()
-    idx = _indexer(es, tmp_path, lambda ok, bad, why: reported.append((ok, bad, why)),
-                   metrics=metrics)
+    idx = _indexer(
+        es,
+        tmp_path,
+        lambda ok, bad, why: reported.append((ok, bad, why)),
+        metrics=metrics,
+    )
     idx._do_bulk([_item("a"), _item("b")], "k")
     assert es.calls == 0
     assert reported and reported[0][0] == [] and sorted(reported[0][1]) == ["a", "b"]
@@ -139,6 +158,7 @@ def test_a_failed_mget_writes_nothing_and_reports_the_batch(tmp_path):
 
 def test_jsonl_run_with_failed_docs_exits_nonzero():
     from src.main import _exit_status
+
     assert _exit_status(jsonl=True, counters={"bulkFailedDocs": 2}) == 1
     assert _exit_status(jsonl=True, counters={"bulkFailedDocs": 0}) == 0
     assert _exit_status(jsonl=False, counters={"bulkFailedDocs": 2}) == 0

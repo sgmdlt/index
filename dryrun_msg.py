@@ -8,17 +8,17 @@ import json
 import sys
 from collections import Counter
 
+from src.bulk_indexer import build_update_item
 from src.main import _derive_id_final
 from src.prepare_doc import prepare_doc
 from src.to_document import to_document
-from src.bulk_indexer import build_update_item
 
 PATH = sys.argv[1] if len(sys.argv) > 1 else "/home/ltdmgs/MSUDRF-All-02.jsonl"
 N = int(sys.argv[2]) if len(sys.argv) > 2 else 10
 SUMMARY_N = int(sys.argv[3]) if len(sys.argv) > 3 else 5000
 
 src_keys = Counter()
-out_keys = Counter()    # non-empty fields in assembled doc
+out_keys = Counter()  # non-empty fields in assembled doc
 empty_keys = Counter()  # present but empty
 dropped_doc_link = 0
 none_id = 0
@@ -49,8 +49,11 @@ with open(PATH, encoding="utf-8") as fh:
             parsed_files=[prepared],
         )
         item = build_update_item(
-            doc=doc, doc_data=prepared, unit={"rel_from_root": data["id_final"]},
-            filename="msg.jsonl", source_path=f"jsonl:{data['id_final']}",
+            doc=doc,
+            doc_data=prepared,
+            unit={"rel_from_root": data["id_final"]},
+            filename="msg.jsonl",
+            source_path=f"jsonl:{data['id_final']}",
         )
         if item is None:
             none_id += 1

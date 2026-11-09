@@ -8,6 +8,7 @@ crawler only has to store pages.
 `prepare_doc.py` already understands the shape produced here — it has explicit
 handling for Moscow cards nesting movement as {section: [rows]}.
 """
+
 import re
 from dataclasses import dataclass
 
@@ -53,7 +54,7 @@ def _rows(table, base: str) -> list:
     for tr in table.select("tbody tr"):
         values = [_cell(td, base) for td in tr.select("td")]
         values += [""] * (len(headers) - len(values))
-        rows.append(dict(zip(headers, values)))
+        rows.append(dict(zip(headers, values)))  # noqa: B905
     return rows
 
 
@@ -83,16 +84,17 @@ def parse_card(html: str, base: str = BASE) -> Card:
         value = _text(right)
         if related is not None:
             href = related["href"]
-            value += "\n\n" + (href if href.startswith("http") else base + href)
+            value += "\n\n" + (href if href.startswith("http") else base + href)  # ty: ignore[unresolved-attribute, unsupported-operator]
         head[_text(left)] = value
 
-    tab_names = {li["data-tab"]: _text(li)
-                 for li in soup.select("ul.tablist__tabs li[data-tab]")}
+    tab_names = {
+        li["data-tab"]: _text(li) for li in soup.select("ul.tablist__tabs li[data-tab]")
+    }
     tables = {}
     for panel in soup.select("ul.tablist__panels li[data-tab]"):
         key = panel["data-tab"]
         name = tab_names.get(key, key)
-        tables[name] = _panel(panel, name, base)
+        tables[name] = _panel(panel, name, base)  # ty: ignore[invalid-argument-type]
 
     links = []
     for groups in tables.values():
@@ -108,12 +110,13 @@ def parse_card(html: str, base: str = BASE) -> Card:
 def fill_texts(tables: dict, texts: dict) -> dict:
     """Replace download URLs sitting in cells with their extracted text."""
     return {
-        tab: [{name: [{k: texts.get(v, v) for k, v in row.items()} for row in rows]}
-              for group in groups for name, rows in group.items()]
+        tab: [
+            {name: [{k: texts.get(v, v) for k, v in row.items()} for row in rows]}
+            for group in groups
+            for name, rows in group.items()
+        ]
         for tab, groups in tables.items()
     }
-
-
 
 
 # Строки шапки, несущие обвинение. Замер на 1744 карточках: «Подсудимый» несёт
@@ -126,10 +129,12 @@ _ACCUSED_ROWS = ("Подсудимый", "Осужденный (оправдан
 # статьёй у уголовного дела на карточке нет.
 _ARTICLE_PAREN = re.compile(r"\(([^)]*\b[Сс]т\.?\s*\d[^)]*)\)")
 _CODEX = re.compile(r"\b(УК|УПК|КоАП|КАС|ГК|ГПК|ТК|НК|УИК)\b")
-_LABELS = ((re.compile(r"\bСт\.\s*"), "ст."),
-           (re.compile(r"\bЧ\.\s*"), "ч."),
-           (re.compile(r"\bпп\.\s*"), "п.п."),
-           (re.compile(r"\bп\.\s*"), "п."))
+_LABELS = (
+    (re.compile(r"\bСт\.\s*"), "ст."),
+    (re.compile(r"\bЧ\.\s*"), "ч."),
+    (re.compile(r"\bпп\.\s*"), "п.п."),
+    (re.compile(r"\bп\.\s*"), "п."),
+)
 
 
 def _one_article(text: str) -> str:
@@ -165,14 +170,24 @@ def _documents(card) -> list:
         for group in groups:
             for rows in group.values():
                 for row in rows:
-                    link = next((v for v in row.values()
-                                 if isinstance(v, str) and v in card.links), None)
+                    link = next(
+                        (
+                            v
+                            for v in row.values()
+                            if isinstance(v, str) and v in card.links
+                        ),
+                        None,
+                    )
                     if link is None or link in seen:
                         continue
                     seen.add(link)
-                    docs.append({"link": link,
-                                 "name": row.get("Вид документа", ""),
-                                 "date": row.get("Дата документа", "")})
+                    docs.append(
+                        {
+                            "link": link,
+                            "name": row.get("Вид документа", ""),
+                            "date": row.get("Дата документа", ""),
+                        }
+                    )
     return docs
 
 
@@ -228,8 +243,14 @@ def is_mgs(html) -> bool:
     return "detail-cart" in html and "card-sud" in html
 
 
-_NUMBER_KEYS = ("Номер дела", "Номер жалобы", "Номер заявления", "Номер материала",
-                "Номер производства", "Номер дела ~ материала")
+_NUMBER_KEYS = (
+    "Номер дела",
+    "Номер жалобы",
+    "Номер заявления",
+    "Номер материала",
+    "Номер производства",
+    "Номер дела ~ материала",
+)
 
 
 def _head_number(head: dict) -> str:
@@ -274,7 +295,7 @@ def card_case_id(card, url: str) -> tuple:
     date_reg = ""
     if rows and rows[index].get("Дата"):
         date_reg = _iso(rows[index]["Дата"])
-    elif head.get("Дата поступления"):        # no state table: best available
+    elif head.get("Дата поступления"):  # no state table: best available
         date_reg = _iso(head["Дата поступления"])
     return court_code, date_reg, case_number
 
@@ -289,14 +310,24 @@ def card_documents(card) -> list:
         for group in groups:
             for rows in group.values():
                 for row in rows:
-                    link = next((v for v in row.values()
-                                 if isinstance(v, str) and v in card.links), None)
+                    link = next(
+                        (
+                            v
+                            for v in row.values()
+                            if isinstance(v, str) and v in card.links
+                        ),
+                        None,
+                    )
                     if link is None or link in seen:
                         continue
                     seen.add(link)
-                    docs.append({"link": link,
-                                 "name": row.get("Вид документа", ""),
-                                 "date": row.get("Дата документа", "")})
+                    docs.append(
+                        {
+                            "link": link,
+                            "name": row.get("Вид документа", ""),
+                            "date": row.get("Дата документа", ""),
+                        }
+                    )
     return docs
 
 
@@ -311,8 +342,6 @@ def build_record(url: str, card, doc_texts: dict) -> dict:
         "id_final": custom_id(court_code, date_reg, number),
         "raw_tables": {"Дело": card.head, **fill_texts(card.tables, doc_texts)},
     }
-
-
 
 
 def mgs_identity(html, url: str) -> dict:
@@ -336,14 +365,17 @@ def mgs_identity(html, url: str) -> dict:
     # a short code ('КоАП') that to_document looks up in CASE_TYPE_MAPPING, and
     # mos-gorsud has no such code — it gives the name outright.
     instance, case_type = proceeding_from_url(url)
-    return {"court_code": court_code, "case_number": case_number,
-            "date_reg": date_reg,
-            "id_final": custom_id(court_code, date_reg, case_number),
-            "link": url,
-            "uuid": uuid_from_url(url),
-            "court_name": COURT_NAME.get(court_code, ""),
-            "instance": instance,
-            "case_type_name": case_type}
+    return {
+        "court_code": court_code,
+        "case_number": case_number,
+        "date_reg": date_reg,
+        "id_final": custom_id(court_code, date_reg, case_number),
+        "link": url,
+        "uuid": uuid_from_url(url),
+        "court_name": COURT_NAME.get(court_code, ""),
+        "instance": instance,
+        "case_type_name": case_type,
+    }
 
 
 # --- ported so this module stands alone -------------------------------------
@@ -357,7 +389,7 @@ COURT_BY_ALIAS = {
     "babushkinskij": "77RS0001",
     "basmannyj": "77RS0002",
     "butyrskij": "77RS0003",
-    "cheremushkinskij": "77RS0032",   # site's current spelling
+    "cheremushkinskij": "77RS0032",  # site's current spelling
     "chertanovskij": "77RS0033",
     "cheryomushkinskij": "77RS0032",  # dump's spelling; the site 301s it
     "dorogomilovskij": "77RS0006",
@@ -379,7 +411,7 @@ COURT_BY_ALIAS = {
     "perovskij": "77RS0020",
     "preobrazhenskij": "77RS0022",
     "presnenskij": "77RS0021",
-    "savelovskij": "77RS0023",   # site's current spelling
+    "savelovskij": "77RS0023",  # site's current spelling
     "savyolovskij": "77RS0023",  # dump's spelling; the site 301s it
     "shcherbinskij": "77RS0034",
     "simonovskij": "77RS0024",
@@ -472,28 +504,28 @@ _MATERIALS = "Производство по материалам"
 
 PROCEEDING_BY_SEGMENT = {
     # measured
-    "admin": (_FIRST, _ADMIN_OFFENCE),                    # 12
-    "admin-exec": (_FIRST, _MATERIALS),                   # 21
-    "appeal-admin": (_APPEAL, _ADMIN_CASE),               # 1
-    "appeal-civil": (_APPEAL, _CIVIL),                    # 378
-    "appeal-kas": (_APPEAL, _ADMIN_CASE),                 # 1
-    "cassation-civil": (_CASSATION, _CIVIL),              # 1
-    "cassation-criminal": (_CASSATION, _CRIMINAL),        # 1
-    "civil": (_FIRST, _CIVIL),                            # 48
-    "claim-admin": (_FIRST, _ADMIN_CASE),                 # 76
-    "claim-civil": (_FIRST, _CIVIL),                      # 78
-    "claim-criminal": (_FIRST, _CRIMINAL),                # 2
-    "criminal": (_FIRST, _CRIMINAL),                      # 6
-    "criminal-materials": (_FIRST, _MATERIALS),           # 108
-    "first-admin": (_FIRST, _ADMIN_CASE),                 # 18
-    "first-admin-exec": (_FIRST, _MATERIALS),             # 4
-    "first-civil": (_FIRST, _CIVIL),                      # 5
-    "first-civil-exec": (_FIRST, _MATERIALS),             # 7
-    "first-criminal": (_FIRST, _CRIMINAL),                # 2
-    "first-criminal-exec": (_FIRST, _MATERIALS),          # 19
-    "kas": (_FIRST, _ADMIN_CASE),                         # 42
+    "admin": (_FIRST, _ADMIN_OFFENCE),  # 12
+    "admin-exec": (_FIRST, _MATERIALS),  # 21
+    "appeal-admin": (_APPEAL, _ADMIN_CASE),  # 1
+    "appeal-civil": (_APPEAL, _CIVIL),  # 378
+    "appeal-kas": (_APPEAL, _ADMIN_CASE),  # 1
+    "cassation-civil": (_CASSATION, _CIVIL),  # 1
+    "cassation-criminal": (_CASSATION, _CRIMINAL),  # 1
+    "civil": (_FIRST, _CIVIL),  # 48
+    "claim-admin": (_FIRST, _ADMIN_CASE),  # 76
+    "claim-civil": (_FIRST, _CIVIL),  # 78
+    "claim-criminal": (_FIRST, _CRIMINAL),  # 2
+    "criminal": (_FIRST, _CRIMINAL),  # 6
+    "criminal-materials": (_FIRST, _MATERIALS),  # 108
+    "first-admin": (_FIRST, _ADMIN_CASE),  # 18
+    "first-admin-exec": (_FIRST, _MATERIALS),  # 4
+    "first-civil": (_FIRST, _CIVIL),  # 5
+    "first-civil-exec": (_FIRST, _MATERIALS),  # 7
+    "first-criminal": (_FIRST, _CRIMINAL),  # 2
+    "first-criminal-exec": (_FIRST, _MATERIALS),  # 19
+    "kas": (_FIRST, _ADMIN_CASE),  # 42
     "magistrate-cassation-civil": (_SUPERVISION, _CIVIL),  # 3
-    "review-not-yet": (_CASSATION, _ADMIN_OFFENCE),       # 159
+    "review-not-yet": (_CASSATION, _ADMIN_OFFENCE),  # 159
     # no document in the index to match against; read off the sibling segments,
     # which agree unanimously within each family
     "appeal-criminal": (_APPEAL, _CRIMINAL),
@@ -513,9 +545,19 @@ def proceeding_from_url(url: str) -> tuple:
     return PROCEEDING_BY_SEGMENT.get(match.group(1), ("", ""))
 
 
-_SANITIZE = str.maketrans({" ": "", "/": "-", "\\": "-",
-                           "(": "_", ")": "_", "[": "_", "]": "_",
-                           "{": "_", "}": "_"})
+_SANITIZE = str.maketrans(
+    {
+        " ": "",
+        "/": "-",
+        "\\": "-",
+        "(": "_",
+        ")": "_",
+        "[": "_",
+        "]": "_",
+        "{": "_",
+        "}": "_",
+    }
+)
 
 
 def custom_id(court_code: str, date_reg: str, case_number: str) -> str:

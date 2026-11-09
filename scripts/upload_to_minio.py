@@ -13,11 +13,11 @@ import os
 import sys
 import threading
 import time
+from collections.abc import Iterable, Iterator
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from itertools import islice
 from pathlib import Path
-from typing import Iterable, Iterator
 
 import boto3
 from botocore.exceptions import ClientError
@@ -146,14 +146,23 @@ def main() -> int:
                     mb = bytes_up / (1024 * 1024)
                     logger.info(
                         "uploaded=%d (skipped=%d) %.0f files/s %.1f MB elapsed=%.1fs",
-                        n_files, n_skipped, rate, mb, now - started,
+                        n_files,
+                        n_skipped,
+                        rate,
+                        mb,
+                        now - started,
                     )
 
     elapsed = time.monotonic() - started
     mb = bytes_up / (1024 * 1024)
     logger.info(
         "DONE files=%d uploaded=%d skipped=%d total=%.1f MB rate=%.1f MB/s elapsed=%.1fs",
-        n_files, n_files - n_skipped, n_skipped, mb, mb / max(0.001, elapsed), elapsed,
+        n_files,
+        n_files - n_skipped,
+        n_skipped,
+        mb,
+        mb / max(0.001, elapsed),
+        elapsed,
     )
     return 0
 

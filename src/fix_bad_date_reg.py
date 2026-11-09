@@ -51,7 +51,7 @@ def run(es: Elasticsearch, index: str, apply: bool) -> None:
         query=build_query(),
         size=500,
         scroll="5m",
-        _source=["date_reg", "progress", "date_result", "case_number", "id_uid"],
+        _source=["date_reg", "progress", "date_result", "case_number", "id_uid"],  # ty: ignore[unknown-argument]
     )
     scroll_id = resp["_scroll_id"]
     while hits := resp["hits"]["hits"]:
@@ -87,7 +87,9 @@ def run(es: Elasticsearch, index: str, apply: bool) -> None:
                         print(f"ERROR {item['update'].get('_id')}: {err}")
         resp = es.scroll(scroll_id=scroll_id, scroll="5m")
     es.clear_scroll(scroll_id=scroll_id)
-    print(f"bad={total} recovered={recovered} kept={total - recovered} mode={'APPLY' if apply else 'dry-run'}")
+    print(
+        f"bad={total} recovered={recovered} kept={total - recovered} mode={'APPLY' if apply else 'dry-run'}"
+    )
 
 
 def main() -> None:
@@ -98,7 +100,9 @@ def main() -> None:
     p.add_argument("--password")
     p.add_argument("--api-key", dest="api_key", default=None)
     p.add_argument("--insecure", action="store_true")
-    p.add_argument("--apply", action="store_true", help="write fixes (default: dry-run)")
+    p.add_argument(
+        "--apply", action="store_true", help="write fixes (default: dry-run)"
+    )
     args = p.parse_args()
 
     es_opts: dict = {"request_timeout": 120}
@@ -109,7 +113,10 @@ def main() -> None:
     elif os.environ.get("ES_API_KEY"):
         es_opts["api_key"] = os.environ["ES_API_KEY"]
     elif os.environ.get("ES_USER"):
-        es_opts["basic_auth"] = (os.environ["ES_USER"], os.environ.get("SGMDLT_PASSWORD", ""))
+        es_opts["basic_auth"] = (
+            os.environ["ES_USER"],
+            os.environ.get("SGMDLT_PASSWORD", ""),
+        )
     if args.insecure and args.es.startswith("https://"):
         es_opts["verify_certs"] = False
     es = Elasticsearch(args.es, **es_opts)

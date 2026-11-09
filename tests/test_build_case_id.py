@@ -3,7 +3,10 @@ from src.utils.case_id import build_case_id
 
 def test_simple_id_matches_courts_format():
     # real manifest: case_number "1-76/2016", date_reg "30.03.2016"
-    assert build_case_id("1-76/2016", "30.03.2016", "61RS0018") == "61RS0018_2016-03-30_1-76"
+    assert (
+        build_case_id("1-76/2016", "30.03.2016", "61RS0018")
+        == "61RS0018_2016-03-30_1-76"
+    )
 
 
 def test_missing_date_reg_returns_none():

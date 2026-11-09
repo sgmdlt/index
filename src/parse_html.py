@@ -6,6 +6,7 @@ Safe to import with no side effects (used in multiprocessing workers).
 
 import logging
 import re
+
 from bs4 import BeautifulSoup, Tag
 
 from src.parse_html_mgs import fill_raw_tables_mgs, is_mgs
@@ -76,7 +77,7 @@ def _parse_table(table: Tag):
                 continue
             if _has_nested_table(v_cell):
                 nested = v_cell.find("table")
-                result[key] = _parse_table(nested)
+                result[key] = _parse_table(nested)  # ty: ignore[invalid-argument-type]
             else:
                 result[key] = _text(v_cell)
         return result
@@ -117,7 +118,7 @@ def _parse_table(table: Tag):
             cell = tds[i]
             if _has_nested_table(cell):
                 nested = cell.find("table")
-                row[key] = _parse_table(nested)
+                row[key] = _parse_table(nested)  # ty: ignore[invalid-argument-type]
             else:
                 row[key] = _text(cell)
         if row:
@@ -145,8 +146,8 @@ def _resolve_table_name(soup: BeautifulSoup, table: Tag) -> str:
 
     # Try parent tab label
     tab_content = table.find_parent(class_="lawcase-tab-content")
-    if tab_content and tab_content.get("id", "").startswith("tab_content_"):
-        suffix = tab_content["id"].replace("tab_content_", "")
+    if tab_content and tab_content.get("id", "").startswith("tab_content_"):  # ty: ignore[unresolved-attribute]
+        suffix = tab_content["id"].replace("tab_content_", "")  # ty: ignore[unresolved-attribute]
         tab_label = soup.find(id=f"tab_id_{suffix}")
         if tab_label:
             txt = _text(tab_label)
@@ -198,7 +199,7 @@ def fill_raw_tables(html: bytes | str, documents: dict | None = None) -> dict:
     soup = BeautifulSoup(html, "lxml")
     for tbody in soup.find_all("tbody"):
         tbody.unwrap()
-    tab_container = soup.select_one("div[id^=cont_doc]")
+    tab_container = soup.select_one("div[id^=cont_doc]")  # noqa: F841
     formatted_case = {}
     formatted_case["raw_tables"] = {}
 
@@ -206,7 +207,7 @@ def fill_raw_tables(html: bytes | str, documents: dict | None = None) -> dict:
         # Формат 2: ul#case_bookmarks + div.lawcase-tab-content[id=tab_content_X]
         if soup.select_one("ul#case_bookmarks"):
             for label_el in soup.select("ul#case_bookmarks li[id^=tab_id_]"):
-                suffix = label_el["id"].replace("tab_id_", "")
+                suffix = label_el["id"].replace("tab_id_", "")  # ty: ignore[unresolved-attribute]
                 tab_name = label_el.get_text(" ", strip=True)
                 content_div = soup.find(id=f"tab_content_{suffix}")
                 if not content_div:
@@ -219,15 +220,15 @@ def fill_raw_tables(html: bytes | str, documents: dict | None = None) -> dict:
                 if doc_labels:
                     docs = []
                     for doc_label_el in doc_labels:
-                        doc_suffix = doc_label_el["id"].replace("doctab_id_", "")
+                        doc_suffix = doc_label_el["id"].replace("doctab_id_", "")  # ty: ignore[unresolved-attribute]
                         doc_div = content_div.find(id=f"doctab_content_{doc_suffix}")
                         if not doc_div:
                             continue
                         for meta in doc_div.find_all("meta"):
                             meta.decompose()
-                        docs.append({
-                            doc_label_el.get_text(" ", strip=True): doc_div.get_text()
-                        })
+                        docs.append(
+                            {doc_label_el.get_text(" ", strip=True): doc_div.get_text()}
+                        )
                     formatted_case["raw_tables"][tab_name] = docs
                     continue
 
@@ -247,7 +248,7 @@ def fill_raw_tables(html: bytes | str, documents: dict | None = None) -> dict:
 
         # Формат 1: ul.tabs li + div.contentt > div[id^=cont]
         else:
-            for tab_name, tab in zip(
+            for tab_name, tab in zip(  # noqa: B905
                 soup.select("ul.tabs li"),
                 soup.select("div.contentt > div[id^=cont]"),
             ):
@@ -257,13 +258,13 @@ def fill_raw_tables(html: bytes | str, documents: dict | None = None) -> dict:
                 if not tab.find("table"):
                     # Если несколько текстов (вложенные вкладки)
                     if tab.select("li[id^=tab], li[id^=doctab]"):
-                        for doc_name, doc in zip(
+                        for doc_name, doc in zip(  # noqa: B905
                             tab.select("li[id^=tab], li[id^=doctab]"),
                             tab.select("div[id^=cont_doc], div[id^=doctab_content]"),
-                                    ):
+                        ):
                             for meta in doc.find_all("meta"):
                                 meta.decompose()
-                            formatted_case["raw_tables"][tab_name].append(
+                            formatted_case["raw_tables"][tab_name].append(  # ty: ignore[unresolved-attribute]
                                 {doc_name.get_text(" ", strip=True): doc.get_text()}
                             )
                     # Если один текст
@@ -283,13 +284,15 @@ def fill_raw_tables(html: bytes | str, documents: dict | None = None) -> dict:
                         )
                     # Если таблиц несколько
                     else:
-                        for table_name, table in zip(
+                        for table_name, table in zip(  # noqa: B905
                             tab.select(":scope > table tr:first-child [colspan]"),
                             tab.select(":scope > table"),
-                                    ):
-                            formatted_case["raw_tables"][tab_name].append(
+                        ):
+                            formatted_case["raw_tables"][tab_name].append(  # ty: ignore[unresolved-attribute]
                                 {
-                                    table_name.get_text(" ", strip=True): tab_to_dict(table)
+                                    table_name.get_text(" ", strip=True): tab_to_dict(
+                                        table
+                                    )
                                 }
                             )
     except Exception as e:
@@ -355,12 +358,12 @@ def tab_to_dict(tab):
                 ):
                     for row in tab.select(":scope > tr:not(:has([colspan]))")[1:]:
                         row_dict = {}
-                        for key, value in zip(
+                        for key, value in zip(  # noqa: B905
                             tab.select(":scope > tr:not(:has([colspan]))")[0].select(
                                 "td"
                             ),
                             row.select("td"),
-                                    ):
+                        ):
                             row_dict[key.get_text(" ", strip=True)] = value.get_text(
                                 " ", strip=True
                             )
@@ -400,13 +403,15 @@ def tab_to_dict(tab):
         # Если в таблице только другая таблица с шапкой, сохраняем её
         elif len(tab.select(":scope > tr")) == 2 and tab.select(":scope table"):
             parsed_tab = {}
-            parsed_tab[
-                tab.select_one(":scope [colspan]").get_text(" ", strip=True)
-            ] = tab_to_dict(tab.select_one(":scope table"))
+            parsed_tab[tab.select_one(":scope [colspan]").get_text(" ", strip=True)] = (
+                tab_to_dict(tab.select_one(":scope table"))
+            )
 
         # Если ничего не подошло — ошибка
         elif len(tab.select("tr")) > 0:
-            logger.debug("tab_to_dict: unrecognized table structure: %s", str(tab)[:200])
+            logger.debug(
+                "tab_to_dict: unrecognized table structure: %s", str(tab)[:200]
+            )
             raise ValueError
 
     return parsed_tab

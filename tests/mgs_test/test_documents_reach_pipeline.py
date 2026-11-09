@@ -5,6 +5,7 @@ thing that consumes them is `fill_raw_tables_mgs` — several layers down, behin
 a process pool. Dropping them there costs nothing visible: the card still
 indexes, just with no decision text at all.
 """
+
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
@@ -12,8 +13,10 @@ from src.main import _run_pipelined
 from src.metrics import Metrics
 
 CARD = (Path(__file__).parent / "card_civil.html").read_bytes()
-DOC = ("https://mos-gorsud.ru/rs/horoshevskij/cases/docs/content/"
-       "4823f0b2-9a83-487c-8fea-b49c2a948770")
+DOC = (
+    "https://mos-gorsud.ru/rs/horoshevskij/cases/docs/content/"
+    "4823f0b2-9a83-487c-8fea-b49c2a948770"
+)
 LOCATOR = "/warc/shard-1.warc.gz:0:123"
 FNAME = "10-06-2026.12:00:00.html"
 
@@ -37,8 +40,14 @@ def test_warc_unit_documents_reach_the_parser(tmp_path):
     }
     indexer = FakeIndexer()
     with ProcessPoolExecutor(max_workers=1) as pool:
-        _run_pipelined([unit], pool, indexer, Metrics(), max_workers=1,
-                       failed_log=str(tmp_path / "failed.log"))
+        _run_pipelined(
+            [unit],
+            pool,
+            indexer,  # ty: ignore[invalid-argument-type]
+            Metrics(),
+            max_workers=1,
+            failed_log=str(tmp_path / "failed.log"),
+        )
 
     [(_, update)] = indexer.items
     [archived] = update["doc"]["documents"]

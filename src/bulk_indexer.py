@@ -10,15 +10,17 @@ from pathlib import Path
 
 from .text_filters import broken_text_message, fix_date_reg
 from .utils.case_id import case_id_from_fields
-from .uuid_group import in_group_scope, pick_group_id
 from .utils.dates import html_name_to_iso
-from .utils.paths import norm_path, dir_of_rel
+from .utils.paths import norm_path
+from .uuid_group import in_group_scope, pick_group_id
 
 logger = logging.getLogger(__name__)
 
 _HERE = Path(__file__).parent.parent  # project root (index/)
 
-_rules: dict = json.loads((Path(__file__).parent / "elastic_index_dict.json").read_text(encoding="utf-8"))
+_rules: dict = json.loads(
+    (Path(__file__).parent / "elastic_index_dict.json").read_text(encoding="utf-8")
+)
 MERGE_FIELDS: set[str] = {
     "html_files",
     "judge",
@@ -30,6 +32,7 @@ ARRAY_MERGE_FIELDS: frozenset[str] = frozenset(MERGE_FIELDS)
 
 
 # ID and document helpers
+
 
 def resolve_doc_id(doc: dict) -> str:
     """Return the document's id_final verbatim for use as the ES _id."""
@@ -44,7 +47,6 @@ def _to_array(v) -> list:
     if isinstance(v, str) and v == "":
         return []
     return [v]
-
 
 
 # ---------------------------------------------------------------------------
@@ -98,9 +100,10 @@ def _merge_documents(existing_arr: list, incoming_arr: list) -> list:
             result.append(entry)
             continue
         kept = result[i]
-        if ((kept.get("name") or "") in _PLACEHOLDER_NAMES
-                and (entry.get("name") or "") not in _PLACEHOLDER_NAMES):
-            kept = entry    # same text, properly named copy wins
+        if (kept.get("name") or "") in _PLACEHOLDER_NAMES and (
+            entry.get("name") or ""
+        ) not in _PLACEHOLDER_NAMES:
+            kept = entry  # same text, properly named copy wins
         if _layout_score(entry.get("text", "")) > _layout_score(kept.get("text", "")):
             # Same text up to whitespace, so the better-laid-out one wins —
             # layout is the formatting of an act. This is what lets a
@@ -123,7 +126,9 @@ def merge_docs(existing: dict | None, incoming: dict) -> dict:
             elif key == "progress":
                 continue  # handled below
             elif key in ARRAY_MERGE_FIELDS:
-                result[key] = _merge_array(_to_array(existing.get(key)), _to_array(value))
+                result[key] = _merge_array(
+                    _to_array(existing.get(key)), _to_array(value)
+                )
             elif value is not None and value != "" and value != [] and value != {}:
                 result[key] = value
         result["version"] = (existing.get("version") or 0) + 1
@@ -211,12 +216,14 @@ def merge_progress(existing: list, incoming: list) -> list[dict]:
             continue
         rest = _progress_rest(d)
         result = [
-            r for r in result
+            r
+            for r in result
             if _progress_head(r) != head or not _progress_rest(r) <= rest
         ]
         result.append(d)
     result.sort(key=_progress_sort_key)
     return result
+
 
 def build_doc(
     doc: dict, doc_data: dict, unit: dict, version: int, version_ts: str
@@ -245,9 +252,7 @@ def build_doc(
     return result
 
 
-def _build_documents_array(
-    doc_texts, filename: str | None, date: str
-) -> list[dict]:
+def _build_documents_array(doc_texts, filename: str | None, date: str) -> list[dict]:
     """Shape the prepare_doc `_document_text` payload into the nested documents array."""
     if not doc_texts:
         return []
@@ -329,9 +334,7 @@ def mget(es_client, index: str, ids: list[str]) -> dict[str, dict]:
     """Fetch existing documents by ID. Returns {id: _source} for found docs."""
     resp = es_client.mget(index=index, ids=ids)
     return {
-        doc["_id"]: doc["_source"]
-        for doc in resp.get("docs", [])
-        if doc.get("found")
+        doc["_id"]: doc["_source"] for doc in resp.get("docs", []) if doc.get("found")
     }
 
 
@@ -347,11 +350,15 @@ def uuid_twins(es_client, index: str, uuids: list[str]) -> dict[str, list[dict]]
     """
     ids: list[str] = []
     for i in range(0, len(uuids), UUID_CHUNK):
-        resp = es_client.search(index=index, query={"terms": {"uuid": uuids[i:i + UUID_CHUNK]}},
-                                size=10000, source=False)
+        resp = es_client.search(
+            index=index,
+            query={"terms": {"uuid": uuids[i : i + UUID_CHUNK]}},
+            size=10000,
+            source=False,
+        )
         ids += [hit["_id"] for hit in resp["hits"]["hits"]]
     out: dict[str, list[dict]] = {}
-    for doc in (es_client.mget(index=index, ids=ids).get("docs", []) if ids else []):
+    for doc in es_client.mget(index=index, ids=ids).get("docs", []) if ids else []:
         if doc.get("found"):
             out.setdefault(doc["_source"].get("uuid"), []).append(doc)
     return out
@@ -361,12 +368,20 @@ def _group_key(doc: dict) -> str:
     # кандидат группы — формульный id документа: старый id из прошлой
     # формулы не должен стать целевым только потому, что он там уже лежит
     src = doc["_source"]
-    return case_id_from_fields(src.get("case_number"), src.get("date_reg"),
-                               src.get("court_id") or src.get("court_code"),
-                               src.get("link")) or doc["_id"]
+    return (
+        case_id_from_fields(
+            src.get("case_number"),
+            src.get("date_reg"),
+            src.get("court_id") or src.get("court_code"),
+            src.get("link"),
+        )
+        or doc["_id"]
+    )
 
 
-def regroup(batch: list[dict], twins: dict[str, list[dict]]) -> tuple[list[dict], dict[str, list[dict]], dict]:
+def regroup(
+    batch: list[dict], twins: dict[str, list[dict]]
+) -> tuple[list[dict], dict[str, list[dict]], dict]:
     """Сводит документы одного uuid на id, выбранный правилом группы.
 
     Возвращает пачку с переписанными _id (исходный — в _orig_id: вызывающий
@@ -381,7 +396,10 @@ def regroup(batch: list[dict], twins: dict[str, list[dict]]) -> tuple[list[dict]
 
     target_of = {
         u: pick_group_id(
-            [(_group_key(t), t["_source"].get("version_ts") or "") for t in twins.get(u, [])]
+            [
+                (_group_key(t), t["_source"].get("version_ts") or "")
+                for t in twins.get(u, [])
+            ]
             + [(it["_id"], it.get("version_ts") or "") for it in items]
         )
         for u, items in by_uuid.items()
@@ -390,7 +408,9 @@ def regroup(batch: list[dict], twins: dict[str, list[dict]]) -> tuple[list[dict]
     regrouped = []
     for item in batch:
         item = {**item, "_orig_id": item.get("_orig_id", item["_id"])}
-        target = target_of.get(item["doc"]["uuid"]) if in_group_scope(item["doc"]) else None
+        target = (
+            target_of.get(item["doc"]["uuid"]) if in_group_scope(item["doc"]) else None
+        )
         if target:
             item = {**item, "_id": target, "doc": {**item["doc"], "id_final": target}}
         regrouped.append(item)
@@ -411,7 +431,7 @@ def with_group_created_at(merged: dict, docs: list[dict]) -> dict:
     один записан до created_at (легаси), его нет и у слитого: дело старое."""
     stamps = [d.get("created_at") for d in docs]
     merged = {k: v for k, v in merged.items() if k != "created_at"}
-    return merged if None in stamps else {**merged, "created_at": min(stamps)}
+    return merged if None in stamps else {**merged, "created_at": min(stamps)}  # ty: ignore[invalid-argument-type]
 
 
 def fold_group(docs: list[dict | None], target: str) -> dict:
@@ -419,13 +439,17 @@ def fold_group(docs: list[dict | None], target: str) -> dict:
     входящим, чтобы старый близнец не перетёр поля свежего."""
     docs = [d for d in docs if d]
     acc = None
-    for doc in sorted(docs, key=lambda d: d.get("version_ts") or ""):
-        acc = merge_docs(acc, doc)
-    return with_group_created_at({**acc, "id_final": target}, docs)
+    for doc in sorted(docs, key=lambda d: d.get("version_ts") or ""):  # ty: ignore[unresolved-attribute]
+        acc = merge_docs(acc, doc)  # ty: ignore[invalid-argument-type]
+    return with_group_created_at({**acc, "id_final": target}, docs)  # ty: ignore[invalid-argument-type]
 
 
-def apply_merge(batch: list[dict], existing_by_id: dict[str, dict], now: str,
-                stamp_created_at: bool = True) -> list[dict]:
+def apply_merge(
+    batch: list[dict],
+    existing_by_id: dict[str, dict],
+    now: str,
+    stamp_created_at: bool = True,
+) -> list[dict]:
     """Merge batch items against each other and existing ES docs.
 
     Items sharing the same _id are folded together in order (batch is pre-sorted
@@ -516,7 +540,9 @@ class BulkIndexer:
         if should_flush:
             # Hand off to a daemon thread so the caller is never stalled
             # waiting for mget + es.bulk network I/O.
-            t = threading.Thread(target=self._flush_bucket, args=(bucket_key,), daemon=True)
+            t = threading.Thread(
+                target=self._flush_bucket, args=(bucket_key,), daemon=True
+            )
             with self._lock:
                 self._flush_threads.append(t)
             t.start()
@@ -570,7 +596,9 @@ class BulkIndexer:
 
         # Документы одного uuid — одно дело: без этого правка даты судом
         # кладёт карточку под второй _id. Сбой поиска валит батч, как и mget.
-        uuids = sorted({item["doc"]["uuid"] for item in batch if in_group_scope(item["doc"])})
+        uuids = sorted(
+            {item["doc"]["uuid"] for item in batch if in_group_scope(item["doc"])}
+        )
         try:
             twins = uuid_twins(self._es, self._index, uuids) if uuids else {}
         except Exception as exc:
@@ -587,9 +615,10 @@ class BulkIndexer:
             # вызывающий ждёт вердикт по своим id, а не по переписанным
             return [o for i in ids for o in origin.get(i, [i])]
 
-
         try:
-            existing_by_id = mget(self._es, self._index, [item["_id"] for item in batch])
+            existing_by_id = mget(
+                self._es, self._index, [item["_id"] for item in batch]
+            )
         except Exception as exc:
             # Раньше это считалось «все документы новые», и слияние становилось
             # перезаписью: старые документы дела и история терялись, а частичная
@@ -598,7 +627,9 @@ class BulkIndexer:
             self._fail_batch(batch, bucket_key, f"mget failed: {exc}")
             return
         for target, sources in twins_for.items():
-            existing_by_id[target] = fold_group([existing_by_id.get(target), *sources], target)
+            existing_by_id[target] = fold_group(
+                [existing_by_id.get(target), *sources], target
+            )
         now = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
         merged_items = apply_merge(batch, existing_by_id, now, self._stamp_created_at)
 
@@ -634,9 +665,15 @@ class BulkIndexer:
                     if failed_ids:
                         self._metrics.inc("bulkFailedDocs", len(failed_ids))
                 if failed_ids:
-                    logger.warning("Bucket %s: %d/%d docs failed",
-                                   bucket_key, len(failed_ids), len(batch))
-                self._report(callers(indexed_ids), callers(failed_ids), "bulk item rejected")
+                    logger.warning(
+                        "Bucket %s: %d/%d docs failed",
+                        bucket_key,
+                        len(failed_ids),
+                        len(batch),
+                    )
+                self._report(
+                    callers(indexed_ids), callers(failed_ids), "bulk item rejected"
+                )
                 self._delete_twins(delete_for, set(indexed_ids))
                 return
 
@@ -669,7 +706,9 @@ class BulkIndexer:
                     return
 
     def _fail_batch(self, batch: list, bucket_key: str, reason: str) -> None:
-        failed_ids = [item.get("_orig_id") or item["_id"] for item in batch if item.get("_id")]
+        failed_ids = [
+            item.get("_orig_id") or item["_id"] for item in batch if item.get("_id")
+        ]
         logger.error("%s bucket=%s, batch not written", reason, bucket_key)
         for doc_id in failed_ids:
             self._log_failure(doc_id, reason)
@@ -682,8 +721,18 @@ class BulkIndexer:
         прочитанной версии: обновлённый после чтения близнец получит 409 и
         останется. Оставшийся близнец — дубль, а не потеря: следующая запись
         этого uuid сольёт его снова."""
-        ops = [{"delete": {"_index": self._index, "_id": twin, "if_seq_no": seq, "if_primary_term": term}}
-               for twin, (target, seq, term) in delete_for.items() if target in written]
+        ops = [
+            {
+                "delete": {
+                    "_index": self._index,
+                    "_id": twin,
+                    "if_seq_no": seq,
+                    "if_primary_term": term,
+                }
+            }
+            for twin, (target, seq, term) in delete_for.items()
+            if target in written
+        ]
         ids = [op["delete"]["_id"] for op in ops]
         if not ops:
             return

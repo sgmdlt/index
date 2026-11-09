@@ -1,0 +1,3 @@
+# Elasticsearch apiKey in the init commit (sud_import.js, since deleted). History is
+# immutable, so it stays listed; the key itself must be revoked: courts-hkvc.
+8d607260be77ebb5d1019d62db3ffa88dae67a8e:sud_import.js:generic-api-key:38

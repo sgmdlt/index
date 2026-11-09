@@ -5,6 +5,7 @@ so a Moscow case could not be filtered by instance nor linked back to its
 source page. None of the four is in the card markup — every one is derivable
 from the URL the crawler already stores in the manifest.
 """
+
 from pathlib import Path
 
 from src.load_from_db import enrich_mgs_meta
@@ -13,7 +14,7 @@ from src.to_document import to_document
 
 CARD = (Path(__file__).parent / "card_civil.html").read_bytes()
 UUID = "260ca701-38dc-11f1-9a49-2d939b4e4d75"
-URL = (f"https://mos-gorsud.ru/rs/horoshevskij/services/cases/civil/details/{UUID}")
+URL = f"https://mos-gorsud.ru/rs/horoshevskij/services/cases/civil/details/{UUID}"
 
 
 def test_identity_carries_the_source_page():
@@ -36,8 +37,11 @@ def test_instance_comes_from_the_url_segment():
 def test_the_four_fields_survive_into_the_document():
     meta = enrich_mgs_meta({"url": URL, "court_code": "77RS0031"}, CARD)
     doc_meta = to_document(
-        manifest_path="/w/s.warc.gz:0:1", rel_from_root="/w/s.warc.gz:0:1",
-        meta=meta, html_files=["10-06-2026.12:00:00.html"], parsed_files=[{}],
+        manifest_path="/w/s.warc.gz:0:1",
+        rel_from_root="/w/s.warc.gz:0:1",
+        meta=meta,
+        html_files=["10-06-2026.12:00:00.html"],
+        parsed_files=[{}],
     )["meta"]
     assert doc_meta["link"] == URL
     assert doc_meta["uuid"] == UUID
@@ -49,7 +53,10 @@ def test_a_sudrf_link_still_yields_its_own_uuid():
     """The MGS rule must not displace the _uid= form sudrf links use."""
     link = "http://x.sudrf.ru/modules.php?name=sud_delo&case_uid=abc-123&delo_id=1"
     doc_meta = to_document(
-        manifest_path="m", rel_from_root="m", meta={"link": link},
-        html_files=[], parsed_files=[],
+        manifest_path="m",
+        rel_from_root="m",
+        meta={"link": link},
+        html_files=[],
+        parsed_files=[],
     )["meta"]
     assert doc_meta["uuid"] == "abc-123"
