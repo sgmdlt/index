@@ -5,8 +5,10 @@ Ports toDocument.js.
 
 import json
 import re
+from collections.abc import Callable
 from pathlib import Path
 
+from .bulk_indexer import build_update_item
 from .utils.case_id import case_id_from_fields
 from .utils.dates import date_value_to_iso, get_files_version
 from .utils.paths import dir_of_rel, norm_path
@@ -106,3 +108,34 @@ def to_document(
         "html_files": html_files,
         "meta": new_meta,
     }
+
+
+def assemble_unit(
+    unit: dict,
+    pairs: list[tuple[str, dict]],
+    source_path_of: Callable[[str], str],
+) -> list[dict]:
+    """Parsed files of one unit -> indexer items, one per file.
+
+    `pairs` are (filename, prepared) in event order, failed files already
+    dropped. A unit without an id yields no items; the caller compares
+    lengths and records the unit for reprocessing.
+    """
+    doc = to_document(
+        manifest_path=unit["manifest_path"],
+        rel_from_root=unit["rel_from_root"],
+        meta=unit["meta"],
+        html_files=[f for f, _ in pairs],
+        parsed_files=[p for _, p in pairs],
+    )
+    updates = (
+        build_update_item(
+            doc=doc,
+            doc_data=parsed,
+            unit=unit,
+            filename=filename,
+            source_path=source_path_of(filename),
+        )
+        for filename, parsed in pairs
+    )
+    return [u for u in updates if u]

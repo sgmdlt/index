@@ -50,7 +50,7 @@ from src.parse_html import fill_raw_tables
 
 # from src.parse_html_sx import fill_raw_tables as fill_raw_tables
 from src.prepare_doc import prepare_doc
-from src.to_document import to_document
+from src.to_document import assemble_unit, to_document
 from src.traverse import traverse_cases
 from src.utils.case_id import case_id_from_fields
 from src.utils.text import normalize_jsonl_text
@@ -439,6 +439,15 @@ def _refresh_index(es, index: str) -> None:
 # Unit processing
 
 
+def _source_path_of(unit: dict):
+    """filename -> sourcePath for the item's debug metadata."""
+    if unit.get("html_bytes_by_name") is not None:
+        # WARC: rel_from_root is a locator, dirname is meaningless
+        return lambda _filename: unit["manifest_path"]
+    rel_dir = os.path.dirname(unit["rel_from_root"])
+    return lambda filename: os.path.join(rel_dir, filename)
+
+
 def _run_pipelined(
     units_iter,
     pool: ProcessPoolExecutor,
@@ -568,44 +577,19 @@ def _run_pipelined(
                     on_unit_complete(unit, False, [])
                 continue
 
-            html_files_done = [p[0] for p in pairs]
-            parsed_files_done = [p[1] for p in pairs]
-
             t0 = metrics.now_ms()
-            doc = to_document(
-                manifest_path=unit["manifest_path"],
-                rel_from_root=unit["rel_from_root"],
-                meta=unit["meta"],
-                html_files=html_files_done,
-                parsed_files=parsed_files_done,
-            )
+            updates = assemble_unit(unit, pairs, _source_path_of(unit))
             metrics.add_time("toDocMs", metrics.now_ms() - t0)
 
+            if len(updates) < len(pairs):
+                _append_failed_unit(unit["rel_from_root"], failed_log)
             bkey = bucket_key_fn(unit) if bucket_key_fn else _bucket_key(unit)
-            indexed_any = False
-            doc_ids: list[str] = []
-            is_warc = unit.get("html_bytes_by_name") is not None
-            for filename, parsed in zip(html_files_done, parsed_files_done):  # noqa: B905
-                update = build_update_item(
-                    doc=doc,
-                    doc_data=parsed,
-                    unit=unit,
-                    filename=filename,
-                    # WARC: rel_from_root is a locator, dirname is meaningless
-                    source_path=unit["manifest_path"]
-                    if is_warc
-                    else os.path.join(os.path.dirname(unit["rel_from_root"]), filename),
-                )
-                if update:
-                    metrics.inc("docsPrepared")
-                    doc_ids.append(update["_id"])
-                    indexer.add(bkey, update)
-                    indexed_any = True
-                else:
-                    _append_failed_unit(unit["rel_from_root"], failed_log)
+            for update in updates:
+                metrics.inc("docsPrepared")
+                indexer.add(bkey, update)
             if on_unit_complete:
                 # doc_ids связывают юнит с вердиктом ES, который придёт позже
-                on_unit_complete(unit, indexed_any, doc_ids)
+                on_unit_complete(unit, bool(updates), [u["_id"] for u in updates])
 
         metrics.log()
 
