@@ -13,8 +13,3 @@ disabled_rules = ["XP-003"]
 # "Keep that — don't rewrite assertions…" already gives the positive form first.
 paths = ["CLAUDE.md"]
 disabled_rules = ["PE-006"]
-
-[[overrides]]
-# Real finding, tracked as its own ticket: the file protects nothing (courts-4ecw).
-paths = ["src/.claudeignore"]
-disabled_rules = ["CC-SET-038"]
