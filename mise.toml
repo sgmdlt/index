@@ -11,6 +11,7 @@ PYTHONDONTWRITEBYTECODE = "1"
 [tools]
 uv = "0.13.7"
 shellcheck = "0.11.0"
+osv-scanner = "2.7.0"
 
 [tasks.check]
 description = "Run every check, the same set CI runs"
@@ -21,6 +22,8 @@ run = [
   "uv run --locked deptry .",
   "uv run --locked lint-imports",
   "git ls-files -z '*.sh' | xargs -0 shellcheck",
+  # Needs the network (api.osv.dev); CI also runs it weekly, since advisories land without a diff.
+  "osv-scanner scan source -L uv.lock",
   "uv run --locked pytest tests -q -p no:cacheprovider",
 ]
 
