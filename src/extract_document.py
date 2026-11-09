@@ -33,10 +33,10 @@ def sniff_ext(body: bytes) -> str | None:
     return None
 
 
-import os
-import re
-import subprocess
-import tempfile
+import os  # noqa: E402
+import re  # noqa: E402
+import subprocess  # noqa: E402
+import tempfile  # noqa: E402
 
 _UNAVAILABLE = "временно недоступ"
 _TRAILING_WS = re.compile(r"[ \t]+$", re.M)

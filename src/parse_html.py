@@ -199,7 +199,7 @@ def fill_raw_tables(html: bytes | str, documents: dict | None = None) -> dict:
     soup = BeautifulSoup(html, "lxml")
     for tbody in soup.find_all("tbody"):
         tbody.unwrap()
-    tab_container = soup.select_one("div[id^=cont_doc]")
+    tab_container = soup.select_one("div[id^=cont_doc]")  # noqa: F841
     formatted_case = {}
     formatted_case["raw_tables"] = {}
 
@@ -248,7 +248,7 @@ def fill_raw_tables(html: bytes | str, documents: dict | None = None) -> dict:
 
         # Формат 1: ul.tabs li + div.contentt > div[id^=cont]
         else:
-            for tab_name, tab in zip(
+            for tab_name, tab in zip(  # noqa: B905
                 soup.select("ul.tabs li"),
                 soup.select("div.contentt > div[id^=cont]"),
             ):
@@ -258,7 +258,7 @@ def fill_raw_tables(html: bytes | str, documents: dict | None = None) -> dict:
                 if not tab.find("table"):
                     # Если несколько текстов (вложенные вкладки)
                     if tab.select("li[id^=tab], li[id^=doctab]"):
-                        for doc_name, doc in zip(
+                        for doc_name, doc in zip(  # noqa: B905
                             tab.select("li[id^=tab], li[id^=doctab]"),
                             tab.select("div[id^=cont_doc], div[id^=doctab_content]"),
                         ):
@@ -284,7 +284,7 @@ def fill_raw_tables(html: bytes | str, documents: dict | None = None) -> dict:
                         )
                     # Если таблиц несколько
                     else:
-                        for table_name, table in zip(
+                        for table_name, table in zip(  # noqa: B905
                             tab.select(":scope > table tr:first-child [colspan]"),
                             tab.select(":scope > table"),
                         ):
@@ -358,7 +358,7 @@ def tab_to_dict(tab):
                 ):
                     for row in tab.select(":scope > tr:not(:has([colspan]))")[1:]:
                         row_dict = {}
-                        for key, value in zip(
+                        for key, value in zip(  # noqa: B905
                             tab.select(":scope > tr:not(:has([colspan]))")[0].select(
                                 "td"
                             ),

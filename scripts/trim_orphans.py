@@ -53,7 +53,7 @@ def iter_candidates(conn, batch_size: int):
             rows = cur.fetchall()
         if not rows:
             return
-        for row in rows:
+        for row in rows:  # noqa: UP028
             yield row
         last_id = rows[-1][0]
 

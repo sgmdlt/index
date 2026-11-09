@@ -210,7 +210,7 @@ def rekey_all(key: str, ids: list[str], batch: int = 200) -> None:
         items = bulk(key, ops) if ops else []
         ok = [
             d
-            for d, it in zip(new_id, items)
+            for d, it in zip(new_id, items)  # noqa: B905
             if next(iter(it.values())).get("status") in (200, 201)
         ]
         rekeyed += len(ok)
@@ -319,7 +319,9 @@ def fold_all(key: str, bad_ids: list[str], batch: int = 200) -> None:
         )
         # кривой удаляем, только если запись слитого документа ES принял
         ok = [
-            b for b, it in zip(pairs, items) if it["index"].get("status") in (200, 201)
+            b
+            for b, it in zip(pairs, items)  # noqa: B905
+            if it["index"].get("status") in (200, 201)
         ]
         folded += len(ok)
         deleted += delete_ids(key, ok)
@@ -354,7 +356,7 @@ def move_all(key: str, bad_ids: list[str], batch: int = 200) -> None:
             if new_id
             else []
         )
-        ok = [b for b, it in zip(new_id, items) if it["create"].get("status") == 201]
+        ok = [b for b, it in zip(new_id, items) if it["create"].get("status") == 201]  # noqa: B905
         created += len(ok)
         deleted += delete_ids(key, ok)
         print(

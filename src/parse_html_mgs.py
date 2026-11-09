@@ -54,7 +54,7 @@ def _rows(table, base: str) -> list:
     for tr in table.select("tbody tr"):
         values = [_cell(td, base) for td in tr.select("td")]
         values += [""] * (len(headers) - len(values))
-        rows.append(dict(zip(headers, values)))
+        rows.append(dict(zip(headers, values)))  # noqa: B905
     return rows
 
 

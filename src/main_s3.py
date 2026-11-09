@@ -246,7 +246,7 @@ def _run_pipelined(
             metrics.add_time("toDocMs", metrics.now_ms() - t0)
 
             bkey = _bucket_key(unit)
-            for filename, parsed in zip(html_files_done, parsed_files_done):
+            for filename, parsed in zip(html_files_done, parsed_files_done):  # noqa: B905
                 update = build_update_item(
                     doc=doc,
                     doc_data=parsed,

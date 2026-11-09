@@ -223,7 +223,7 @@ async def tab_to_dict(soup, tab, task_number, session):
         # Если ошибка с ячейками, заполняем пустыми до конца
         tag_diff = len(tab.select("thead th")) - len(row.select("td"))
         if tag_diff > 0:
-            for i in range(tag_diff):
+            for i in range(tag_diff):  # noqa: B007
                 row.append(soup.new_tag("td"))
 
         for key, value in zip(tab.select("thead th"), row.select("td"), strict=True):

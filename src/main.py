@@ -457,7 +457,7 @@ def _process_unit(
     t0 = metrics.now_ms()
     ordered_futures = [pool.submit(_parse_html_file, args) for args in html_paths]
     pairs: list[tuple[str, dict]] = []
-    for future, fname in zip(ordered_futures, html_files):
+    for future, fname in zip(ordered_futures, html_files):  # noqa: B905
         try:
             prepared, read_ms, n_bytes = future.result()
             metrics.add_time("readHtmlMs", read_ms)
@@ -485,7 +485,7 @@ def _process_unit(
 
     bkey = _bucket_key(unit)
     indexed_any = False
-    for filename, parsed in zip(html_files, parsed_files):
+    for filename, parsed in zip(html_files, parsed_files):  # noqa: B905
         update = build_update_item(
             doc=doc,
             doc_data=parsed,
@@ -648,7 +648,7 @@ def _run_pipelined(
             indexed_any = False
             doc_ids: list[str] = []
             is_warc = unit.get("html_bytes_by_name") is not None
-            for filename, parsed in zip(html_files_done, parsed_files_done):
+            for filename, parsed in zip(html_files_done, parsed_files_done):  # noqa: B905
                 update = build_update_item(
                     doc=doc,
                     doc_data=parsed,

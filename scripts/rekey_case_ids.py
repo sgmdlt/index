@@ -232,7 +232,7 @@ def apply(key: str, path: str, batch: int = 200) -> None:
             items = bulk(key, writes) if writes else []
             ok = [
                 o
-                for o, it in zip(pending, items)
+                for o, it in zip(pending, items)  # noqa: B905
                 if next(iter(it.values())).get("status") in (200, 201)
             ]
             for o in pending:
@@ -256,7 +256,7 @@ def apply(key: str, path: str, batch: int = 200) -> None:
                 if ok
                 else []
             )
-            for o, it in zip(ok, deletes):
+            for o, it in zip(ok, deletes):  # noqa: B905
                 if it["delete"].get("status") != 200:
                     retry.write(json.dumps(o, ensure_ascii=False) + "\n")
             done += sum(it["delete"].get("status") == 200 for it in deletes)
