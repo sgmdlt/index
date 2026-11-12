@@ -136,3 +136,75 @@ def test_full_reindex_leaves_created_at_unset(tmp_path):
     indexer._do_bulk([_item(TARGET, "a.html", "2026-09-28")], "k")
     [(_, source)] = _index_ops(es.bulk_calls[0])
     assert "created_at" not in source and source["indexed_at"]
+
+
+# --- статьи и ФИО дописываются в карточку позже: момент, когда список вырос, — новость для подписок ---
+
+
+def test_a_grown_list_in_an_existing_case_is_stamped_in_appeared_at():
+    old = {
+        "case_number": "1",
+        "articles": ["ст.286 ч.4 УК РФ"],
+        "defendants": ["Иванов"],
+    }
+    batch = [
+        {
+            "_id": "a",
+            "doc": {"articles": ["ст.286 ч.4 УК РФ"], "defendants": ["Петров"]},
+        }
+    ]
+    [doc] = apply_merge(batch, {"a": old}, NOW)
+    assert doc["appeared_at"] == {"defendants": NOW}
+
+
+def test_first_articles_of_a_legacy_case_are_stamped():
+    [doc] = apply_merge(
+        [{"_id": "a", "doc": {"articles": ["ст.286 УК РФ"]}}],
+        {"a": {"case_number": "1"}},
+        NOW,
+    )
+    assert doc["appeared_at"] == {"articles": NOW} and "created_at" not in doc
+
+
+def test_a_new_case_gets_no_appeared_at():
+    [doc] = apply_merge(
+        [{"_id": "a", "doc": {"articles": ["ст.286 УК РФ"], "defendants": ["Иванов"]}}],
+        {},
+        NOW,
+    )
+    assert "appeared_at" not in doc
+
+
+def test_appeared_at_keeps_other_fields_and_does_not_touch_the_old_doc():
+    old = {
+        "case_number": "1",
+        "articles": ["ст.286 УК РФ"],
+        "appeared_at": {"defendants": "2026-10-01T00:00:00Z"},
+    }
+    [doc] = apply_merge(
+        [{"_id": "a", "doc": {"articles": ["ст.105 УК РФ"]}}], {"a": old}, NOW
+    )
+    assert doc["appeared_at"] == {"defendants": "2026-10-01T00:00:00Z", "articles": NOW}
+    assert old["appeared_at"] == {"defendants": "2026-10-01T00:00:00Z"}
+
+
+def test_an_unchanged_list_keeps_its_stamp():
+    old = {
+        "case_number": "1",
+        "articles": ["ст.286 УК РФ"],
+        "appeared_at": {"articles": "2026-10-01T00:00:00Z"},
+    }
+    [doc] = apply_merge(
+        [{"_id": "a", "doc": {"articles": ["ст.286 УК РФ"]}}], {"a": old}, NOW
+    )
+    assert doc["appeared_at"] == {"articles": "2026-10-01T00:00:00Z"}
+
+
+def test_full_reindex_does_not_stamp_appeared_at():
+    [doc] = apply_merge(
+        [{"_id": "a", "doc": {"articles": ["ст.286 УК РФ"]}}],
+        {"a": {"case_number": "1"}},
+        NOW,
+        stamp_created_at=False,
+    )
+    assert "appeared_at" not in doc
