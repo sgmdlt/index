@@ -23,8 +23,12 @@ CREATE TABLE outbox (
     locked_at TIMESTAMP WITH TIME ZONE,
     lease_until TIMESTAMP WITH TIME ZONE,
     warc_locator VARCHAR,
-    priority INTEGER NOT NULL DEFAULT 0
+    priority INTEGER NOT NULL DEFAULT 0,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    case_id VARCHAR
 );
+
+CREATE INDEX ix_outbox_created_at ON outbox USING brin (created_at);
 
 CREATE TABLE redownload_queue (
     id SERIAL PRIMARY KEY,
@@ -33,6 +37,7 @@ CREATE TABLE redownload_queue (
     reason redownload_reason NOT NULL,
     outbox_id INTEGER REFERENCES outbox(id) ON DELETE SET NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
+    requeued_at TIMESTAMPTZ,
     UNIQUE (manifest_path, filename, reason)
 );
 
