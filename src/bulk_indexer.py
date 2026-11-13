@@ -146,6 +146,12 @@ def merge_docs(existing: dict | None, incoming: dict) -> dict:
 
 
 _PROGRESS_HEAD = ("date", "event")
+# sudrf has two «Движение дела» templates naming the same columns differently;
+# canonicalize so one event from both templates merges into one row.
+_PROGRESS_KEY_ALIASES = {
+    "Время события": "Время",
+    "Основания для выбранного результата события": "Основание для выбранного результата события",
+}
 
 
 def _progress_head(row: dict) -> tuple[str, str]:
@@ -194,11 +200,15 @@ def _progress_from_str(s: str) -> dict:
     return row
 
 
+def _canon_progress_keys(row: dict) -> dict:
+    return {_PROGRESS_KEY_ALIASES.get(k, k): v for k, v in row.items()}
+
+
 def _as_progress_dict(row) -> dict | None:
     if isinstance(row, dict):
-        return row
+        return _canon_progress_keys(row)
     if isinstance(row, str) and row:
-        return _progress_from_str(row)
+        return _canon_progress_keys(_progress_from_str(row))
     return None
 
 
