@@ -444,6 +444,10 @@ def fold_group(docs: list[dict | None], target: str) -> dict:
     return with_group_created_at({**acc, "id_final": target}, docs)  # ty: ignore[invalid-argument-type]
 
 
+# накопительные списки, рост которых — новость для подписок: время роста в appeared_at[поле]
+APPEARED_FIELDS = ("articles", "defendants")
+
+
 def apply_merge(
     batch: list[dict],
     existing_by_id: dict[str, dict],
@@ -470,8 +474,21 @@ def apply_merge(
     for doc_id, doc in acc.items():
         doc["_id"] = doc_id
         doc["indexed_at"] = now
-        if stamp_created_at and doc_id not in existing_by_id:
+        old = existing_by_id.get(doc_id)
+        if stamp_created_at and old is None:
             doc["created_at"] = now
+        if stamp_created_at and old is not None:
+            # статьи и ФИО дописываются в карточку позже: для подписок это новость
+            grown = [
+                f
+                for f in APPEARED_FIELDS
+                if set(_to_array(doc.get(f))) - set(_to_array(old.get(f)))
+            ]
+            if grown:
+                doc["appeared_at"] = {
+                    **(old.get("appeared_at") or {}),
+                    **dict.fromkeys(grown, now),
+                }
         result.append(doc)
     return result
 
