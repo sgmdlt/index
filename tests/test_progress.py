@@ -41,3 +41,22 @@ def test_retrochange_progress():
     # print("MERGED PROGRESS:", merged.get("progress"))
     # Retrochange 1 progress
     assert len(merged["progress"]) == len(doc1["progress"]) + 1
+
+
+def test_two_sudrf_templates_collapse_into_one_row_per_event():
+    # Same case seen through both sudrf «Движение дела» templates:
+    # «Время»/«Основание…» vs «Время события»/«Основания…».
+    old = _parse("template_old.html")
+    new = _parse("template_new.html")
+
+    merged = merge_docs(merge_docs(None, old), new)
+
+    assert [(r["date"], r["event"]) for r in merged["progress"]] == [
+        ("05.12.2023", "Судебное заседание"),
+        ("07.12.2023", "Сдача материалов дела в архив"),
+    ]
+    assert merged["progress"][1]["Время"] == "17:55"
+    assert (
+        merged["progress"][0]["Основание для выбранного результата события"]
+        == "Назначено наказание"
+    )
