@@ -28,7 +28,8 @@ export COURTS_WARC_ROOT=${COURTS_WARC_ROOT:-/home/ltdmgs/courts_warc/mgs/}
 export PYTHONUNBUFFERED=1
 
 ES=${ES:-http://10.13.12.1:9200}
-INDEX=${INDEX:-sudata}
+# No default: the old one (sudata) went stale when that index was deleted.
+INDEX=${INDEX:?set INDEX to the target index, e.g. INDEX=sudata_v2}
 
 cd "$ROOT"
 echo "=== $(date -Is) indexing MGS outbox → $INDEX ==="

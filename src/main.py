@@ -28,6 +28,7 @@ import sys
 import threading
 import time
 from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
+from datetime import datetime
 from pathlib import Path
 
 import psycopg2
@@ -57,7 +58,13 @@ from src.utils.text import normalize_jsonl_text
 
 load_dotenv()
 
-logging.basicConfig(level=logging.WARNING, format="%(levelname)s %(name)s: %(message)s")
+# Лог пишется в файл без меток cron'а: время эпизода видно только отсюда.
+TS_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
+logging.basicConfig(
+    level=logging.WARNING,
+    format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+    datefmt=TS_FORMAT,
+)
 logger = logging.getLogger(__name__)
 logging.getLogger("elastic_transport.transport").setLevel(logging.ERROR)
 
@@ -817,6 +824,17 @@ def _exit_status(jsonl: bool, counters) -> int:
     return 1 if jsonl and counters.get("bulkFailedDocs") else 0
 
 
+def completed_line(index: str, c: dict, elapsed: float, now: datetime) -> str:
+    return (
+        f"=== {now.strftime(TS_FORMAT)} Indexation COMPLETED: index={index} "
+        f"units={c['unitsSeen']} "
+        f"docsPrepared={c['docsPrepared']} "
+        f"docsIndexed={c['docsIndexed']} "
+        f"parseErrors={c['parseErrors']} "
+        f"elapsed={elapsed:.1f}s ==="
+    )
+
+
 def main():
     args = parse_args()
 
@@ -924,14 +942,10 @@ def main():
             if pg_conn is not None:
                 pg_conn.close()
             elapsed = time.perf_counter() - t_start
-            c = metrics.counters
             print(
-                f"=== Indexation COMPLETED: index={args.index} "
-                f"units={c['unitsSeen']} "
-                f"docsPrepared={c['docsPrepared']} "
-                f"docsIndexed={c['docsIndexed']} "
-                f"parseErrors={c['parseErrors']} "
-                f"elapsed={elapsed:.1f}s ===",
+                completed_line(
+                    args.index, metrics.counters, elapsed, datetime.now().astimezone()
+                ),
                 flush=True,
             )
     sys.exit(_exit_status(bool(args.jsonl), metrics.counters))
