@@ -5,11 +5,11 @@
 exclude = [".claude/worktrees/**"]
 
 [[overrides]]
-# The data lives on this one machine; CLAUDE.md names its real paths on purpose.
-paths = ["CLAUDE.md"]
+# The data lives on this one machine; AGENTS.md names its real paths on purpose.
+paths = ["AGENTS.md"]
 disabled_rules = ["XP-003"]
 
 [[overrides]]
 # "Keep that — don't rewrite assertions…" already gives the positive form first.
-paths = ["CLAUDE.md"]
+paths = ["AGENTS.md"]
 disabled_rules = ["PE-006"]
