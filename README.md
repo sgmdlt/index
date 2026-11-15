@@ -81,7 +81,14 @@ uv run python -m src.main --index NEW_INDEX --warc /path/to/shards
 
 ## Расписание
 
-Cron-строк в репозитории нет: расписание лежит в crontab хоста. Повторяемые прогоны — `--db` (обычный и `--priority-only`) и `scripts/index_mgs.sh`; это пакетные задачи, а не демоны, они завершаются, когда outbox пуст. Какие именно строки и как часто стоят в crontab, из репозитория не видно.
+Cron-строк в репозитории нет: расписание лежит в crontab хоста. Все прогоны — пакетные задачи, а не демоны: они завершаются, когда outbox пуст, идут под `flock` и `nice -n 19` и пишут в индекс `sudata_v2` на `http://10.13.12.1:9200`. Состояние на 2026-11-15:
+
+| Прогон | Когда | Лог |
+| --- | --- | --- |
+| `python -m src.main --db --workers 4` (courts) | каждые 2 ч, :30 | `~/index.log` |
+| `python -m src.main --db --priority-only --workers 2` (courts) | каждые 20 мин с :07 | `~/index_prio.log` |
+| `scripts/index_mgs.sh --workers 4` (МГС) | каждые 2 ч, :00 | `~/index_mgs.log` |
+| `scripts/index_mgs.sh --priority-only --workers 2` (МГС) | каждые 20 мин с :14 | `~/index_mgs_prio.log` |
 
 ## Грабли
 
