@@ -9,7 +9,7 @@ BROKEN_DOCX = "Вместо текста залит нечитаемый docx"
 BROKEN_SERVER = "Вместо текста отображается ошибка сервера"
 BROKEN_SQL = "Вместо текста отображается ошибка SQL"
 
-_MIN_DATE = "1990-01-01"
+MIN_DATE = "1990-01-01"
 # Даты судов записаны по местному времени (до UTC+12), «сегодня» считается по
 # UTC: дело, зарегистрированное сегодня на Камчатке, для UTC ещё завтрашнее
 _LOCAL_AHEAD = timedelta(days=1)
@@ -43,7 +43,7 @@ def _latest_date(today: str | None) -> str:
 
 
 def _is_valid(iso: str | None, latest: str) -> bool:
-    return bool(iso) and _MIN_DATE <= iso[:10] <= latest
+    return bool(iso) and MIN_DATE <= iso[:10] <= latest
 
 
 def _case_number_year(case_number: str | None) -> str | None:
@@ -72,7 +72,7 @@ def fix_date_reg(
     case_number: str | None = None,
     today: str | None = None,
 ) -> str | None:
-    """Keep date_reg if sane (_MIN_DATE..today + _LOCAL_AHEAD), else recover.
+    """Keep date_reg if sane (MIN_DATE..today + _LOCAL_AHEAD), else recover.
 
     Fallback chain: earliest sane date from progress -> sane date_result ->
     year from case number with date_reg's month-day (or Jan 1) -> original
@@ -99,7 +99,7 @@ def fix_date_reg(
         if rec:
             return rec
     year = _case_number_year(case_number)
-    if year and year >= _MIN_DATE[:4]:
+    if year and year >= MIN_DATE[:4]:
         md = _MONTH_DAY_RE.search(date_reg or "")
         rebuilt = f"{year}-{md.group(1)}-{md.group(2)}" if md else f"{year}-01-01"
         if _is_valid(rebuilt, latest):
