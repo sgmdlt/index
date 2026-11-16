@@ -1,9 +1,12 @@
+import pytest
+
 from scripts.dedup_bracket_ids import (
     collision_groups,
     covered,
     fixed_id,
     fold,
     fold_ids,
+    index,
     move_ids,
     moved,
     rekey_candidates,
@@ -144,3 +147,15 @@ def test_rekey_candidates_are_where_the_docs_sit_now_minus_collisions():
         "77KJ0002_2025-05-22_88а-1",
         "33OS0000_2011-01-01_44У-7",
     ]
+
+
+def test_index_is_taken_from_the_environment(monkeypatch):
+    # courts-7han: захардкоженный «sudata» удалён — скрипт писал бы в никуда
+    monkeypatch.setenv("INDEX", "sudata_v2")
+    assert index() == "sudata_v2"
+
+
+def test_missing_index_stops_the_script(monkeypatch):
+    monkeypatch.delenv("INDEX", raising=False)
+    with pytest.raises(SystemExit):
+        index()

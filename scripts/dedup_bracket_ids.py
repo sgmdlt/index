@@ -21,10 +21,13 @@
 
 Удаляется только тот кривой документ, у которого правильный близнец уже есть в
 индексе. Что не переиндексировалось — остаётся и видно в выводе.
+
+Целевой индекс — переменная окружения INDEX (INDEX=sudata_v2 python -m …).
 """
 
 import argparse
 import json
+import os
 import re
 import time
 import urllib.request
@@ -35,7 +38,17 @@ from src.dump_none_ids import is_warc_locator
 from src.utils.case_id import build_case_id
 
 ES = "http://10.13.12.1:9200"
-INDEX = "sudata"
+
+
+def index() -> str:
+    # без значения по умолчанию: старый «sudata» удалён, а запись не туда
+    # не видна до сверки (courts-7han)
+    name = os.environ.get("INDEX")
+    if not name:
+        raise SystemExit("задайте INDEX — целевой индекс, например INDEX=sudata_v2")
+    return name
+
+
 ENV = Path(__file__).resolve().parent.parent / ".env"
 PAGE = 10000  # потолок scroll; каждая страница — полный перебор словаря, их должно быть мало
 
@@ -80,7 +93,7 @@ def call(key: str, path: str, body=None, timeout=900):
 def scan_bracket(key: str, pattern: str):
     resp = call(
         key,
-        f"{INDEX}/_search?scroll=5m",
+        f"{index()}/_search?scroll=5m",
         {
             "query": {"wildcard": {"id_final": {"value": pattern}}},
             "size": PAGE,
@@ -105,7 +118,7 @@ def fetch_by_ids(key: str, ids: list[str]):
     for i in range(0, len(ids), 1000):
         resp = call(
             key,
-            f"{INDEX}/_mget?_source_includes=case_number,path_manifest,html_files",
+            f"{index()}/_mget?_source_includes=case_number,path_manifest,html_files",
             {"ids": ids[i : i + 1000]},
         )
         yield from (d for d in resp["docs"] if d.get("found"))
@@ -258,14 +271,14 @@ def sources(key: str, ids: list[str]) -> dict[str, dict]:
     # пачка уже разобрана прошлым запуском — на пустой _mget ES отвечает 400
     if not ids:
         return {}
-    resp = call(key, f"{INDEX}/_mget", {"ids": ids})
+    resp = call(key, f"{index()}/_mget", {"ids": ids})
     return {d["_id"]: d for d in resp["docs"] if d.get("found")}
 
 
 def bulk(key: str, ops: list[dict]) -> list[dict]:
     body = "".join(json.dumps(op, ensure_ascii=False) + "\n" for op in ops).encode()
     req = urllib.request.Request(
-        f"{ES}/{INDEX}/_bulk",
+        f"{ES}/{index()}/_bulk",
         data=body,
         method="POST",
         headers={
@@ -377,7 +390,7 @@ def delete_ids(key: str, ids: list[str]) -> int:
 
 
 def existing(key: str, ids: list[str]) -> dict[str, list[str]]:
-    resp = call(key, f"{INDEX}/_mget?_source_includes=html_files", {"ids": ids})
+    resp = call(key, f"{index()}/_mget?_source_includes=html_files", {"ids": ids})
     return {
         d["_id"]: d["_source"].get("html_files") or []
         for d in resp["docs"]
