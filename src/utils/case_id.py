@@ -34,6 +34,12 @@ def case_id_from_fields(
     return None if case_id is None or case_id.endswith("ID_NOT_PARSED") else case_id
 
 
+def id_date_segment(id_final: str) -> str | None:
+    """Middle segment of `<court>_<date>_<case>`, or None if not that shape."""
+    parts = (id_final or "").split("_")
+    return parts[1] if len(parts) == 3 else None
+
+
 # "<number>/<year>" inside a case number string; the number may itself hold
 # "/" ("М-2/6/2025"), brackets ("1[2]-50/2022") or a court-panel digit in
 # round ones ("М(2)-32/2026" — without it М(2)-32 and М(3)-32 share an id)

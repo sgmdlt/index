@@ -286,3 +286,56 @@ def test_twin_on_a_legacy_id_ranks_by_its_formula_id(tmp_path):
     )
     assert [i for i, _ in _index_ops(es.bulk_calls[0])] == ["78OS0000_2008-12-09_2-2"]
     assert _delete_ids(es.bulk_calls[1]) == ["78OS0000_2008-12-09_2-1"]
+
+
+def _scraped(doc_id, html, version_ts, case_number, date_reg):
+    return {
+        **_doc(doc_id, html, version_ts),
+        "case_number": case_number,
+        "date_reg": date_reg,
+        "court_code": doc_id.split("_")[0],
+    }
+
+
+def test_healed_date_reg_of_a_twin_does_not_move_the_case(tmp_path):
+    # 52RS0007 1-427/2026: первый скрейп вылечил «завтрашнюю» date_reg до
+    # 2026-01-01, но id уже был по дате источника — повторный скрейп не должен
+    # переносить дело на «…_2026-01-01_1-427»
+    stored = _scraped(
+        "52RS0007_2026-11-16_1-427",
+        "15-11-2026.23:33:37.html",
+        "2026-11-15T23:33:37Z",
+        "1-427/2026",
+        "2026-01-01",
+    )
+    es = FakeES({stored["id_final"]: stored})
+    _indexer(es, tmp_path)._do_bulk(
+        [
+            _item(
+                "52RS0007_2026-11-16_1-427",
+                "16-11-2026.07:44:24.html",
+                "2026-11-16T07:44:24Z",
+            )
+        ],
+        "k",
+    )
+    assert [i for i, _ in _index_ops(es.bulk_calls[0])] == ["52RS0007_2026-11-16_1-427"]
+    assert len(es.bulk_calls) == 1  # удалять нечего
+
+
+def test_court_editing_the_date_does_not_move_the_case(tmp_path):
+    # дело легло под дату первого скрейпа, суд потом исправил её на 05.03 —
+    # самая ранняя дата карточки остаётся в id (ADR 0001)
+    stored = _scraped(
+        "50RS0030_2026-03-01_5-225",
+        "old.html",
+        "2026-03-02",
+        "5-225/2026",
+        "2026-03-05",
+    )
+    es = FakeES({stored["id_final"]: stored})
+    _indexer(es, tmp_path)._do_bulk(
+        [_item("50RS0030_2026-03-05_5-225", "new.html", "2026-03-06")], "k"
+    )
+    assert [i for i, _ in _index_ops(es.bulk_calls[0])] == ["50RS0030_2026-03-01_5-225"]
+    assert len(es.bulk_calls) == 1

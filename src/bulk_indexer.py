@@ -9,7 +9,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from .text_filters import broken_text_message, fix_date_reg
-from .utils.case_id import case_id_from_fields
+from .utils.case_id import case_id_from_fields, id_date_segment
 from .utils.dates import html_name_to_iso
 from .utils.paths import norm_path
 from .uuid_group import in_group_scope, pick_group_id
@@ -376,12 +376,14 @@ def uuid_twins(es_client, index: str, uuids: list[str]) -> dict[str, list[dict]]
 
 def _group_key(doc: dict) -> str:
     # кандидат группы — формульный id документа: старый id из прошлой
-    # формулы не должен стать целевым только потому, что он там уже лежит
+    # формулы не должен стать целевым только потому, что он там уже лежит.
+    # Дата — из самого _id: она пришла из источника, а date_reg в индексе
+    # могла вылечить fix_date_reg или позже исправить суд (courts-1ctj)
     src = doc["_source"]
     return (
         case_id_from_fields(
             src.get("case_number"),
-            src.get("date_reg"),
+            id_date_segment(doc["_id"]),
             src.get("court_id") or src.get("court_code"),
             src.get("link"),
         )

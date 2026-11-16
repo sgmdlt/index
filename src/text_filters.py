@@ -1,7 +1,7 @@
 """Filters for broken case texts and invalid date_reg values."""
 
 import re
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 
 from .utils.dates import date_value_to_iso
 
@@ -10,6 +10,9 @@ BROKEN_SERVER = "Вместо текста отображается ошибка
 BROKEN_SQL = "Вместо текста отображается ошибка SQL"
 
 _MIN_DATE = "1990-01-01"
+# Даты судов записаны по местному времени (до UTC+12), «сегодня» считается по
+# UTC: дело, зарегистрированное сегодня на Камчатке, для UTC ещё завтрашнее
+_LOCAL_AHEAD = timedelta(days=1)
 # Sentinel the source/parser writes when a case has no registration date.
 _PLACEHOLDER_DATE = "1900-01-01"
 
@@ -33,8 +36,14 @@ def broken_text_message(text: str) -> str | None:
     return None
 
 
-def _is_valid(iso: str | None, today: str) -> bool:
-    return bool(iso) and _MIN_DATE <= iso[:10] <= today[:10]
+def _latest_date(today: str | None) -> str:
+    """Самая поздняя допустимая дата: «сегодня» по UTC плюс _LOCAL_AHEAD."""
+    now = datetime.fromisoformat(today) if today else datetime.now(UTC)
+    return (now + _LOCAL_AHEAD).date().isoformat()
+
+
+def _is_valid(iso: str | None, latest: str) -> bool:
+    return bool(iso) and _MIN_DATE <= iso[:10] <= latest
 
 
 def _case_number_year(case_number: str | None) -> str | None:
@@ -52,9 +61,8 @@ def recover_malformed_date(
     m = _MANGLED_DATE_RE.match(date_str or "")
     if not m:
         return None
-    today = today or datetime.now(UTC).isoformat()
     cand = f"20{m.group(1)[-2:]:0>2}-{m.group(2)}-{m.group(3)}"
-    return cand if _is_valid(cand, today) else None
+    return cand if _is_valid(cand, _latest_date(today)) else None
 
 
 def fix_date_reg(
@@ -64,25 +72,25 @@ def fix_date_reg(
     case_number: str | None = None,
     today: str | None = None,
 ) -> str | None:
-    """Keep date_reg if sane (_MIN_DATE..today), else recover.
+    """Keep date_reg if sane (_MIN_DATE..today + _LOCAL_AHEAD), else recover.
 
     Fallback chain: earliest sane date from progress -> sane date_result ->
     year from case number with date_reg's month-day (or Jan 1) -> original
     value. A coarse-but-right-year date beats a hole or a mangled year.
     """
-    today = today or datetime.now(UTC).isoformat()
-    if _is_valid(date_reg, today):
+    latest = _latest_date(today)
+    if _is_valid(date_reg, latest):
         return date_reg
     candidates = [
         iso
         for row in progress
         if isinstance(row, dict)
         for iso in [date_value_to_iso(row.get("date"))]
-        if _is_valid(iso, today)
+        if _is_valid(iso, latest)
     ]
     if candidates:
         return min(candidates)  # ty: ignore[invalid-argument-type]
-    if _is_valid(date_result, today):
+    if _is_valid(date_result, latest):
         return date_result
     # Mangled year (e.g. 0217-08-28) — but not the no-info placeholder, whose
     # "1900" would wrongly become 2000; that one falls through to case number.
@@ -94,7 +102,7 @@ def fix_date_reg(
     if year and year >= _MIN_DATE[:4]:
         md = _MONTH_DAY_RE.search(date_reg or "")
         rebuilt = f"{year}-{md.group(1)}-{md.group(2)}" if md else f"{year}-01-01"
-        if _is_valid(rebuilt, today):
+        if _is_valid(rebuilt, latest):
             return rebuilt
         return f"{year}-01-01"
     return date_reg

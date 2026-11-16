@@ -76,6 +76,33 @@ def test_future_date_reg_replaced_from_progress():
     )
 
 
+def test_date_reg_of_tomorrow_by_utc_is_kept():
+    # 52RS0007 1-427/2026: зарегистрировано 16.11 по местному времени суда,
+    # скачано в 23:33 UTC 15.11 — для UTC это «завтра», но дата настоящая
+    progress = [{"date": "16.11.2026"}]
+    assert (
+        fix_date_reg(
+            "2026-11-16T00:00:00Z",
+            progress,
+            case_number="1-427/2026",
+            today="2026-11-15T23:35:14+00:00",
+        )
+        == "2026-11-16T00:00:00Z"
+    )
+
+
+def test_date_reg_two_days_ahead_is_still_healed():
+    assert (
+        fix_date_reg(
+            "2026-11-17T00:00:00Z",
+            [],
+            case_number="1-427/2026",
+            today="2026-11-15T23:35:14+00:00",
+        )
+        == "2026-01-01"
+    )
+
+
 def test_no_valid_progress_keeps_original():
     assert (
         fix_date_reg("1970-01-01T00:00:00Z", [{"date": "01.01.1985"}], today=TODAY)
