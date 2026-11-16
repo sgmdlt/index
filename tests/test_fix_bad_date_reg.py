@@ -1,4 +1,5 @@
-from src.fix_bad_date_reg import id_date_segment, recover_from_id
+from src.fix_bad_date_reg import recover_from_id
+from src.utils.case_id import id_date_segment
 
 TODAY = "2026-06-15T00:00:00Z"
 

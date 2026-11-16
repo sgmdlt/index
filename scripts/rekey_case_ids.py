@@ -25,6 +25,20 @@ docs/adr/0001-stable-case-id.md, эпик courts-271g). Индекс собир�
                          # получит 409 и уйдёт в retry: подать retry в --apply ещё раз
     7. контрольная выборка: доля id ≠ формула и групп одного uuid ≈ 0
 
+Дела, чья вылеченная date_reg попала в ID дела (courts-1ctj) — прицельно,
+без полной выгрузки и без шагов 4–6. Только после выкатки правки 1ctj: до
+неё ночные сохранения портят новые дела, а после неё полный --export
+сравнивает ID дела с формулой от date_reg и перенёс бы дела, чью дату суд
+поправил задним числом (ADR 0001):
+    1. INDEX=sudata_v2 python -m scripts.rekey_case_ids --export-healed hl
+                         # без записи: hl.rekey.jsonl (ID дела на <год>-01-01),
+                         # hl.dates.jsonl (в теле date_reg = <год>-01-01), сводка
+    2. INDEX=sudata_v2 python -m scripts.rekey_case_ids --apply-dates hl.dates.jsonl
+    3. INDEX=sudata_v2 python -m scripts.rekey_case_ids --check hl.rekey.jsonl --out hl
+       INDEX=sudata_v2 python -m scripts.rekey_case_ids --apply hl.ops.jsonl
+
+Во всех режимах, кроме --groups, нужен INDEX — целевой индекс.
+
 МГС (mos-gorsud) не трогаем: у него свой ключ. Документ на id с «чужим» uuid
 не сливается — уходит в *.manual.jsonl. Старый id удаляется только после того,
 как ES принял целевой документ, и только если его не обновили после чтения.
@@ -34,10 +48,12 @@ import argparse
 import json
 import time
 from itertools import groupby
+from typing import Literal
 
-from scripts.dedup_bracket_ids import INDEX, api_key, bulk, call, first_error, sources
+from scripts.dedup_bracket_ids import api_key, bulk, call, first_error, index, sources
 from src.bulk_indexer import merge_docs, with_group_created_at
-from src.utils.case_id import case_id_from_fields
+from src.text_filters import MIN_DATE
+from src.utils.case_id import case_id_from_fields, id_date_segment
 from src.uuid_group import in_group_scope, pick_group_id
 
 DOCVALUES = [
@@ -75,6 +91,31 @@ def plan_rekey(rows: list[dict], existing: dict[str, dict]) -> list[dict]:
             op = "manual"
         ops.append({"op": op, "from": row["_id"], "to": target})
     return ops
+
+
+def classify_healed(row: dict) -> Literal["rekey", "date"] | None:
+    """Строка выгрузки --export-healed → «rekey», «date» или None.
+
+    fix_date_reg лечил «завтрашнюю» по UTC дату до `<год>-01-01` (courts-1ctj):
+    «rekey» — эта дата попала в ID дела, а date_reg уже настоящая того же
+    года; «date» — ID дела по дате источника, а в теле осталась вылеченная.
+    """
+    id_date = id_date_segment(row["_id"]) or ""
+    date_reg = (row.get("date_reg") or "")[:10]
+    if (
+        "mos-gorsud" in (row.get("link") or "")
+        # created_at есть у дел, записанных уже с правилом группы — баг только у них
+        or not row.get("created_at")
+        or not id_date
+        or id_date[:4] != date_reg[:4]
+        or id_date == date_reg
+    ):
+        return None
+    if id_date.endswith("-01-01"):
+        return "rekey"
+    if date_reg.endswith("-01-01"):
+        return "date"
+    return None
 
 
 def plan_groups(rows: list[dict]) -> list[dict]:
@@ -122,7 +163,7 @@ def export(key: str, prefix: str, slice_id: int, slices: int) -> None:
         body["slice"] = {"id": slice_id, "max": slices}
         prefix = f"{prefix}.{slice_id}"
     seen = candidates = 0
-    resp = call(key, f"{INDEX}/_search?scroll=10m", body)
+    resp = call(key, f"{index()}/_search?scroll=10m", body)
     with (
         open(f"{prefix}.rekey.jsonl", "w", encoding="utf-8") as rk,
         open(f"{prefix}.uuid.tsv", "w", encoding="utf-8") as uu,
@@ -156,6 +197,122 @@ def export(key: str, prefix: str, slice_id: int, slices: int) -> None:
                 {"scroll": "10m", "scroll_id": resp["_scroll_id"]},
             )
     print(f"итог: просмотрено {seen}, к переносу {candidates}")
+
+
+def healed_query() -> dict:
+    """Кандидаты courts-1ctj: `-01-01` в ID дела или в date_reg, есть
+    created_at, не МГС. Решает classify_healed — запрос только сужает."""
+    # fix_date_reg лечит до года из номера не раньше MIN_DATE, а «сегодня + 1
+    # день» 31 декабря — это уже 1 января следующего года
+    years = range(int(MIN_DATE[:4]), int(time.strftime("%Y")) + 2)
+    return {
+        "bool": {
+            "filter": [{"exists": {"field": "created_at"}}],
+            "must_not": [{"wildcard": {"link": "*mos-gorsud*"}}],
+            "should": [
+                {"wildcard": {"id_final": "*-01-01_*"}},
+                {"terms": {"date_reg": [f"{y}-01-01" for y in years]}},
+            ],
+            "minimum_should_match": 1,
+        }
+    }
+
+
+def export_healed(key: str, prefix: str) -> None:
+    body = {
+        "size": 10000,
+        "sort": ["_doc"],
+        "_source": False,
+        "docvalue_fields": [
+            *DOCVALUES,
+            {"field": "created_at", "format": "strict_date_optional_time"},
+        ],
+        "query": healed_query(),
+    }
+    counts = {"rekey": 0, "date": 0, "skip": 0}
+    resp = call(key, f"{index()}/_search?scroll=10m", body)
+    with (
+        open(f"{prefix}.rekey.jsonl", "w", encoding="utf-8") as rk,
+        open(f"{prefix}.dates.jsonl", "w", encoding="utf-8") as dt,
+    ):
+        while hits := resp["hits"]["hits"]:
+            for h in hits:
+                row = {
+                    "_id": h["_id"],
+                    **{k: v[0] for k, v in h.get("fields", {}).items()},
+                }
+                kind = classify_healed(row)
+                if kind == "rekey":
+                    rk.write(json.dumps(row, ensure_ascii=False) + "\n")
+                elif kind == "date":
+                    op = {
+                        "id": row["_id"],
+                        "from": row["date_reg"][:10],
+                        "to": id_date_segment(row["_id"]),
+                    }
+                    dt.write(json.dumps(op, ensure_ascii=False) + "\n")
+                counts[kind or "skip"] += 1
+            print(f"  {time.strftime('%H:%M:%S')} {counts}", flush=True)
+            resp = call(
+                key,
+                "_search/scroll",
+                {"scroll": "10m", "scroll_id": resp["_scroll_id"]},
+            )
+    print(f"итог: {counts}")
+
+
+def apply_dates(key: str, path: str, batch: int = 500) -> None:
+    """date_reg := дата из ID дела — только если документ не менялся после
+    чтения и date_reg всё ещё вылеченная; иначе строка уходит в retry."""
+    ops = [json.loads(line) for line in open(path, encoding="utf-8")]
+    done = skipped = conflicts = 0
+    with open(
+        path.removesuffix(".jsonl") + ".retry.jsonl", "w", encoding="utf-8"
+    ) as retry:
+        for i in range(0, len(ops), batch):
+            chunk = ops[i : i + batch]
+            # только date_reg: в _source лежат тексты актов
+            resp = call(
+                key,
+                f"{index()}/_mget?_source_includes=date_reg",
+                {"ids": sorted({o["id"] for o in chunk})},
+            )
+            docs = {d["_id"]: d for d in resp["docs"] if d.get("found")}
+            pending = [
+                o
+                for o in chunk
+                if o["id"] in docs
+                and (docs[o["id"]]["_source"].get("date_reg") or "")[:10] == o["from"]
+            ]
+            skipped += len(chunk) - len(pending)  # удалён или уже исправлен
+            writes = [
+                line
+                for o in pending
+                for line in (
+                    {
+                        "update": {
+                            "_id": o["id"],
+                            "if_seq_no": docs[o["id"]]["_seq_no"],
+                            "if_primary_term": docs[o["id"]]["_primary_term"],
+                        }
+                    },
+                    {"doc": {"date_reg": f"{o['to']}T00:00:00Z"}},
+                )
+            ]
+            items = bulk(key, writes) if writes else []
+            for o, it in zip(pending, items, strict=True):
+                if it["update"].get("status") == 200:
+                    done += 1
+                else:
+                    conflicts += 1  # 409 — документ поменяли после чтения
+                    retry.write(json.dumps(o, ensure_ascii=False) + "\n")
+            print(
+                f"  {time.strftime('%H:%M:%S')} {i + len(chunk)} из {len(ops)}: "
+                f"исправлено {done}, пропущено {skipped}, конфликтов {conflicts}"
+                f"{first_error(items)}",
+                flush=True,
+            )
+    print(f"итог: исправлено {done}, пропущено {skipped}, в retry {conflicts}")
 
 
 def check(key: str, paths: list[str], out: str, batch: int = 1000) -> None:
@@ -282,6 +439,14 @@ def main() -> None:
         "--groups", metavar="SORTED_TSV", help="план слияния групп uuid без записи"
     )
     mode.add_argument("--apply", metavar="OPS_JSONL", help="выполнить план")
+    mode.add_argument(
+        "--export-healed",
+        metavar="PREFIX",
+        help="courts-1ctj: дела на вылеченной дате — PREFIX.rekey.jsonl и PREFIX.dates.jsonl",
+    )
+    mode.add_argument(
+        "--apply-dates", metavar="DATES_JSONL", help="вернуть date_reg из ID дела"
+    )
     p.add_argument("--out", default="rk", help="префикс файлов плана")
     p.add_argument("--slice", type=int, default=0)
     p.add_argument("--slices", type=int, default=1)
@@ -293,6 +458,10 @@ def main() -> None:
     key = api_key()
     if args.export:
         export(key, args.export, args.slice, args.slices)
+    elif args.export_healed:
+        export_healed(key, args.export_healed)
+    elif args.apply_dates:
+        apply_dates(key, args.apply_dates)
     elif args.check:
         check(key, args.check, args.out)
     else:

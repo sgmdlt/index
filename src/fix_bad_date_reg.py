@@ -17,12 +17,7 @@ import os
 from elasticsearch import Elasticsearch
 
 from .text_filters import fix_date_reg, recover_malformed_date
-
-
-def id_date_segment(id_final: str) -> str | None:
-    """Middle segment of `<court>_<date>_<case>`, or None if not that shape."""
-    parts = (id_final or "").split("_")
-    return parts[1] if len(parts) == 3 else None
+from .utils.case_id import id_date_segment
 
 
 def recover_from_id(id_final: str, today: str | None = None) -> str | None:
