@@ -28,11 +28,13 @@ def test_old_and_new_collision_converge_to_same_id():
     assert old["id_final"] == new["id_final"] == "61RS0018_2016-03-30_1-76"
 
 
-def test_fallback_to_stored_id_when_no_date_reg():
+def test_save_without_date_reg_is_refused_not_keyed_by_the_stored_id():
+    # ID, выставленный сборщиком, на веру не принимается (ADR 0005): нет даты —
+    # нет Индексного ID, сохранение уходит в отказ (courts-2ymt.4)
     doc = to_document(
         "m.json", _REL, _meta(date_reg=None, ID="61RS0018_2016-03-30_1-76"), [], []
     )
-    assert doc["id_final"] == "61RS0018_2016-03-30_1-76"
+    assert doc["id_final"] is None
 
 
 def test_hmao_region_alias_folds_to_one_name():
@@ -84,22 +86,23 @@ def test_derive_id_final_recomputes_jsonl_record():
     assert _derive_id_final(data) == "78OS0000_2008-12-09_2-2"
 
 
-def test_unparsed_number_keeps_the_stored_id():
-    # «…_ID_NOT_PARSED» склеил бы все такие дела суда за день в один документ
+def test_unparsed_number_is_refused_not_keyed_by_the_stored_id():
+    # «…_ID_NOT_PARSED» склеил бы все такие дела суда за день в один документ,
+    # а сохранённый id формуле не принадлежит — отказ (courts-2ymt.4)
     meta = {
         "case_number": "Материалы дела",
         "date_reg": "2010-01-01",
         "court_code": "61RS0018",
         "id_final": "61RS0018_2010-01-01_М-1",
     }
-    assert to_document("", "x", meta, [], [])["id_final"] == "61RS0018_2010-01-01_М-1"
+    assert to_document("", "x", meta, [], [])["id_final"] is None
 
 
-def test_derive_id_final_survives_a_bad_date():
+def test_derive_id_final_refuses_an_unparsable_date():
     data = {
         "case_number": "2-5/2008",
         "date_reg": "2008/12/09",
         "court_code": "78OS0000",
         "id_final": "78OS0000_2008-12-09_2-5",
     }
-    assert _derive_id_final(data) == "78OS0000_2008-12-09_2-5"
+    assert _derive_id_final(data) == ""

@@ -4,6 +4,7 @@ Ports toDocument.js.
 """
 
 import json
+import logging
 import re
 from collections.abc import Callable
 from pathlib import Path
@@ -12,6 +13,8 @@ from .bulk_indexer import build_update_item
 from .utils.case_id import case_id_from_fields
 from .utils.dates import date_value_to_iso, get_files_version
 from .utils.paths import dir_of_rel, norm_path
+
+logger = logging.getLogger(__name__)
 
 _UUID_RE = re.compile(r"_uid=([0-9a-f-]+)")
 # court_list.csv used to name the 86RS courts differently from 86OS0000; the
@@ -37,6 +40,42 @@ with open(_HERE / "instance_case_type_mapping.json", encoding="utf-8") as _f:
     CASE_TYPE_MAPPING: dict = json.load(_f)
 
 
+def index_id(meta: dict) -> str | None:
+    """Индексный ID сохранения — только из оригинала (ADR 0005).
+
+    sudrf: формула из номера, даты регистрации и суда; ID, который выставил
+    сборщик или старая формула, на веру не принимается. Не построила формула —
+    None, и сохранение уходит в отказ (failed-лог), а не под чужой или
+    «…_ID_NOT_PARSED» ключ (courts-2ymt.4). Сохранённый id остаётся у двух
+    видов записей: МГС ключуется своим правилом (до courts-2ymt.5), а запись
+    без номера, даты, суда и ссылки — не сохранение карточки, а пометка по уже
+    выданному ID (JSONL «скрыто» из открытых данных МГС). У манифеста
+    сохранения суд и ссылка есть всегда, поэтому под ID сборщика он не пройдёт.
+    """
+    link = meta.get("link") or ""
+    is_mark = not any(
+        meta.get(k)
+        for k in ("case_number", "date_reg", "court_id", "court_code", "link")
+    )
+    if "mos-gorsud" in link or is_mark:
+        return fix_none_id(
+            meta.get("ID") or meta.get("id_final"), meta.get("case_number")
+        )
+    try:
+        return case_id_from_fields(
+            meta.get("case_number"),
+            meta.get("date_reg"),
+            meta.get("court_id") or meta.get("court_code"),
+            link,
+        )
+    except Exception:
+        # формула упала на нестроковых полях — отказ сохранению, а не прогону
+        logger.warning(
+            "case id formula failed for %r", meta.get("case_number"), exc_info=True
+        )
+        return None
+
+
 def to_document(
     manifest_path: str,
     rel_from_root: str,
@@ -46,22 +85,7 @@ def to_document(
 ) -> dict:
     """Build the ES document container from a parsed unit."""
     rel_dir = dir_of_rel(rel_from_root)
-    # Recompute the id from the record's component fields with the current
-    # formula instead of trusting a possibly-stale meta["ID"] / JSONL
-    # id_final. This re-keys legacy ids and folds old/new scrapes onto one
-    # _id. Fall back to the stored id only when recomputation can't run.
-    try:
-        recomputed = case_id_from_fields(
-            meta.get("case_number"),
-            meta.get("date_reg"),
-            meta.get("court_id") or meta.get("court_code"),
-            meta.get("link"),
-        )
-    except Exception:
-        recomputed = None
-    id_final = recomputed or fix_none_id(
-        meta.get("ID") or meta.get("id_final"), meta.get("case_number")
-    )
+    id_final = index_id(meta)
     version_info = get_files_version(html_files, rel_dir, meta)
 
     instance_key = str(meta.get("instance", ""))

@@ -25,12 +25,14 @@ def parsed() -> dict:
 
 
 def test_one_update_per_parsed_file():
-    unit = make_unit({"ID": "warc-case-1", "court_id": "03RS0004"})
+    unit = make_unit(
+        {"case_number": "1-55/2026", "date_reg": "10.06.2026", "court_id": "03RS0004"}
+    )
 
     updates = assemble_unit(unit, [(FNAME, parsed())], lambda f: f"src:{f}")
 
     assert len(updates) == 1
-    assert updates[0]["_id"] == "warc-case-1"
+    assert updates[0]["_id"] == "03RS0004_2026-06-10_1-55"
     assert updates[0]["version_ts"] == "2026-06-10T12:00:00Z"
     assert updates[0]["doc"]["path_manifest"] == LOCATOR
     assert updates[0]["metadata"] == {"sourcePath": f"src:{FNAME}"}

@@ -60,7 +60,9 @@ def index_runs(es, index: str, runs: list, failed_log: Path) -> None:
         with time_machine.travel(now):
             for batch in batches:
                 with ThreadPoolExecutor(max_workers=1) as pool:
-                    _run_pipelined(iter(batch), pool, indexer, Metrics(), 1)
+                    _run_pipelined(
+                        iter(batch), pool, indexer, Metrics(), 1, str(failed_log)
+                    )
                 indexer.drain()
         es.indices.refresh(index=index)
 
@@ -168,3 +170,25 @@ def test_number_growth_keeps_the_first_issued_number(
     )[history]
     index_runs(test_es, es_index, runs, tmp_path / "failed.log")
     assert ids_by_uid(test_es, es_index) == {UID: [expected]}
+
+
+def test_stored_id_does_not_override_the_formula(test_es, es_index, tmp_path):
+    # ID в манифесте посчитал сборщик (или старая формула) — индексатор его не
+    # принимает на веру, Индексный ID строит сам из оригинала (ADR 0005)
+    runs = [(NEXT_MORNING, [[save(SECOND, ID="52RS0007_2020-01-01_9-999")]])]
+    index_runs(test_es, es_index, runs, tmp_path / "failed.log")
+    assert ids_by_uid(test_es, es_index) == {UID: ["52RS0007_2026-11-16_1-427"]}
+
+
+def test_save_the_formula_cannot_key_is_refused(test_es, es_index, tmp_path):
+    # мусорная строка выдачи (31OS0000, ноябрь 2026): формула ID не строит, а
+    # сохранённый «…_ID_NOT_PARSED» склеил бы все такие строки суда за день
+    garbage = save(
+        SECOND,
+        case_number="nox.info - поиск персональных данных. Государственный проект.",
+        ID="52RS0007_2026-11-16_ID_NOT_PARSED",
+    )
+    failed = tmp_path / "failed.log"
+    index_runs(test_es, es_index, [(NEXT_MORNING, [[garbage]])], failed)
+    assert ids_by_uid(test_es, es_index) == {}
+    assert failed.read_text(encoding="utf-8").split() == [garbage["rel_from_root"]]
