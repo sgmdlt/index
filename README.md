@@ -32,7 +32,7 @@ flowchart LR
    - `--root` — обход легаси-дерева файлов `court_cases/`, `--folders` — список манифестов оттуда, `--jsonl` — JSONL (в том числе `-` из stdin).
 2. **Разбор HTML** (`parse_html.py`, для МГС — `parse_html_mgs.py`) в `ProcessPoolExecutor`.
 3. **Поля** (`prepare_doc.py`): правила из `elastic_index_dict.json`.
-4. **Документ** (`to_document.py`): ID дела, `version_ts`, тип дела по `instance_case_type_mapping.json`. ID дела — формула из [src/utils/case_id.py](src/utils/case_id.py), копия `build_case_id` из courts, плюс правило группы по UID карточки ([uuid_group.py](src/uuid_group.py), ADR 0001).
+4. **Документ** (`to_document.py`): Индексный ID, `version_ts`, тип дела по `instance_case_type_mapping.json`. Индексный ID — формула из [src/utils/case_id.py](src/utils/case_id.py), копия `build_case_id` из courts, плюс правило группы по UID карточки ([uuid_group.py](src/uuid_group.py), ADR 0001).
 5. **Запись** (`bulk_indexer.py`): `mget` текущего документа, слияние в Python, близнецы по `uuid` вливаются и удаляются (ADR 0002), `appeared_at` ставится при пополнении дела (ADR 0004), затем `_bulk`.
 6. **Статус**: строка outbox становится `DONE` только после подтверждения ES. Данные, которые не проиндексировать (`path_missing`, `docs_missing`, `bad_manifest_json`, `build_failed`, `sql_error`, `empty_html`), дают статус `REDOWNLOAD` и заявку в `redownload_queue` — Перекачку (ADR 0003). Неожиданные ошибки идут в `FAILED` с повтором.
 
@@ -92,7 +92,7 @@ Cron-строк в репозитории нет: расписание лежи�
 
 ## Грабли
 
-- Индекс должен пересобираться с нуля: ID дела не зависит от порядка индексации, но одно дело может прийти под несколькими ID — их сводят слияние близнецов и `rekey_case_ids.py`.
+- Индекс должен пересобираться с нуля: Индексный ID не зависит от порядка индексации, но одно дело может прийти под несколькими ID — их сводят слияние близнецов и `rekey_case_ids.py`.
 - Если ES не ответил на `mget` или поиск близнецов, падает вся пачка, а не пишется вслепую (ADR 0001, 0002).
 - JSONL-прогон с недописанными документами завершается кодом 1, чтобы вызывающий скрипт не удалил файл.
 - `merge_docs` обходит поля входящего документа: убрать из документа устаревшее значение переиндексацией нельзя, нужен скрипт по месту (пример — `clean_stale_result.py`).
