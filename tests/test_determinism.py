@@ -127,3 +127,44 @@ def test_court_editing_the_date_keeps_the_earliest(
     )[history]
     index_runs(test_es, es_index, runs, tmp_path / "failed.log")
     assert ids_by_uid(test_es, es_index) == {UID: ["52RS0007_2026-11-14_1-427"]}
+
+
+# рост номера: первое сохранение — номер, с которым карточка появилась, второе —
+# тот же номер, обросший новым; ID держится на первом выданном номере
+NUMBER_GROWTH = {
+    # гражданское: материал М-196 появился раньше дела 2-408
+    "tilde": (
+        "М-196/2026",
+        "2-408/2026 ~ М-196/2026",
+        "16.11.2026",
+        "52RS0007_2026-11-16_М-196",
+    ),
+    # кассация: жалоба сохранена до того, как ей назначили производство
+    "cassation": (
+        "8Г-7981/2026",
+        "8Г-7981/2026 [88-8481/2026]",
+        "16.11.2026",
+        "52RS0007_2026-11-16_8Г-7981",
+    ),
+    # переномерация: карточка 2008 года потеряла первый номер без года регистрации
+    "renumbered": (
+        "2-2/2010",
+        "2-1/2011 (2-2/2010;)",
+        "09.12.2008",
+        "52RS0007_2008-12-09_2-2",
+    ),
+}
+
+
+@pytest.mark.parametrize("growth", list(NUMBER_GROWTH))
+@pytest.mark.parametrize("history", HISTORIES)
+def test_number_growth_keeps_the_first_issued_number(
+    test_es, es_index, tmp_path, history, growth
+):
+    first, grown, date_reg, expected = NUMBER_GROWTH[growth]
+    runs = _histories(
+        save(FIRST, case_number=first, date_reg=date_reg),
+        save(SECOND, case_number=grown, date_reg=date_reg),
+    )[history]
+    index_runs(test_es, es_index, runs, tmp_path / "failed.log")
+    assert ids_by_uid(test_es, es_index) == {UID: [expected]}
