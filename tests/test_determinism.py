@@ -92,6 +92,9 @@ def _histories(s1, s2) -> dict:
         # одна пачка: до полуночи UTC и неделю спустя
         "one-batch-before-utc-midnight": [(BEFORE_UTC_MIDNIGHT, [[s1, s2]])],
         "one-batch-week-later": [(WEEK_LATER, [[s2, s1]])],
+        # одна пачка — одно сохранение, обе в одном прогоне без refresh между
+        # ними: поиск близнецов не видит записанного в этом прогоне
+        "two-batches-one-run": [(NEXT_MORNING, [[s1], [s2]])],
         "repeats": [
             (BEFORE_UTC_MIDNIGHT, [[s1]]),
             (BEFORE_UTC_MIDNIGHT, [[s1]]),
