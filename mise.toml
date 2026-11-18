@@ -4,6 +4,10 @@
 # Linters get `git ls-files`, so untracked scratch files never fail the check.
 min_version = "2026.11.3"
 
+[env]
+# Тестовый ES (docker-compose.yml, профиль test); фикстура пишет только в кластер index-test
+TEST_ES_URL = "http://127.0.0.1:9233"
+
 [tools]
 uv = "0.13.7"
 shellcheck = "0.11.0"
@@ -31,6 +35,10 @@ run = [
   "agnix --strict .",
   "uv run --locked pytest tests -q -p no:cacheprovider",
 ]
+
+[tasks.test-es]
+description = "Start the test Elasticsearch that `check` needs"
+run = "docker compose --profile test up -d --wait es-test"
 
 [tasks.fix]
 description = "Apply the automatic fixes"

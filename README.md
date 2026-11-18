@@ -77,7 +77,7 @@ uv run python -m src.main --index NEW_INDEX --warc /path/to/shards
 
 Пути WARC из outbox — контейнерные. Индексатор подменяет префикс: `COURTS_WARC_DOCKER_ROOT` (`/app/court_warc/`, для МГС `/app/out/`) на `COURTS_WARC_ROOT` (`/home/ltdmgs/courts_warc/`); для легаси-дерева — `COURTS_FS_ROOT`. Таблицы можно переопределить через `PG_TABLE` и `PG_REDOWNLOAD_TABLE`.
 
-`docker-compose.yml` поднимает локальные ES 8.15 (порт 9200, без безопасности) и Kibana; порты, названные в `AGENTS.md` (9222, 5615), с файлом не совпадают. `Makefile` частично устарел: цели `run` и `retry_db` вызывают удалённые Node-скрипты, `remake` ломается вместе с ними.
+`docker-compose.yml` поднимает локальные ES 8.15 (порт 9200, без безопасности) и Kibana — на хосте сборщика порт 9200 занят продовым ES, там стек не запускать; профиль `test` — тестовый ES для `mise run check`; порты, названные в `AGENTS.md` (9222, 5615), с файлом не совпадают. `Makefile` частично устарел: цели `run` и `retry_db` вызывают удалённые Node-скрипты, `remake` ломается вместе с ними.
 
 ## Расписание
 
@@ -101,6 +101,7 @@ Cron-строк в репозитории нет: расписание лежи�
 ## Проверки
 
 ```bash
+mise run test-es  # тестовый ES 9.1.5 на 127.0.0.1:9233 (кластер index-test), нужен check
 mise run check    # ruff, ty, deptry, import-linter, shellcheck, betterleaks, osv-scanner, jactionlint, agnix, pytest
 make test         # только pytest
 ```

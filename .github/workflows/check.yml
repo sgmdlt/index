@@ -20,6 +20,20 @@ jobs:
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    services:
+      # тот же тестовый ES, что в docker-compose.yml (профиль test)
+      es-test:
+        image: docker.elastic.co/elasticsearch/elasticsearch:9.1.5@sha256:38604132e9d6cf4cd0acc090b3de645361dc142384e5341338aecb863741c630
+        env:
+          cluster.name: index-test
+          discovery.type: single-node
+          xpack.security.enabled: "false"
+          ES_JAVA_OPTS: -Xms512m -Xmx512m
+        ports:
+          - 9233:9200
+        options: >-
+          --health-cmd "curl -sf localhost:9200/_cluster/health?wait_for_status=yellow"
+          --health-interval 5s --health-retries 30
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

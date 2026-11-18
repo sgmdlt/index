@@ -34,7 +34,9 @@ uv run python -m src.main --index sud --root ./court_cases --folders failed_unit
 make delete_index                       # DELETE /sud
 make refresh_index                      # POST /sud/_refresh
 
-# Tests (pytest via uv; -vsrP shows skip/xfail reasons)
+# Tests (pytest via uv; -vsrP shows skip/xfail reasons). They need the test ES
+# (127.0.0.1:9233, cluster index-test): start it once with `mise run test-es`;
+# mise sets TEST_ES_URL, a bare `uv run pytest` needs it exported.
 make test
 uv run pytest tests/test_html_parse.py             # one file
 uv run pytest tests/test_merge.py::test_merge_arrays  # one test
@@ -146,7 +148,8 @@ don't rewrite assertions to use fixture-derived constants.
 
 ## Quality gate
 
-`mise run check` (`mise run fix` applies the safe autofixes). The existing `# noqa`,
+`mise run check` (`mise run fix` applies the safe autofixes). It needs the test
+Elasticsearch running (`mise run test-es`); CI starts the same image as a service. The existing `# noqa`,
 `# ty: ignore` and config allowlists are the adoption baseline, not a pattern
 to extend.
 
