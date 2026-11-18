@@ -27,7 +27,7 @@ import re
 import sys
 import threading
 import time
-from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
+from concurrent.futures import FIRST_COMPLETED, Executor, ProcessPoolExecutor, wait
 from datetime import datetime
 from pathlib import Path
 
@@ -467,7 +467,7 @@ def _source_path_of(unit: dict):
 
 def _run_pipelined(
     units_iter,
-    pool: ProcessPoolExecutor,
+    pool: Executor,
     indexer: BulkIndexer,
     metrics: Metrics,
     max_workers: int,
