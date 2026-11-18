@@ -357,6 +357,8 @@ def uuid_twins(es_client, index: str, uuids: list[str]) -> dict[str, list[dict]]
     search нужен только ради id: он near-real-time, а при refresh_interval=-1
     его _source — копия до прогона, и слияние по ней стёрло бы записанное в
     этом же прогоне. Сами документы и их версия — из mget (real-time).
+    Записанное в этом прогоне search видит только после refresh — его делает
+    вызывающий перед поиском (courts-2ymt.2).
     """
     ids: list[str] = []
     for i in range(0, len(uuids), UUID_CHUNK):
@@ -552,6 +554,10 @@ class BulkIndexer:
 
         self._buffers: dict[str, list] = {}
         self._lock = threading.Lock()
+        # Пачки пишутся по одной: поиск близнецов, запись и удаление пачки,
+        # сброшенной по таймеру, иначе разминутся с пачкой, сброшенной по
+        # размеру в соседнем потоке. Разбор при этом идёт дальше.
+        self._write_lock = threading.Lock()
         self._timer: threading.Timer | None = None
         self._flush_threads: list[threading.Thread] = []
 
@@ -614,7 +620,8 @@ class BulkIndexer:
         with self._lock:
             batch = self._buffers.pop(bucket_key, [])
         if batch:
-            self._do_bulk(batch, bucket_key)
+            with self._write_lock:
+                self._do_bulk(batch, bucket_key)
         # Prune finished threads from the tracking list
         with self._lock:
             self._flush_threads = [t for t in self._flush_threads if t.is_alive()]
@@ -628,6 +635,21 @@ class BulkIndexer:
         uuids = sorted(
             {item["doc"]["uuid"] for item in batch if in_group_scope(item["doc"])}
         )
+        # При refresh_interval=-1 поиск не видит пачек, записанных раньше в этом
+        # прогоне, — и в соседнем: основной и приоритетный прогоны пишут в один
+        # индекс. Поэтому refresh перед каждым поиском, а не «если сам писал»
+        # (courts-2ymt.2). Сбой — отказ пачке, как у самого поиска (ADR 0001).
+        try:
+            if uuids:
+                t0 = time.monotonic()
+                self._es.indices.refresh(index=self._index)
+                if self._metrics:
+                    self._metrics.add_time("refreshMs", (time.monotonic() - t0) * 1000)
+        except Exception as exc:
+            self._fail_batch(
+                batch, bucket_key, f"refresh before uuid search failed: {exc}"
+            )
+            return
         try:
             twins = uuid_twins(self._es, self._index, uuids) if uuids else {}
         except Exception as exc:

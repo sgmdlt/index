@@ -8,6 +8,14 @@ from src.bulk_indexer import BulkIndexer
 LINK = "https://x.sudrf.ru/modules.php?name_op=case&case_uid=u"
 
 
+class _FakeIndices:
+    def __init__(self):
+        self.refresh_calls = 0
+
+    def refresh(self, index=None):
+        self.refresh_calls += 1
+
+
 class FakeES:
     """search отдаёт id (near-real-time, может быть устаревшим), mget — свежий
     документ с версией; bulk отвечает по сценарию и запоминает операции."""
@@ -18,6 +26,7 @@ class FakeES:
         self.search_error = search_error
         self.search_calls = 0
         self.bulk_calls = []
+        self.indices = _FakeIndices()
 
     def search(self, index=None, query=None, size=None, **kw):
         self.search_calls += 1
@@ -183,6 +192,23 @@ def test_search_failure_fails_the_batch(tmp_path):
     )
 
 
+def test_refresh_failure_fails_the_batch(tmp_path):
+    # без refresh поиск не видит пачек этого прогона: писать вслепую нельзя
+    seen = []
+    es = FakeES()
+
+    def timed_out(index=None):
+        raise ConnectionError("Connection timed out")
+
+    es.indices.refresh = timed_out
+    _indexer(es, tmp_path, seen)._do_bulk(
+        [_item("A_2026-06-24_1", "a.html", "2026-06-25")], "k"
+    )
+    assert es.bulk_calls == [] and es.search_calls == 0
+    assert seen[0][1] == ["A_2026-06-24_1"]
+    assert "refresh before uuid search failed" in seen[0][2]
+
+
 def test_mgs_and_no_uuid_items_skip_the_search(tmp_path):
     es = FakeES()
     _indexer(es, tmp_path)._do_bulk(
@@ -197,7 +223,7 @@ def test_mgs_and_no_uuid_items_skip_the_search(tmp_path):
         ],
         "k",
     )
-    assert es.search_calls == 0
+    assert es.search_calls == 0 and es.indices.refresh_calls == 0
     assert sorted(i for i, _ in _index_ops(es.bulk_calls[0])) == [
         "61RS0018_2016-03-30_1-76",
         "77RS0018_2025-01-14_02-3415",
