@@ -91,6 +91,7 @@ class Metrics:
             f"parse_ms={t['parseMs']:.0f}",
             f"toDoc_ms={t['toDocMs']:.0f}",
             f"bulk_ms={t['bulkMs']:.0f}",
+            f"refresh_ms={t['refreshMs']:.0f}",
             f"manifest_ms={t['manifestFetchMs']:.0f}",
             f"html_MB={total_mb:.1f}",
             f"html_MBps={mb_ps:.2f}",
