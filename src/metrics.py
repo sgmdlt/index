@@ -26,6 +26,7 @@ class Metrics:
             "parseMs": 0.0,
             "toDocMs": 0.0,
             "bulkMs": 0.0,
+            "refreshMs": 0.0,
             "readHtmlMs": 0.0,
             "manifestFetchMs": 0.0,
             "cpuParseMs": 0.0,
