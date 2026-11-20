@@ -85,6 +85,14 @@ def build_case_id(case_number: str, date_reg: str, court_id: str) -> str | None:
         single = text.strip()
         if "/" in single and not re.search(r"[\s~∼(){};,]", single):
             return case_id + single[: single.rfind("/")].replace("/", "-")
+        # "5-266\14-130", "2-530", "762/3460/13-ц (…) ~ Материалы дела": старые
+        # номера без четырёхзначного года — номер целиком, как их ключевали
+        # всегда (courts-2ymt.10). Без единой цифры это не номер: ключ из
+        # «Материалы дела» склеил бы все такие карточки суда за день
+        if re.search(r"\d", case_number or ""):
+            return case_id + re.sub(
+                r"\s", "", case_number.replace("/", "-").replace("\\", "-")
+            )
         return case_id + "ID_NOT_PARSED"
     # "4У-47/2017 - (4У-2186/2016)", registered 2016: the number of the
     # registration year; "2-1/2011 (2-2/2010;)", registered 2008, lost its
