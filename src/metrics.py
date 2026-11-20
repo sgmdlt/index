@@ -1,6 +1,7 @@
 """Performance metrics collector. Ports metrics.js."""
 
 import resource
+import threading
 import time
 
 
@@ -31,6 +32,8 @@ class Metrics:
             "manifestFetchMs": 0.0,
             "cpuParseMs": 0.0,
         }
+        # мгновенные значения, а не суммы: глубина очереди записи BulkIndexer
+        self.gauges: dict[str, float] = {}
         self._last_html_bytes = 0
         self._last_read_html_ms = 0.0
 
@@ -92,6 +95,8 @@ class Metrics:
             f"toDoc_ms={t['toDocMs']:.0f}",
             f"bulk_ms={t['bulkMs']:.0f}",
             f"refresh_ms={t['refreshMs']:.0f}",
+            f"bulk_queue={self.gauges.get('bulkQueue', 0):.0f}",
+            f"threads={threading.active_count()}",
             f"manifest_ms={t['manifestFetchMs']:.0f}",
             f"html_MB={total_mb:.1f}",
             f"html_MBps={mb_ps:.2f}",
