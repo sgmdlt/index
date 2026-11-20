@@ -861,7 +861,9 @@ def main():
 
     _ensure_index(es, args.index)
 
-    bulk_docs = 500 if args.db else (1000 if args.jsonl else 1500)
+    # DB — 5000: refresh перед поиском близнецов теперь редок, а крупная пачка
+    # дешевле на документ (courts-u97m)
+    bulk_docs = 5000 if args.db else (1000 if args.jsonl else 1500)
     indexer = BulkIndexer(
         es_client=es,
         index=args.index,
@@ -869,6 +871,7 @@ def main():
         bulk_docs=bulk_docs,
         flush_interval=15.0,
         stamp_created_at=not args.warc,
+        twin_refresh="always" if args.warc else "seen",
     )
 
     orig_settings = {} if args.priority_only else _fast_ingest_on(es, args.index)

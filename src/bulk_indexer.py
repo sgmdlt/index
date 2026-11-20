@@ -8,6 +8,7 @@ import threading
 import time
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Literal
 
 from .text_filters import broken_text_message, fix_date_reg
 from .utils.case_id import case_id_from_fields, id_date_segment
@@ -539,6 +540,7 @@ class BulkIndexer:
         on_result=None,
         stamp_created_at: bool = True,
         max_pending: int = 2,
+        twin_refresh: Literal["seen", "always"] = "seen",
     ):
         self._es = es_client
         self._index = index
@@ -554,6 +556,15 @@ class BulkIndexer:
         # иначе любое старое дело ушло бы подписчикам как новое
         self._stamp_created_at = stamp_created_at
 
+        # Поиск близнецов видит записанное в этом прогоне только после refresh,
+        # а refresh дорог (~4,2 с на пачку на проде). "seen": refresh лишь перед
+        # пачкой с UID карточки, уже записанным этим прогоном; "always" — полная
+        # пересборка, где помнить ~142 млн UID нельзя (courts-u97m, ADR 0001).
+        # Пишет один поток, поэтому набор трогает только он.
+        self._twin_refresh = twin_refresh
+        self._written_uids: set[int] = (
+            set()
+        )  # hash(uuid): ложное «было» — лишь лишний refresh
         self._buffers: dict[str, list] = {}
         self._oldest: dict[str, float] = {}  # bucket → когда лёг первый документ
         self._lock = threading.Lock()
@@ -670,7 +681,10 @@ class BulkIndexer:
         # индекс. Поэтому refresh перед каждым поиском, а не «если сам писал»
         # (courts-2ymt.2). Сбой — отказ пачке, как у самого поиска (ADR 0001).
         try:
-            if uuids:
+            if uuids and (
+                self._twin_refresh == "always"
+                or any(hash(u) in self._written_uids for u in uuids)
+            ):
                 t0 = time.monotonic()
                 self._es.indices.refresh(index=self._index)
                 if self._metrics:
@@ -716,6 +730,11 @@ class BulkIndexer:
 
         # снимаем до build_bulk_index_ops: он вынимает _id из элементов
         doc_ids = [item["_id"] for item in merged_items if item.get("_id")]
+        uuid_of = {
+            item["_id"]: item["uuid"]
+            for item in merged_items
+            if item.get("_id") and in_group_scope(item)
+        }
 
         ops = build_bulk_index_ops(merged_items, self._index)
         if not ops:
@@ -754,6 +773,9 @@ class BulkIndexer:
                     )
                 self._report(
                     callers(indexed_ids), callers(failed_ids), "bulk item rejected"
+                )
+                self._written_uids.update(
+                    hash(uuid_of[i]) for i in indexed_ids if i in uuid_of
                 )
                 self._delete_twins(delete_for, set(indexed_ids))
                 return

@@ -201,9 +201,14 @@ def test_refresh_failure_fails_the_batch(tmp_path):
         raise ConnectionError("Connection timed out")
 
     es.indices.refresh = timed_out
-    _indexer(es, tmp_path, seen)._do_bulk(
-        [_item("A_2026-06-24_1", "a.html", "2026-06-25")], "k"
+    indexer = BulkIndexer(
+        es_client=es,
+        index="t",
+        failed_log=str(tmp_path / "failed.log"),
+        on_result=lambda ok, bad, why: seen.append((ok, bad, why)),
+        twin_refresh="always",  # «seen» для новой карточки refresh не делает
     )
+    indexer._do_bulk([_item("A_2026-06-24_1", "a.html", "2026-06-25")], "k")
     assert es.bulk_calls == [] and es.search_calls == 0
     assert seen[0][1] == ["A_2026-06-24_1"]
     assert "refresh before uuid search failed" in seen[0][2]
