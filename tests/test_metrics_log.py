@@ -7,3 +7,13 @@ def test_log_line_shows_refresh_time(capsys):
     metrics.add_time("refreshMs", 1234.0)
     metrics.log(force=True)
     assert "refresh_ms=1234" in capsys.readouterr().out
+
+
+def test_log_line_shows_write_queue_and_threads(capsys):
+    # очередь записи и потоки видны в логе прогона до того, как кончится память
+    # (courts-jyme)
+    metrics = Metrics()
+    metrics.gauges["bulkQueue"] = 2
+    metrics.log(force=True)
+    out = capsys.readouterr().out
+    assert "bulk_queue=2" in out and "threads=" in out

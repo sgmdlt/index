@@ -2,6 +2,7 @@
 
 import json
 import logging
+import queue
 import re
 import threading
 import time
@@ -537,6 +538,7 @@ class BulkIndexer:
         failed_log: str = "failed_paths.log",
         on_result=None,
         stamp_created_at: bool = True,
+        max_pending: int = 2,
     ):
         self._es = es_client
         self._index = index
@@ -553,13 +555,24 @@ class BulkIndexer:
         self._stamp_created_at = stamp_created_at
 
         self._buffers: dict[str, list] = {}
+        self._oldest: dict[str, float] = {}  # bucket → когда лёг первый документ
         self._lock = threading.Lock()
-        # Пачки пишутся по одной: поиск близнецов, запись и удаление пачки,
-        # сброшенной по таймеру, иначе разминутся с пачкой, сброшенной по
-        # размеру в соседнем потоке. Разбор при этом идёт дальше.
-        self._write_lock = threading.Lock()
-        self._timer: threading.Timer | None = None
-        self._flush_threads: list[threading.Thread] = []
+        # Разбор идёт быстрее записи: без предела очередь пачек копилась в памяти
+        # (прогон 19–20.11 — 43 ГБ, 1,74 млн незаписанных). Пишет один поток, по
+        # одной пачке — иначе близнецы соседних пачек разминутся; add() ждёт,
+        # пока в очереди не освободится место (courts-jyme). max_pending=2:
+        # пока одна пачка пишется, следующая уже собрана — ES не простаивает, а
+        # больше двух не ускоряет: запись всё равно идёт по одной. В памяти не
+        # больше (max_pending + 1) × bulk_docs документов плюс буферы корзин.
+        self._queue: queue.Queue = queue.Queue(maxsize=max_pending)
+        # поток стартует с первой пачкой, а не в конструкторе: main создаёт пул
+        # процессов (fork) уже после индексатора
+        self._writer: threading.Thread | None = None
+        # проверка «писатель жив» и put — под одной блокировкой, остановка
+        # писателя — под ней же и только при пустой очереди: иначе пачка, которую
+        # производитель положил, пока drain() из другого потока останавливал
+        # писателя, осталась бы в очереди без потока записи
+        self._enqueue_lock = threading.Lock()
 
     def set_on_result(self, fn) -> None:
         """DB-режим ставит колбэк уже после конструктора: он замыкает соединение
@@ -567,64 +580,81 @@ class BulkIndexer:
         self._on_result = fn
 
     def add(self, bucket_key: str, item: dict) -> None:
+        """Кладёт документ в буфер; полный или старше flush_interval буфер уходит
+        в очередь записи. Ждёт, пока очередь полна, — это и есть backpressure."""
+        now = time.monotonic()
         with self._lock:
             buf = self._buffers.setdefault(bucket_key, [])
+            if not buf:
+                self._oldest[bucket_key] = now
             buf.append(item)
-            should_flush = len(buf) >= self._bulk_docs
-
-        if should_flush:
-            # Hand off to a daemon thread so the caller is never stalled
-            # waiting for mget + es.bulk network I/O.
-            t = threading.Thread(
-                target=self._flush_bucket, args=(bucket_key,), daemon=True
-            )
-            with self._lock:
-                self._flush_threads.append(t)
-            t.start()
-        else:
-            self._schedule_flush()
+            # полный буфер — и любой, что пролежал дольше flush_interval: FS-режим
+            # держит буфер на месяц, и прошлый месяц иначе ждал бы конца прогона
+            due = [
+                key
+                for key, docs in self._buffers.items()
+                if docs
+                and (
+                    len(docs) >= self._bulk_docs
+                    or now - self._oldest[key] >= self._flush_interval
+                )
+            ]
+            jobs = [(self._buffers.pop(key), key) for key in due]
+        for batch, key in jobs:
+            self._enqueue(batch, key)
 
     def drain(self) -> None:
-        """Wait for in-flight background flushes, then flush all remaining buffers."""
+        """Ставит остатки буферов в очередь и ждёт, пока всё записано. Можно
+        звать повторно: DB-режим зовёт его из _run_db и из finally в main."""
         with self._lock:
-            if self._timer:
-                self._timer.cancel()
-                self._timer = None
-            threads = list(self._flush_threads)
+            jobs = [(batch, key) for key, batch in self._buffers.items() if batch]
+            self._buffers.clear()
+            self._oldest.clear()
+        for batch, bucket_key in jobs:
+            self._enqueue(batch, bucket_key)
+        self._queue.join()
+        # поток записи не переживает drain: следующая пачка запустит новый
+        with self._enqueue_lock:
+            writer = self._writer
+            if writer is None or not self._queue.empty():
+                return  # пока ждали, производитель положил ещё — писатель нужен
+            self._writer = None
+            self._queue.put(None)
+        writer.join()
 
-        for t in threads:
-            t.join()
+    def _enqueue(self, batch: list, bucket_key: str) -> None:
+        # put под блокировкой: при полной очереди писатель занят записью и
+        # блокировка ему не нужна, так что ожидание здесь не дедлок
+        with self._enqueue_lock:
+            if self._writer is None:
+                self._writer = threading.Thread(
+                    target=self._write_loop, name="bulk-writer", daemon=True
+                )
+                self._writer.start()
+            self._queue.put((batch, bucket_key))  # ждёт, пока очередь полна
+            self._gauge_queue()
 
-        with self._lock:
-            self._flush_threads.clear()
-            keys = list(self._buffers.keys())
+    def _gauge_queue(self) -> None:
+        if self._metrics:
+            self._metrics.gauges["bulkQueue"] = self._queue.qsize()
 
-        for key in keys:
-            self._flush_bucket(key)
-
-    def _schedule_flush(self) -> None:
-        with self._lock:
-            if self._timer is None:
-                self._timer = threading.Timer(self._flush_interval, self._timer_fired)
-                self._timer.daemon = True
-                self._timer.start()
-
-    def _timer_fired(self) -> None:
-        with self._lock:
-            self._timer = None
-            keys = list(self._buffers.keys())
-        for key in keys:
-            self._flush_bucket(key)
-
-    def _flush_bucket(self, bucket_key: str) -> None:
-        with self._lock:
-            batch = self._buffers.pop(bucket_key, [])
-        if batch:
-            with self._write_lock:
+    def _write_loop(self) -> None:
+        while (job := self._queue.get()) is not None:
+            self._gauge_queue()
+            batch, bucket_key = job
+            try:
                 self._do_bulk(batch, bucket_key)
-        # Prune finished threads from the tracking list
-        with self._lock:
-            self._flush_threads = [t for t in self._flush_threads if t.is_alive()]
+            except Exception as exc:
+                # упавший поток записи повесил бы add() навсегда — поэтому и
+                # отказ пачке не должен его уронить
+                logger.exception("bulk writer failed bucket=%s", bucket_key)
+                try:
+                    self._fail_batch(batch, bucket_key, f"bulk writer failed: {exc}")
+                except Exception:
+                    logger.exception("could not report the failed batch")
+            finally:
+                self._queue.task_done()
+        self._queue.task_done()
 
     def _do_bulk(self, batch: list, bucket_key: str, retries: int = 3) -> None:
         # Sort oldest-first so latest values win for non-array fields
