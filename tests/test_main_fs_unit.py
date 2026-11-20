@@ -28,7 +28,11 @@ def test_fs_unit_reads_html_beside_the_manifest(tmp_path):
     unit = {
         "manifest_path": str(case_dir / "manifest.json"),
         "rel_from_root": REL,
-        "meta": {"ID": "fs-case-1", "court_id": "03RS0004"},
+        "meta": {
+            "case_number": "1-55/2026",
+            "date_reg": "10.06.2026",
+            "court_id": "03RS0004",
+        },
         "html_files": [FNAME],
     }
     indexer = FakeIndexer()
@@ -44,6 +48,6 @@ def test_fs_unit_reads_html_beside_the_manifest(tmp_path):
         )
 
     [(_, update)] = indexer.items
-    assert update["_id"] == "fs-case-1"
+    assert update["_id"] == "03RS0004_2026-06-10_1-55"
     assert update["metadata"] == {"sourcePath": f"26/03/03RS0004/1/case-1/{FNAME}"}
     assert metrics.counters["htmlBytes"] == FIXTURE.stat().st_size

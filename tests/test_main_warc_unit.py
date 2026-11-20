@@ -24,7 +24,11 @@ def make_warc_unit():
     return {
         "manifest_path": LOCATOR,
         "rel_from_root": LOCATOR,
-        "meta": {"ID": "warc-case-1", "court_id": "03RS0004"},
+        "meta": {
+            "case_number": "1-55/2026",
+            "date_reg": "10.06.2026",
+            "court_id": "03RS0004",
+        },
         "html_files": [fname],
         "html_bytes_by_name": {fname: html},
     }
@@ -47,7 +51,7 @@ def test_warc_unit_indexes_with_locator_debug_link(tmp_path):
     assert completed == [True]
     assert len(indexer.items) == 1
     _, update = indexer.items[0]
-    assert update["_id"] == "warc-case-1"
+    assert update["_id"] == "03RS0004_2026-06-10_1-55"
     assert update["doc"]["path_manifest"] == LOCATOR
     assert update["version_ts"] == "2026-06-10T12:00:00Z"
 
@@ -66,4 +70,4 @@ def test_the_unit_reports_the_ids_it_handed_to_the_indexer(tmp_path):
             failed_log=str(tmp_path / "failed.log"),
             on_unit_complete=lambda unit, ok, ids: seen.append(ids),
         )
-    assert seen == [["warc-case-1"]]
+    assert seen == [["03RS0004_2026-06-10_1-55"]]
